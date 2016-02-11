@@ -1,0 +1,80 @@
+# encoding: UTF-8
+def loadeur(nom)
+	fichier = File.open("Pages/#{nom}.txt", "r").read.gsub("\n","").split("/")
+	fichier
+end
+def afficher(texte)
+	texte = texte.split("<par>")
+	texte.each do |i|
+		i = i.split("<br>")
+		i.each{|y| autoRN(y)}
+		#~ autoRN(i)
+		#~ puts i
+		puts $vocab[0]
+		passage = gets
+	end
+end
+def autoRN(chaine) 
+	if (chaine.length <= 80)
+		puts chaine
+	else
+		caractere = 79
+		while not chaine[caractere] == " " 
+			#~ puts "|#{chaine[caractere]}|"
+			caractere -= 1
+		end
+		puts (chaine[0..caractere])
+		autoRN(chaine[(caractere+1)..-1])
+	end
+end
+def inputMinMax(min, max)	
+	inpute = min - 1
+	while not inpute.between?(min, max)
+		inpute = gets.chomp.to_i
+		if not inpute.between?(min, max)
+			puts sprintf($vocab[3], min, max)
+		end
+	end
+	inpute
+end
+def exist?(file)
+	File.file?("Pages/#{file}.txt")
+end
+def existTell?(file)
+	if File.file?("Pages/#{file}.txt")
+		""
+	else
+		$vocab[5]
+	end
+end
+$vocab = File.open("Vocab/vocab.txt", "r").read.split("/")
+toload = "MainPage"
+while true
+	page = loadeur(toload)
+	texte = page[0]
+	suite = page[1]
+	afficher(texte)
+	suite = suite.split("_")
+	puts "0. #{$vocab[1]}"
+	#~ suite.each do |i|
+		#~ i = i.split("|")
+	#~ end
+	0.upto(suite.length - 1) do |index|
+		suite[index] = suite[index].split("|")
+		puts "#{index+1}. #{suite[index][0]}" + existTell?(suite[index][1])
+	end
+	while true
+		puts $vocab[2]
+		choix = inputMinMax(0, suite.length)
+		if exist?(suite[choix-1][1]) || choix == 0
+			break
+		else	
+			puts $vocab[4]
+		end
+	end
+	if choix == 0
+		break
+	else
+		toload = suite[choix-1][1]
+	end
+end

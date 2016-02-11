@@ -1,0 +1,5 @@
+Well done !
+<par>
+You can leave now
+/
+Go back to the begining|MainPage
