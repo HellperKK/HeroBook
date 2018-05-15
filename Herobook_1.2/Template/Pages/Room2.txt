@@ -1,6 +1,0 @@
-This is Room2
-<par>
-Fantastic, isn't it ?
-/
-Go back to the begining|MainPage_
-Go to Room3|Room3

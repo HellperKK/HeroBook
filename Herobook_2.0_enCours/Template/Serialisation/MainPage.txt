@@ -1,2 +1,0 @@
-This is a first paragraph.
-Whith a second line. Separated in two lines._And a second one./This will load Room2|Room2_This goes nowhere|haha
