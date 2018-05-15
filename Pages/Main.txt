@@ -1,7 +1,7 @@
 Ceci est un exemple de page
--
-Avec un deuxieme paragraphe
 
-[Prendre la suite]
-[Partir]
-[Utiliser la cle]{owned:key}
+Avec un deuxieme paragraphe
+--------------------------------
+[Prendre la suite|Page2]
+[Partir|Page3]
+[Utiliser la cle|Page4]{owned:key}
