@@ -1,0 +1,22 @@
+[
+  {
+    "name" : "main",
+    "text" : "Ceci est une premiere page",
+    "next" : [
+      {
+        "action" : "Passer a la seconde page",
+        "page2"
+      }
+    ]
+  },
+  {
+    "name" : "page2",
+    "text" : "Ceci est une premiere page",
+    "next" : [
+      {
+        "action" : "Passer a la premiere page",
+        "main"
+      }
+    ]
+  }
+]
