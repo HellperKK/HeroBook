@@ -26,8 +26,6 @@ pages_file.each do |i|
   pages[i["name"]] = i
 end
 
-puts pages.to_s
-
 actual_page = pages["main"]
 while actual_page != nil
   # puts actual_page.to_s
