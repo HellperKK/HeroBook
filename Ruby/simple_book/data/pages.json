@@ -5,17 +5,21 @@
     "next" : [
       {
         "action" : "Passer a la seconde page",
-        "page2"
+        "page" : "page2"
+      },
+      {
+        "action" : "Passer a la troisieme page",
+        "page" : "page3"
       }
     ]
   },
   {
     "name" : "page2",
-    "text" : "Ceci est une premiere page",
+    "text" : "Ceci est une seconde page",
     "next" : [
       {
         "action" : "Passer a la premiere page",
-        "main"
+        "page" : "main"
       }
     ]
   }
