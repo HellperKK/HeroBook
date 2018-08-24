@@ -28,12 +28,10 @@ end
 
 actual_page = pages["main"]
 while actual_page != nil
-  # puts actual_page.to_s
   puts actual_page["text"]
   nexte = actual_page["next"]
   print_next(nexte)
   choice = get_nexte(nexte.length, vocab)
-  puts nexte[choice]["page"]
   actual_page = pages[nexte[choice]["page"]]
 end
 vocab["End"]
