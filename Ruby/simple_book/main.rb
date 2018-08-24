@@ -34,4 +34,4 @@ while actual_page != nil
   choice = get_nexte(nexte.length, vocab)
   actual_page = pages[nexte[choice]["page"]]
 end
-vocab["End"]
+puts vocab["End"]
