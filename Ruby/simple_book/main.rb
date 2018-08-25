@@ -6,7 +6,7 @@ def print_next(liste)
   end
 end
 
-def get_nexte(length, vocab)
+def get_next(length, vocab)
   while true
     puts vocab["Ask_input"]
     entree = gets.strip
@@ -16,6 +16,20 @@ def get_nexte(length, vocab)
     puts vocab["Input_error"].sub("{}", 0.to_s).sub("{}", (length - 1).to_s)
   end
   entree.to_i
+end
+
+def print_text(text)
+  if text.length <= 80
+    puts text
+  else
+    pointeur = 80
+      while text[pointeur] != " " || pointeur < 0
+        pointeur -= 1
+      end
+    pointeur = 80 if pointeur == 0
+    puts text[0...pointeur]
+    print_text(text[pointeur..-1])
+  end
 end
 
 vocab = JSON.parse(File.open("data/vocab.json", "r"){|file| file.read})
@@ -28,10 +42,10 @@ end
 
 actual_page = pages["main"]
 while actual_page != nil
-  puts actual_page["text"]
+  print_text(actual_page["text"])
   nexte = actual_page["next"]
   print_next(nexte)
-  choice = get_nexte(nexte.length, vocab)
+  choice = get_next(nexte.length, vocab)
   actual_page = pages[nexte[choice]["page"]]
 end
 puts vocab["End"]
