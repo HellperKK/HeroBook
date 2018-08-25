@@ -20,6 +20,20 @@
       {
         "action" : "Passer a la premiere page",
         "page" : "main"
+      },
+      {
+        "action" : "Passer a la troisieme page",
+        "page" : "page3"
+      }
+    ]
+  },
+  {
+    "name" : "page3",
+    "text" : "Ceci est la dernire page. Vous pouvez a present partir apres la lecture de ce long texte de test pour voir ce quis e passe quand c'est torp long attention ça risque de ne pas être tres interessant a lire alors ne lisez pas si vous ne voulez pas le lire ce n'est aps une obligation d'aller jusqu'au bout voila c'est deja finit",
+    "next" : [
+      {
+        "action" : "Partir",
+        "page" : "fin"
       }
     ]
   }
