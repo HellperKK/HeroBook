@@ -1,3 +1,3 @@
 # HeroBook
 
-A branching stroy engine written in diverse language and implementations.
+A branching story game engine made in diverse languages and implementations.
