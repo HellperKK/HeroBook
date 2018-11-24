@@ -10,7 +10,7 @@ See licence for more specific usage terms.
 # List of versions
 ## simple_book
 The simplest version in CLI wich load two json file one for the story and another for
-some vocaculary.
+some vocabulary.
 
 Also supports for line breaks so words doesn't get cut in half when reaching the
 end of a line.
