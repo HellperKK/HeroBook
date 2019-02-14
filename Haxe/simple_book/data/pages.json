@@ -33,7 +33,7 @@
     "next" : [
       {
         "action" : "Partir",
-        "page" : "main"
+        "page" : "end"
       }
     ]
   }

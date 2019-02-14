@@ -5,7 +5,7 @@
   },
   {
     "name" : "Input_error",
-    "text" : "You mus enter a number between {} and {}"
+    "text" : "You mus enter a number between {min} and {max}"
   },
   {
     "name" : "End",
