@@ -19,20 +19,27 @@ def get_next(length, vocab)
 end
 
 def print_text(text)
-  if text.length <= 80
+  if text.length <= 79
     puts text
   else
-    pointeur = 80
-      while text[pointeur] != " " || pointeur < 0
+    pointeur = 79
+      while (text[pointeur] != " ") && (pointeur >= 0)
         pointeur -= 1
       end
-    pointeur = 80 if pointeur == 0
-    puts text[0...pointeur]
+
+    if pointeur < 0
+      pointeur = 79
+    else
+      pointeur += 1
+    end
+    puts text[0...pointeur].strip
     print_text(text[pointeur..-1])
   end
 end
 
-vocab = JSON.parse(File.open("data/vocab.json", "r"){|file| file.read})
+vocab_tmp = JSON.parse(File.open("data/vocab.json", "r"){|file| file.read})
+vocab = Hash.new
+vocab_tmp.each{|voc| vocab[voc["name"]] = voc["text"]}
 pages_file = JSON.parse(File.open("data/pages.json", "r"){|file| file.read})
 
 pages = Hash.new
