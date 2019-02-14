@@ -1,4 +1,14 @@
-{ "Ask_input" : "Make your choice"
-, "Input_error" : "You mus enter a number between {} and {}"
-, "End" : "End of the story"
-}
+[
+  {
+    "name" : "Ask_input",
+    "text" : "Make your choice"
+  },
+  {
+    "name" : "Input_error",
+    "text" : "You mus enter a number between {min} and {max}"
+  },
+  {
+    "name" : "End",
+    "text" : "End of the story"
+  }
+]
