@@ -13,7 +13,7 @@ def get_next(length, vocab)
     if (0...length).include?(entree.to_i) && entree.to_i.to_s == entree
       break
     end
-    puts vocab["Input_error"].sub("{}", 0.to_s).sub("{}", (length - 1).to_s)
+    puts vocab["Input_error"].sub("{min}", 0.to_s).sub("{max}", (length - 1).to_s)
   end
   entree.to_i
 end
