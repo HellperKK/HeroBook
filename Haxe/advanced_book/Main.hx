@@ -14,7 +14,8 @@ class Main {
     while(entry != "exit"){
       Sys.println("What do you whant to do ?");
       entry = stdin.readLine().toLowerCase();
-      Game.find(entry);
+      var game:Game = new Game();
+      game.find(entry);
       // var r = ~/open ([^\s]+)/;
       // if(r.match(entry)){
       //   Printer.print('you have oppened the ${r.matched(1)}');

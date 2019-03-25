@@ -2,13 +2,18 @@ import Printer;
 import Sys;
 
 class Game{
-  static public var actions:Map<EReg, EReg->Void> = [
-    ~/hello/ => hello,
-    ~/exit/ => exit,
-    ~/open ([^\s]+)/ => open,
-  ];
 
-  static public function find(entry) : Void {
+  static public var actions:Map<EReg, EReg->Void>;
+
+  public function new() {
+    actions = [
+      ~/hello/ => hello,
+      ~/exit/ => exit,
+      ~/open ([^\s]+)/ => open,
+    ];
+  }
+
+  public function find(entry) : Void {
     for(val in actions.keys()){
       if (val.match(entry)){
         actions[val](val);
@@ -18,16 +23,16 @@ class Game{
     Printer.print("No match found");
   }
 
-  static function hello(reg:EReg) : Void {
-    Printer.print("Hello !");
+  public function hello(reg:EReg) : Void {
+    Printer.print("Hello!");
   }
 
-  static function exit(reg:EReg) : Void {
-    Printer.print("Goodbye !");
+  public function exit(reg:EReg) : Void {
+    Printer.print("Goodbye!");
     Sys.exit(0);
   }
 
-  static function open(reg:EReg) : Void {
+  public function open(reg:EReg) : Void {
     Printer.print(reg.matched(1));
   }
 }
