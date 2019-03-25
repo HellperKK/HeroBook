@@ -1,5 +1,6 @@
 import Sys;
-using Printer;
+import Printer;
+import Game;
 using StringTools;
 
 class Main {
@@ -13,10 +14,11 @@ class Main {
     while(entry != "exit"){
       Sys.println("What do you whant to do ?");
       entry = stdin.readLine().toLowerCase();
-      var r = ~/open ([^\s]+)/;
-      if(r.match(entry)){
-        Printer.print('you have oppened the ${r.matched(1)}');
-      }
+      Game.find(entry);
+      // var r = ~/open ([^\s]+)/;
+      // if(r.match(entry)){
+      //   Printer.print('you have oppened the ${r.matched(1)}');
+      // }
     }
     Printer.print("Goodbye !");
   }
