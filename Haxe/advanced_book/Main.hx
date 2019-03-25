@@ -1,5 +1,5 @@
 import Sys;
-using Test;
+using Printer;
 using StringTools;
 
 class Main {
