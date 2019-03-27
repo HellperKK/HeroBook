@@ -14,6 +14,16 @@ class MainScene extends Scene{
     ];
   }
 
+  override public function run():Void {
+    var entry = "";
+    var stdin = Sys.stdin();
+    while(entry != "exit"){
+      Sys.println("What do you whant to do ?");
+      entry = stdin.readLine().toLowerCase();
+      find(entry);
+    }
+  }
+
   public function hello(reg:EReg) : Void {
     Printer.print("Hello!");
   }

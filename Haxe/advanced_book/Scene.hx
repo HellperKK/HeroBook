@@ -6,13 +6,7 @@ class Scene{
   }
 
   public function run():Void {
-    var entry = "";
-    var stdin = Sys.stdin();
-    while(entry != "exit"){
-      Sys.println("What do you whant to do ?");
-      entry = stdin.readLine().toLowerCase();
-      find(entry);
-    }
+    
   }
 
   public function find(entry) : Void {
