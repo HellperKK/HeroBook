@@ -9,9 +9,4 @@ class Main {
     Game.start(new MainScene());
     Printer.print("Goodbye !");
   }
-
-  static function run() {
-
-
-  }
 }
