@@ -3,5 +3,5 @@ run:bin/Main.jar
 
 build:bin/Main.jar
 
-bin/Main.jar:Main.hx Game.hx Printer.hx MainScene.hx Scene.hx
+bin/Main.jar:Main.hx
 	haxe -java bin -main Main -cp .
