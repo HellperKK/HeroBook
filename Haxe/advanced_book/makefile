@@ -4,4 +4,4 @@ run:bin/Main.jar
 build:bin/Main.jar
 
 bin/Main.jar:Main.hx
-	haxe -java bin -main Main -cp .
+	haxe build.hxml
