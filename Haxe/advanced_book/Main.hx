@@ -2,6 +2,8 @@ import Sys;
 using StringTools;
 
 class Main {
+static var rooms:Map<String, Room> = new Map<String,Room>();
+
   static function main() {
     run();
     print("Goodbye !");
