@@ -1,4 +1,5 @@
 import Sys;
+import Random;
 using StringTools;
 
 class Main {
@@ -11,8 +12,16 @@ static var rooms:Map<String, Room> = new Map<String,Room>();
 
   static function run() : Void {
     var actions = [
-      ~/hello/ => hello,
       ~/exit/ => exit,
+      ~/save/ => placeHolder,
+      ~/use ([^\s]+) on ([^\s]+)/ => placeHolder,
+      ~/activate ([^\s]+)/ => placeHolder,
+      ~/open ([^\s]+)/ => placeHolder,
+      ~/close ([^\s]+)/ => placeHolder,
+      ~/take ([^\s]+)/ => placeHolder,
+      ~/drop ([^\s]+)/ => placeHolder,
+      ~/look ([^\s]+)/ => placeHolder,
+      ~/say ([^\s]+) to ([^\s]+)/ => placeHolder,
       ~/open ([^\s]+)/ => open,
     ];
     var entry = "";
@@ -31,7 +40,7 @@ static var rooms:Map<String, Room> = new Map<String,Room>();
         return;
       }
     }
-    print("No match found");
+    printError();
   }
 
   static function print(text:String) {
@@ -54,16 +63,25 @@ static var rooms:Map<String, Room> = new Map<String,Room>();
     }
   }
 
-  static function hello(reg:EReg) : Void {
-    print("Hello!");
+  static function printError() {
+    print(Random.fromArray([
+      "This doens't mean anything",
+      "What ?",
+      "Nothing happens...",
+      "Hum..."
+      ]));
   }
 
-  static function exit(reg:EReg) : Void {
+  static function placeHolder(reg:EReg){
+
+  }
+
+  static function exit(reg:EReg){
     print("Goodbye!");
     Sys.exit(0);
   }
 
-  static function open(reg:EReg) : Void {
+  static function open(reg:EReg){
     print(reg.matched(1));
   }
 }
