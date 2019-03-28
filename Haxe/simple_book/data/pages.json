@@ -1,38 +1,38 @@
 [
   {
     "name" : "main",
-    "text" : "Ceci est une premiere page",
+    "text" : "This is a first page",
     "next" : [
       {
-        "action" : "Passer a la seconde page",
+        "action" : "Go to the second page",
         "page" : "page2"
       },
       {
-        "action" : "Passer a la troisieme page",
+        "action" : "Go to the third page",
         "page" : "page3"
       }
     ]
   },
   {
     "name" : "page2",
-    "text" : "Ceci est une seconde page",
+    "text" : "This is a second page",
     "next" : [
       {
-        "action" : "Passer a la premiere page",
+        "action" : "Go to the first page",
         "page" : "main"
       },
       {
-        "action" : "Passer a la troisieme page",
+        "action" : "Go to the third page",
         "page" : "page3"
       }
     ]
   },
   {
     "name" : "page3",
-    "text" : "Ceci est la dernire page. Vous pouvez a present partir apres la lecture de ce long texte de test pour voir ce qui se passe quand c'est trop long attention ça risque de ne pas être tres interessant a lire alors ne lisez pas si vous ne voulez pas le lire ce n'est pas une obligation d'aller jusqu'au bout voila c'est deja finit",
+    "text" : "This is a thord page. You can now leave",
     "next" : [
       {
-        "action" : "Partir",
+        "action" : "Leave",
         "page" : "end"
       }
     ]
