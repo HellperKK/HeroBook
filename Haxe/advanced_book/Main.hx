@@ -3,11 +3,19 @@ import Random;
 using StringTools;
 
 class Main {
-static var rooms:Map<String, Room> = new Map<String,Room>();
+  static var rooms:Map<String, Room> = new Map<String,Room>();
+  static var actualRoom:Room;
 
   static function main() {
+    defineRooms();
+    if(rooms.exists("main_room")){
+      actualRoom = rooms.get("main_room");
+    }
+    else{
+      print("Looking for main_room");
+      Sys.exit(0);
+    }
     run();
-    print("Goodbye !");
   }
 
   static function run() : Void {
@@ -15,19 +23,20 @@ static var rooms:Map<String, Room> = new Map<String,Room>();
       ~/exit/ => exit,
       ~/save/ => placeHolder,
       ~/use ([^\s]+) on ([^\s]+)/ => placeHolder,
+      ~/combine ([^\s]+) with ([^\s]+)/ => placeHolder,
       ~/activate ([^\s]+)/ => placeHolder,
       ~/open ([^\s]+)/ => placeHolder,
       ~/close ([^\s]+)/ => placeHolder,
       ~/take ([^\s]+)/ => placeHolder,
       ~/drop ([^\s]+)/ => placeHolder,
-      ~/look ([^\s]+)/ => placeHolder,
+      ~/look ([^\s]+)/ => look,
       ~/say ([^\s]+) to ([^\s]+)/ => placeHolder,
       ~/open ([^\s]+)/ => open,
     ];
     var entry = "";
     var stdin = Sys.stdin();
     while(entry != "exit"){
-      Sys.println("What do you whant to do ?");
+      Sys.println("What do you whant to do?");
       entry = stdin.readLine().toLowerCase();
       activate(actions, entry);
     }
@@ -72,8 +81,23 @@ static var rooms:Map<String, Room> = new Map<String,Room>();
       ]));
   }
 
-  static function placeHolder(reg:EReg){
+  static function defineRooms(){
+    var room = new Room("Room", "A dark room");
+    rooms.set("main_room", room);
+  }
 
+  static function placeHolder(reg:EReg){
+    print("Not yep implemented");
+  }
+
+  static function look(reg:EReg){
+    var name = reg.matched(1);
+    if(name == "room"){
+      print(actualRoom.desc);
+    }
+    else{
+      printError();
+    }
   }
 
   static function exit(reg:EReg){

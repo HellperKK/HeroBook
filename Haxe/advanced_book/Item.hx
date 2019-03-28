@@ -1,10 +1,12 @@
 class Item{
   private var type:String;
-  private var actions:Map<String, Array<String>->Void>
+  public var desc:String;
+  private var actions:Map<String, Array<String>->Void>;
 
-  public function new(type) {
+  public function new(type, desc){
     this.type = type;
-    actions = new Map<String, Void->Void>();
+    this.desc = desc;
+    actions = new Map<String, Array<String>->Void>();
   }
 
   public function addAction(name, action){
@@ -12,8 +14,8 @@ class Item{
   }
 
   public function activate(name, elms){
-    if(actions.exist(name)){
-      actions[name](elms)
+    if(actions.exists(name)){
+      actions[name](elms);
     }
   }
 }

@@ -1,7 +1,8 @@
 run:bin/Main.jar
 	java -jar bin/Main.jar
 
-build:bin/Main.jar
+build:
+	haxe build.hxml
 
 bin/Main.jar:Main.hx
-	haxe build.hxml
+	make build
