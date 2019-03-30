@@ -29,7 +29,7 @@
   },
   {
     "name" : "page3",
-    "text" : "This is a thord page. You can now leave",
+    "text" : "This is a third page. You can now leave",
     "next" : [
       {
         "action" : "Leave",
