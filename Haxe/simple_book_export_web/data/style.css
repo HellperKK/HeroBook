@@ -1,0 +1,14 @@
+body{
+  background-color: #dbfffd;
+  text-align: center;
+}
+
+a, a:hover, a:visited{
+  color: #492e10;
+  text-decoration: none;
+}
+
+.story{
+  background-color: #a9e5e2;
+  margin:10%;
+}

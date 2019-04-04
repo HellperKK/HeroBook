@@ -4,5 +4,5 @@ build_jav:main.hx
 build_bin_win:main.hx
 	haxe -cpp bin_win -main Main
 
-run_jar:bin/Main.jar
+run_jav:
 	java -jar jav/Main.jar
