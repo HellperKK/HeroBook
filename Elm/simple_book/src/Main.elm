@@ -4,6 +4,7 @@ import Browser
 import Dict
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
+import Json.Decode as D
 
 
 main =
@@ -28,6 +29,44 @@ type alias Model =
   , actual : String
   }
 
+decode_choice : D.Decoder ChoiceModel
+decode_choice =
+    D.map2 ChoiceModel
+        (D.field "action" D.string)
+        (D.field "page" D.string)
+
+decode_page : D.Decoder (List PageModel)
+decode_page =
+    D.list
+      (D.map3 PageModel
+          (D.field "name" D.string)
+          (D.field "text" D.string)
+          (D.field "next"
+              (D.list
+                  (D.map2 ChoiceModel
+                      (D.field "action" D.string)
+                      (D.field "page" D.string)
+                  )
+              )
+          )
+        )
+
+extract_result : Result D.Error (List PageModel) -> Model
+extract_result res = case res of
+  Err _ ->
+    {pages =
+      [{name = "First", text = "First page", next = [{action="Suivant", page="Second"}]}
+      , {name = "Second", text = "Second page", next = [{action="Precedent", page="First"}]}
+      ]
+    , actual = "First"
+    }
+  Ok x -> {pages = x, actual = "Main"}
+
+init : Model
+init =
+  (D.decodeString decode_page "") |> extract_result
+
+{--
 init : Model
 init =
   {pages =
@@ -36,6 +75,7 @@ init =
     ]
   , actual = "First"
   }
+--}
 
 
 
