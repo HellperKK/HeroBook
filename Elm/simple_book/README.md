@@ -1,9 +1,7 @@
 # SimpleBook
 
-Simplest version of HeroBook made in haxe then compiled using java.
+Simplest version of HeroBook made in elm then compiled into javascript.
 
 # How to run
 
-```
-java -jar Main.jar
-```
+Open `index.html`

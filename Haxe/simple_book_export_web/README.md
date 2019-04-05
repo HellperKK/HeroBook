@@ -1,9 +1,7 @@
 # SimpleBook
 
-Simplest version of HeroBook made in haxe then compiled using java.
+Simplest version of HeroBook exported to as list a html files.
 
 # How to run
 
-```
-java -jar Main.jar
-```
+Open `output/index.html`
