@@ -13,35 +13,40 @@ main =
 -- MODEL
 
 type alias ChoiceModel =
-  { action:String
-  , next:String
+  { action : String
+  , next : String
   }
 
-type alias Model = Dict.Dict String ChoiceModel
+type alias Model =
+  { dico : Dict.Dict String ChoiceModel
+  , actual : String
+  }
 
 init : Model
 init =
-  Dict.fromList
+  {dico = Dict.fromList
     [ ("First", {action = "parler un peu", next = "Second"})
     , ("Second"  , {action = "parler beaucoup", next = "Third"})
     , ("Third", {action = "parler mal", next = "First"})
     ]
+  , actual = "First"
+  }
 
 
 
 -- UPDATE
 
-type Msg = Choice Int
+type Msg = Choice String
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
     Choice x ->
-      model
+      {model| actual = x }
 
 
 -- VIEW
-to_buttons item = div [] [button [onClick (Choice item)] [text (String.fromInt item)]]
+to_buttons item = div [] [button [onClick (Choice item.next)] [text item.action]]
 
 recover_dico val dico = case (Dict.get val dico) of
   Just x -> x
@@ -50,6 +55,6 @@ recover_dico val dico = case (Dict.get val dico) of
 view : Model -> Html Msg
 view model =
   div []
-    [ div [] [ text ((recover_dico "First" model )).action ]
-    , div [] (List.map to_buttons [1, 2, 3])
+    [ div [] [ text ((recover_dico model.actual model.dico )).action ]
+    , div [] (List.map to_buttons (Dict.values model.dico))
     ]
