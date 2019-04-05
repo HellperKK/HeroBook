@@ -5,6 +5,7 @@ import Dict
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Json.Decode as D
+import Http as H
 
 
 main =
@@ -27,6 +28,7 @@ type alias PageModel =
 type alias Model =
   { pages : List PageModel
   , actual : String
+  , load : Cmd Msg
   }
 
 decode_choice : D.Decoder ChoiceModel
@@ -51,20 +53,17 @@ decode_page =
           )
         )
 
-extract_result : Result D.Error (List PageModel) -> Model
+extract_result : Result D.Error (List PageModel) -> (List PageModel)
 extract_result res = case res of
-  Err _ ->
-    {pages =
-      [{name = "First", text = "First page", next = [{action="Suivant", page="Second"}]}
-      , {name = "Second", text = "Second page", next = [{action="Precedent", page="First"}]}
-      ]
-    , actual = "First"
-    }
-  Ok x -> {pages = x, actual = "Main"}
+  Err _ -> [{name = "Main", text = "Couldn't load a file so replacer with an empty one", next = []}]
+  Ok x -> x
 
 init : Model
 init =
-  (D.decodeString decode_page "") |> extract_result
+  { load = (H.get {url = "pages.json", expect = H.expectString GotText})
+  , pages = []
+  , actual = "Main"
+  }
 
 {--
 init : Model
@@ -81,22 +80,22 @@ init =
 
 -- UPDATE
 
-type Msg = Choice String
+type Msg = Choice String |GotText (Result H.Error String)
+
+extract_text res = case res of
+  Err _ -> "[]"
+  Ok x -> x
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
     Choice x ->
       {model| actual = x }
+    GotText x -> {model| pages = x |> extract_text |> (D.decodeString decode_page) |> extract_result }
 
 
 -- VIEW
 to_buttons item = div [] [button [onClick (Choice item.page)] [text item.action]]
-
-{--recover_dico val dico = case (Dict.get val dico) of
-  Just x -> x
-  Nothing -> {action = "", page = ""}
---}
 
 find_list f liste = case liste of
   [] -> Nothing
