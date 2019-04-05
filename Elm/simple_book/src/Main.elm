@@ -1,3 +1,5 @@
+module Main exposing (..)
+
 import Browser
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
@@ -18,24 +20,22 @@ init =
 
 -- UPDATE
 
-type Msg = Increment | Decrement
+type Msg = Choice Int
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
-    Increment ->
-      model + 1
-
-    Decrement ->
-      model - 1
+    Choice x ->
+      model + x
 
 
 -- VIEW
+to_buttons item = div [] [button [onClick (Choice item)] [text (String.fromInt item)]]
 
 view : Model -> Html Msg
 view model =
   div []
-    [ button [ onClick Decrement ] [ text "-" ]
+    [ button [ onClick (Choice 1) ] [ text "Increment" ]
     , div [] [ text (String.fromInt model) ]
-    , button [ onClick Increment ] [ text "+" ]
+    , div [] (List.map to_buttons [1, 2, 3])
     ]
