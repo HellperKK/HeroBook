@@ -5851,7 +5851,7 @@ var author$project$Main$init = {
 	load: elm$http$Http$get(
 		{
 			expect: elm$http$Http$expectString(author$project$Main$GotText),
-			url: 'pages.json'
+			url: './pages.json'
 		}),
 	pages: _List_Nil
 };
@@ -5902,6 +5902,8 @@ var author$project$Main$extract_text = function (res) {
 		return x;
 	}
 };
+var elm$core$Platform$Cmd$batch = _Platform_batch;
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm$json$Json$Decode$decodeString = _Json_runOnString;
 var author$project$Main$update = F2(
 	function (msg, model) {
@@ -5915,6 +5917,7 @@ var author$project$Main$update = F2(
 			return _Utils_update(
 				model,
 				{
+					load: elm$core$Platform$Cmd$none,
 					pages: author$project$Main$extract_result(
 						A2(
 							elm$json$Json$Decode$decodeString,
@@ -6049,8 +6052,6 @@ var author$project$Main$view = function (model) {
 				A2(elm$core$List$map, author$project$Main$to_buttons, actual_page.next))
 			]));
 };
-var elm$core$Platform$Cmd$batch = _Platform_batch;
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm$core$Platform$Sub$batch = _Platform_batch;
 var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var elm$browser$Browser$External = function (a) {

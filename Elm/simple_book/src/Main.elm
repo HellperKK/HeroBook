@@ -6,6 +6,7 @@ import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Json.Decode as D
 import Http as H
+import File.Select as Select
 
 
 main =
@@ -31,12 +32,6 @@ type alias Model =
   , load : Cmd Msg
   }
 
-decode_choice : D.Decoder ChoiceModel
-decode_choice =
-    D.map2 ChoiceModel
-        (D.field "action" D.string)
-        (D.field "page" D.string)
-
 decode_page : D.Decoder (List PageModel)
 decode_page =
     D.list
@@ -51,7 +46,7 @@ decode_page =
                   )
               )
           )
-        )
+      )
 
 extract_result : Result D.Error (List PageModel) -> (List PageModel)
 extract_result res = case res of
@@ -60,22 +55,10 @@ extract_result res = case res of
 
 init : Model
 init =
-  { load = (H.get {url = "pages.json", expect = H.expectString GotText})
+  { load = (H.get {url = "./pages.json", expect = H.expectString GotText})
   , pages = []
   , actual = "Main"
   }
-
-{--
-init : Model
-init =
-  {pages =
-    [{name = "First", text = "First page", next = [{action="Suivant", page="Second"}]}
-    , {name = "Second", text = "Second page", next = [{action="Precedent", page="First"}]}
-    ]
-  , actual = "First"
-  }
---}
-
 
 
 -- UPDATE
@@ -91,7 +74,7 @@ update msg model =
   case msg of
     Choice x ->
       {model| actual = x }
-    GotText x -> {model| pages = x |> extract_text |> (D.decodeString decode_page) |> extract_result }
+    GotText x -> {model| load = Cmd.none ,pages = x |> extract_text |> (D.decodeString decode_page) |> extract_result }
 
 
 -- VIEW
