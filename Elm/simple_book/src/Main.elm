@@ -2,11 +2,14 @@ module Main exposing (..)
 
 import Browser
 import Dict
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Json.Decode as D
 import Http as H
+import File exposing (File)
 import File.Select as Select
+import Task
 
 
 main =
@@ -29,8 +32,12 @@ type alias PageModel =
 type alias Model =
   { pages : List PageModel
   , actual : String
-  , load : Cmd Msg
+  , request : Cmd Msg
   }
+
+filesDecoder : D.Decoder (List File)
+filesDecoder =
+  D.at ["target","files"] (D.list File.decoder)
 
 decode_page : D.Decoder (List PageModel)
 decode_page =
@@ -55,26 +62,37 @@ extract_result res = case res of
 
 init : Model
 init =
-  { load = (H.get {url = "./pages.json", expect = H.expectString GotText})
-  , pages = []
+  { pages = []
   , actual = "Main"
+  , request = Cmd.none
   }
 
 
 -- UPDATE
 
-type Msg = Choice String |GotText (Result H.Error String)
+type Msg = Choice String | Charge (List File) | Lis String
 
 extract_text res = case res of
-  Err _ -> "[]"
+  Err _ -> ""
   Ok x -> x
+
+
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
     Choice x ->
       {model| actual = x }
-    GotText x -> {model| load = Cmd.none ,pages = x |> extract_text |> (D.decodeString decode_page) |> extract_result }
+    Lis x -> {model| pages = x
+        |> (D.decodeString decode_page)
+        |> extract_result
+      }
+    Charge x ->
+      {model| request = x
+        |> List.head
+        |> maybe_read
+        |> (maybe_take Cmd.none)
+      }
 
 
 -- VIEW
@@ -87,16 +105,26 @@ find_list f liste = case liste of
     then Just x
     else find_list f xs
 
-maybe_page page = case page of
-  Nothing -> {name = "First", text = "First page", next = []}
+maybe_take defaut page = case page of
+  Nothing -> defaut
   Just x -> x
+
+maybe_read file = case file of
+  Nothing -> Nothing
+  Just x -> Just (Task.perform Lis (File.toString x))
 
 view : Model -> Html Msg
 view model =
   let
-    actual_page = (find_list (\x -> x.name == model.actual) model.pages) |> maybe_page
+    actual_page = (find_list (\x -> x.name == model.actual) model.pages) |>
+      (maybe_take {name = "First", text = "First page", next = []})
   in
     div []
-      [ div [] [ text actual_page.text]
+      [ input
+          [ type_ "file"
+          , multiple False
+          , on "change" (D.map Charge filesDecoder)
+          ] []
+      , div [] [text actual_page.text]
       , div [] (List.map to_buttons actual_page.next)
       ]
