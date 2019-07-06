@@ -32,8 +32,8 @@
     "text" : "This is a third page. You can now leave",
     "next" : [
       {
-        "action" : "Leave",
-        "page" : "end"
+        "action" : "Go bak to beginning",
+        "page" : "main"
       }
     ]
   }

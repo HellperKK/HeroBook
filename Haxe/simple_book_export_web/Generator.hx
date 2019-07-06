@@ -1,6 +1,7 @@
 import Main;
 import sys.io.File;
 import Lambda;
+import hxdtl.Template;
 using StringTools;
 
 class Generator {
@@ -11,6 +12,9 @@ class Generator {
   public static function convertMain(name:String){
     if(name == "main"){
       return "index";
+    }
+    else if (name == "index"){
+      return "main";
     }
     else{
       return name;
@@ -24,14 +28,16 @@ class Generator {
   }
 
   public function generate(dico:Map<String, Page>, out:String) : Void {
-    var template:String = File.getContent("data/template.html");
-    var choices = "";
-    for( suivant in next ) {
-      if(dico.exists(suivant.page)) {
-        choices += '<a href="${convertMain(suivant.page)}.html">${suivant.action}</a>' + '<br>';
+    var choices:Array<PageNext> = [];
+    for( ne in next ) {
+      if(dico.exists(ne.page)) {
+        choices.push(ne);
       }
     }
-    template = template.replace("{text}", text).replace("{next}", choices);
-    File.saveContent('output/${convertMain(name)}.html', template);
+    var template = new Template(File.getContent("data/template.html"));
+    File.saveContent('${out}/${name}.html', template.render({
+      text : text,
+      next : next
+    }));
   }
 }

@@ -7,10 +7,12 @@
   </head>
   <body>
     <div class="story">
-      <p>{text}</p>
+      <p>{{text}}</p>
       <br>
       <div class="choices">
-        {next}
+      {% for ne in next %}
+        <a href="{{ ne.page }}.html"> {{ ne.action }} </a>
+      {% endfor %}
       </div>
     </div>
   </body>
