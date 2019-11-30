@@ -1,0 +1,40 @@
+[
+  {
+    "name" : "main",
+    "text" : "Ceci est une premiere page",
+    "next" : [
+      {
+        "action" : "Passer a la seconde page",
+        "page" : "page2"
+      },
+      {
+        "action" : "Passer a la troisieme page",
+        "page" : "page3"
+      }
+    ]
+  },
+  {
+    "name" : "page2",
+    "text" : "Ceci est une seconde page",
+    "next" : [
+      {
+        "action" : "Passer a la premiere page",
+        "page" : "main"
+      },
+      {
+        "action" : "Passer a la troisieme page",
+        "page" : "page3"
+      }
+    ]
+  },
+  {
+    "name" : "page3",
+    "text" : "Ceci est la dernire page. Vous pouvez a present partir apres la lecture de ce long texte de test pour voir ce qui se passe quand c'est trop long attention ça risque de ne pas être tres interessant a lire alors ne lisez pas si vous ne voulez pas le lire ce n'est pas une obligation d'aller jusqu'au bout voila c'est deja finit",
+    "next" : [
+      {
+        "action" : "Partir",
+        "page" : "main"
+      }
+    ]
+  }
+]
