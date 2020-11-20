@@ -29,6 +29,7 @@ const dataT = document.querySelector("#game-data")
 
 if (dataT && dataT.innerHTML) {
   data = JSON.parse(dataT.innerHTML)
+  dataT.remove()
   format("main")
 }
 else {
