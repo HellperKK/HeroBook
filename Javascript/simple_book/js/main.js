@@ -28,9 +28,13 @@ const format = function(pageName) {
 const dataT = document.querySelector("#game-data")
 
 if (dataT && dataT.innerHTML) {
-  data = JSON.parse(dataT.innerHTML)
-  dataT.remove()
-  format("main")
+  try {
+    data = JSON.parse(dataT.innerHTML)
+    dataT.remove()
+    format("main")
+  } catch (error) {
+    alert("error while reading data")
+  }
 }
 else {
   alert("No game data found")
