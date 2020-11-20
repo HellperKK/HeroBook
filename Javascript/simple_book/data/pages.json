@@ -1,38 +1,38 @@
 [
   {
     "name" : "main",
-    "text" : "Ceci est une premiere page",
+    "text" : "Here is a first room.",
     "next" : [
       {
-        "action" : "Passer a la seconde page",
+        "action" : "Go to second room",
         "page" : "page2"
       },
       {
-        "action" : "Passer a la troisieme page",
+        "action" : "Go to third room",
         "page" : "page3"
       }
     ]
   },
   {
     "name" : "page2",
-    "text" : "Ceci est une seconde page",
+    "text" : "Here is a second room.",
     "next" : [
       {
-        "action" : "Passer a la premiere page",
+        "action" : "Go back to first room",
         "page" : "main"
       },
       {
-        "action" : "Passer a la troisieme page",
+        "action" : "Go to third room",
         "page" : "page3"
       }
     ]
   },
   {
     "name" : "page3",
-    "text" : "Ceci est la dernire page. Vous pouvez a present partir apres la lecture de ce long texte de test pour voir ce qui se passe quand c'est trop long attention ça risque de ne pas être tres interessant a lire alors ne lisez pas si vous ne voulez pas le lire ce n'est pas une obligation d'aller jusqu'au bout voila c'est deja finit",
+    "text" : "This is the last room. You just won! You can still go back to the first room whenever you feel doing it.",
     "next" : [
       {
-        "action" : "Partir",
+        "action" : "Replay",
         "page" : "main"
       }
     ]
