@@ -12,6 +12,49 @@
 
       </div>
     </div>
+    <div style="visibility: hidden;">
+      <p id="game-data">[
+        {
+          "name" : "main",
+          "text" : "Here is a first room.",
+          "next" : [
+            {
+              "action" : "Go to second room",
+              "page" : "page2"
+            },
+            {
+              "action" : "Go to third room",
+              "page" : "page3"
+            }
+          ]
+        },
+        {
+          "name" : "page2",
+          "text" : "Here is a second room.",
+          "next" : [
+            {
+              "action" : "Go back to first room",
+              "page" : "main"
+            },
+            {
+              "action" : "Go to third room",
+              "page" : "page3"
+            }
+          ]
+        },
+        {
+          "name" : "page3",
+          "text" : "This is the last room. You just won! You can still go back to the first room whenever you feel like doing it.",
+          "next" : [
+            {
+              "action" : "Replay",
+              "page" : "main"
+            }
+          ]
+        }
+      ]
+      </p>
+    </div>
     <script src="js/main.js" charset="utf-8"></script>
   </body>
 </html>

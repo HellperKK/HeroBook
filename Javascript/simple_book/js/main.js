@@ -25,16 +25,12 @@ const format = function(pageName) {
   }
 }
 
-const xhr = new XMLHttpRequest()
-xhr.open("GET", "data/pages.json", true)
-xhr.responseType = 'json'
-xhr.onload = function() {
-  var status = xhr.status
-  if (status === 200) {
-    data = this.response
-    format("main")
-  } else {
-    alert("no page found !")
-  }
-};
-xhr.send();
+const dataT = document.querySelector("#game-data")
+
+if (dataT && dataT.innerHTML) {
+  data = JSON.parse(dataT.innerHTML)
+  format("main")
+}
+else {
+  alert("No game data found")
+}
