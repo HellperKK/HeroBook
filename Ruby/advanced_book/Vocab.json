@@ -1,6 +1,0 @@
-{ "New_game" : "New game"
-, "Load" : "Load"
-, "Quit" : "Quit"
-, "Load_error" : "The page doesn't exist"
-, "Input_error" : "You mus enter a number between {} and {}"
-}
