@@ -27,8 +27,14 @@ import TextField from '@mui/material/TextField';
 // import Divider from '@mui/material/Divider';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Container, Stack } from '@mui/material';
-import { initialState, initialPage, Page, State } from '../utils/initialStuff';
+import { Box } from '@mui/system';
+import {
+  initialState,
+  initialPage,
+  initialChoice,
+  Page,
+  State,
+} from '../utils/initialStuff';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -46,7 +52,7 @@ declare module '@mui/material/styles' {
 
 const Editor = () => {
   const [state, setState] = useState(initialState());
-  const [selectedPage, setSelectedPage] = useState(state.pages[0].id);
+  const [selectedPage, setSelectedPage] = useState(0);
   const [pageId, setPageId] = useState(3);
 
   const stateL = lens<State>();
@@ -54,7 +60,17 @@ const Editor = () => {
 
   const addPage = () => {
     const newPage = pageL.id.set(pageId)(initialPage());
-    setState(stateL.pages.set(state.pages.concat(newPage))(state));
+    setState(stateL.pages.set(state.pages.concat([newPage]))(state));
+    setPageId(pageId + 1);
+  };
+
+  const addChoice = (index: number) => {
+    const newChoices = initialChoice();
+    setState(
+      stateL.pages[index].next.set(
+        state.pages[index].next.concat([newChoices])
+      )(state)
+    );
     setPageId(pageId + 1);
   };
 
@@ -75,16 +91,29 @@ const Editor = () => {
     return initialPage();
   };
 
+  const changeTitle = (index: number, title: string) => {
+    setState(stateL.pages[index].name.set(title)(state));
+  };
+
+  const changeText = (index: number, text: string) => {
+    setState(stateL.pages[index].text.set(text)(state));
+  };
+
+  const setFirst = (index: number) => {
+    const firstPageIndex = state.pages.findIndex((page) => page.isFirst);
+    if (firstPageIndex !== -1) {
+      const newPages = state.pages.slice();
+      newPages[firstPageIndex] = pageL.isFirst.set(false)(
+        state.pages[firstPageIndex]
+      );
+      newPages[index] = pageL.isFirst.set(true)(state.pages[index]);
+      setState(stateL.pages.set(newPages)(state));
+    }
+  };
+
   return (
-    <Stack
-      spacing={0.2}
-      direction="column"
-      sx={
-        {
-          /* height: '100vh' */
-        }
-      }
-    >
+    <Box sx={{ padding: '8px' }}>
+      {/* Menu Bar */}
       <Grid
         container
         spacing={0.2}
@@ -122,12 +151,22 @@ const Editor = () => {
           </Button>
         </Grid>
       </Grid>
+      {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={3}>
+        <Grid item xs={3} xl={2}>
+          {/* Page List */}
           <List sx={{ overflow: 'auto' }}>
             {state.pages.map((page, index) => (
-              <ListItem onClick={() => setSelectedPage(page.id)} key={page.id}>
-                <ListItemIcon>
+              <ListItem
+                onClick={() => setSelectedPage(index)}
+                key={page.id}
+                sx={{ bgcolor: index === selectedPage ? 'secondary.main' : '' }}
+              >
+                <ListItemIcon
+                  sx={{
+                    color: 'text.primary',
+                  }}
+                >
                   {page.isFirst ? <FlagSharpIcon /> : <div />}
                 </ListItemIcon>
                 <ListItemText primary={page.name} />
@@ -147,26 +186,40 @@ const Editor = () => {
             </ListItem>
           </List>
         </Grid>
-        <Grid item xs={9}>
+        {/* Page Data */}
+        <Grid item xs={9} xl={10}>
           {/* <Divider textAlign="left">Page Data</Divider> */}
-          <Container>
+          <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
             <TextField
               label="Page Title"
               variant="outlined"
-              value={findPage(state.pages, selectedPage).name}
+              value={state.pages[selectedPage].name}
+              onChange={(e) => changeTitle(selectedPage, e.target.value)}
             />
-          </Container>
-          <Container>
+            <Button
+              variant="contained"
+              onClick={() => setFirst(selectedPage)}
+              disabled={state.pages[selectedPage].isFirst}
+              sx={{ height: '100%' }}
+            >
+              <FlagSharpIcon />
+            </Button>
+          </Box>
+          <Box sx={{ height: '55vh', paddingTop: '20px' }}>
             <TextField
               multiline
+              fullWidth
               label="Page Content"
               variant="outlined"
-              value={findPage(state.pages, selectedPage).text}
+              value={state.pages[selectedPage].text}
+              onChange={(e) => changeText(selectedPage, e.target.value)}
+              sx={{ height: '100%' }}
             />
-          </Container>
-          <Container>
+          </Box>
+          {/* Choice List */}
+          <Box sx={{ height: '30vh' }}>
             <List sx={{ overflow: 'auto' }}>
-              {findPage(state.pages, selectedPage).next.map((choice, index) => (
+              {state.pages[selectedPage].next.map((choice, index) => (
                 <ListItem key={`choice-${index + 42}`}>
                   <TextField
                     label="Choice Text"
@@ -188,17 +241,16 @@ const Editor = () => {
               <ListItem>
                 <Button
                   variant="contained"
-                  sx={{ width: '100%' }}
-                  onClick={addPage}
+                  onClick={() => addChoice(selectedPage)}
                 >
                   <AddSharpIcon />
                 </Button>
               </ListItem>
             </List>
-          </Container>
+          </Box>
         </Grid>
       </Grid>
-    </Stack>
+    </Box>
   );
 };
 
