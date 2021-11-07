@@ -28,6 +28,7 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { Box } from '@mui/system';
+import Container from '@mui/material/Container';
 import {
   initialState,
   initialPage,
@@ -236,40 +237,47 @@ const Editor = () => {
               variant="outlined"
               value={state.pages[selectedPage].text}
               onChange={(e) => changeText(selectedPage, e.target.value)}
-              sx={{ height: '100%' }}
+              sx={{ height: '100%', width: '100%' }}
             />
           </Box>
           {/* Choice List */}
           <Box sx={{ height: '30vh' }}>
-            <List sx={{ overflow: 'auto' }}>
-              {state.pages[selectedPage].next.map((choice, index) => (
-                <ListItem key={`choice-${index + 42}`}>
-                  <TextField
-                    label="Choice Text"
-                    variant="outlined"
-                    value={choice.action}
-                  />
-                  <Select value={findPage(state.pages, choice.pageId).id}>
-                    {state.pages.map((page) => (
-                      <MenuItem key={page.id} value={page.id}>
-                        {page.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <Button variant="contained" onClick={() => {}}>
-                    <DeleteSharpIcon />
+            <Container>
+              <List sx={{ overflow: 'auto' }}>
+                {state.pages[selectedPage].next.map((choice, index) => (
+                  <ListItem key={`choice-${index + 42}`}>
+                    <TextField
+                      label="Choice Text"
+                      variant="outlined"
+                      value={choice.action}
+                      sx={{ width: '50%' }}
+                    />
+                    <Select
+                      value={findPage(state.pages, choice.pageId).id}
+                      sx={{ width: '30%' }}
+                    >
+                      {state.pages.map((page) => (
+                        <MenuItem key={page.id} value={page.id}>
+                          {page.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <Button variant="contained" onClick={() => {}}>
+                      <DeleteSharpIcon />
+                    </Button>
+                  </ListItem>
+                ))}
+                <ListItem>
+                  <Button
+                    variant="contained"
+                    onClick={() => addChoice(selectedPage)}
+                    sx={{ width: '85%' }}
+                  >
+                    <AddSharpIcon />
                   </Button>
                 </ListItem>
-              ))}
-              <ListItem>
-                <Button
-                  variant="contained"
-                  onClick={() => addChoice(selectedPage)}
-                >
-                  <AddSharpIcon />
-                </Button>
-              </ListItem>
-            </List>
+              </List>
+            </Container>
           </Box>
         </Grid>
       </Grid>
