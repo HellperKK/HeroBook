@@ -1,30 +1,17 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-// import Paper from '@mui/material/Paper';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
-import FolderOpenSharpIcon from '@mui/icons-material/FolderOpenSharp';
-import SaveSharpIcon from '@mui/icons-material/SaveSharp';
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
-import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
-import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
-import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp';
 import FlagSharpIcon from '@mui/icons-material/FlagSharp';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
-// import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
-import { ThemeProvider } from '@mui/private-theming';
-
 import { useState } from 'react';
 import './App.global.css';
 import { lens } from 'lens.ts';
-import createTheme from '@mui/material/styles/createTheme';
-import { orange } from '@mui/material/colors';
 import TextField from '@mui/material/TextField';
-// import Divider from '@mui/material/Divider';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { Box } from '@mui/system';
@@ -37,19 +24,7 @@ import {
   State,
 } from '../utils/initialStuff';
 
-declare module '@mui/material/styles' {
-  interface Theme {
-    status: {
-      danger: string;
-    };
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    status?: {
-      danger?: string;
-    };
-  }
-}
+import TopBar from './components/topBar';
 
 const Editor = () => {
   const [state, setState] = useState(initialState());
@@ -106,55 +81,16 @@ const Editor = () => {
   const setFirst = (index: number) => {
     const firstPageIndex = state.pages.findIndex((page) => page.isFirst);
     if (firstPageIndex !== -1) {
-      const newPages = state.pages.slice();
-      newPages[firstPageIndex] = pageL.isFirst.set(false)(
-        state.pages[firstPageIndex]
-      );
-      newPages[index] = pageL.isFirst.set(true)(state.pages[index]);
-      setState(stateL.pages.set(newPages)(state));
+      setState(stateL.pages[firstPageIndex].isFirst.set(false)(state));
     }
+    setState((currentState) =>
+      stateL.pages[index].isFirst.set(true)(currentState)
+    );
   };
 
   return (
     <Box sx={{ padding: '8px' }}>
-      {/* Menu Bar */}
-      <Grid
-        container
-        spacing={0.2}
-        justifyContent="center"
-        alignItems="stretch"
-      >
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <FolderOpenSharpIcon />
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <SaveSharpIcon />
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <SettingsSharpIcon />
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <PermMediaSharpIcon />
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <PlayArrowSharpIcon />
-          </Button>
-        </Grid>
-        <Grid item xs={1}>
-          <Button variant="contained">
-            <FileDownloadSharpIcon />
-          </Button>
-        </Grid>
-      </Grid>
+      <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>
@@ -288,20 +224,12 @@ const Editor = () => {
   );
 };
 
-const theme = createTheme({
-  status: {
-    danger: orange[500],
-  },
-});
-
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Switch>
-          <Route path="/" component={Editor} />
-        </Switch>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <Switch>
+        <Route path="/" component={Editor} />
+      </Switch>
+    </Router>
   );
 }
