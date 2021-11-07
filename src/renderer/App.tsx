@@ -170,11 +170,25 @@ const Editor = () => {
                     color: 'text.primary',
                   }}
                 >
-                  {page.isFirst ? <FlagSharpIcon /> : <div />}
+                  {page.isFirst ? (
+                    <FlagSharpIcon
+                      sx={{
+                        color: index === selectedPage ? 'white' : '',
+                      }}
+                    />
+                  ) : (
+                    <div />
+                  )}
                 </ListItemIcon>
-                <ListItemText primary={page.name} />
+                <ListItemText
+                  sx={{
+                    color: index === selectedPage ? 'white' : '',
+                  }}
+                  primary={page.name}
+                />
                 <Button
                   variant="contained"
+                  disabled={state.pages.length === 1}
                   onClick={(e) => {
                     e.stopPropagation();
                     removePage(index);
