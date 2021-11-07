@@ -164,7 +164,10 @@ const Editor = () => {
               <ListItem
                 onClick={() => setSelectedPage(index)}
                 key={page.id}
-                sx={{ bgcolor: index === selectedPage ? 'secondary.main' : '' }}
+                sx={{
+                  bgcolor: index === selectedPage ? 'secondary.main' : '',
+                  cursor: 'pointer',
+                }}
               >
                 <ListItemIcon
                   sx={{
