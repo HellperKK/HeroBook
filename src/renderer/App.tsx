@@ -25,7 +25,7 @@ import {
   State,
 } from '../utils/initialStuff';
 import { openAFile, download } from '../utils/utils';
-import format from '../utils/format';
+import { compile } from '../utils/format';
 
 import TopBar from './components/topBar';
 
@@ -52,7 +52,8 @@ const Editor = () => {
   };
 
   const compileState = () => {
-    download('game.html', format(JSON.stringify(state), false, state.settings));
+    // download('game.html', format(JSON.stringify(state), false, state.settings));
+    compile(state, false);
   };
 
   const addPage = () => {
