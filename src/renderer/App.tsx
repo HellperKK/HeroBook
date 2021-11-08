@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
@@ -23,6 +24,8 @@ import {
   Page,
   State,
 } from '../utils/initialStuff';
+import { openAFile, download } from '../utils/utils';
+import format from '../utils/format';
 
 import TopBar from './components/topBar';
 
@@ -33,6 +36,27 @@ const Editor = () => {
 
   const stateL = lens<State>();
   const pageL = lens<Page>();
+
+  const loadState = () => {
+    console.log('test');
+    openAFile((file: File) => {
+      file
+        .text()
+        .then((content) => setState(JSON.parse(content)))
+        .catch(() => {});
+    });
+  };
+
+  const saveState = () => {
+    download('gameData.json', JSON.stringify(state));
+  };
+
+  const compileState = () => {
+    download(
+      'gameData.json',
+      format(JSON.stringify(state), false, state.settings)
+    );
+  };
 
   const addPage = () => {
     const newPage = pageL.id.set(pageId)(initialPage());
@@ -90,7 +114,7 @@ const Editor = () => {
 
   return (
     <Box sx={{ padding: '8px' }}>
-      <TopBar />
+      <TopBar load={loadState} save={saveState} compile={compileState} />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>
