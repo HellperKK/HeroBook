@@ -52,10 +52,7 @@ const Editor = () => {
   };
 
   const compileState = () => {
-    download(
-      'gameData.json',
-      format(JSON.stringify(state), false, state.settings)
-    );
+    download('game.html', format(JSON.stringify(state), false, state.settings));
   };
 
   const addPage = () => {
