@@ -1,3 +1,7 @@
+/* eslint-disable no-console */
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+
 const makeTitle = (settings) =>
   settings.gameTitle + (settings.author ? ` by ${settings.author}` : '');
 
@@ -15,7 +19,7 @@ const format = (game, crypt, settings) =>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>{title}</title>
+    <title>${makeTitle(settings)}</title>
     <style>
       body {
         text-align: center;
@@ -49,11 +53,11 @@ const format = (game, crypt, settings) =>
       </div>
     </div>
     <p style="display: none;" id="game-data">
-        {game}
+        ${crypt ? crypter(game, 'jeronimo') : game}
     </p>
     <script>
       let data
-      const crypted = {crypted}
+      const crypted = ${crypt}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
       const divText = divStory.querySelector(".story-text")
@@ -127,9 +131,19 @@ const format = (game, crypt, settings) =>
     </script>
   </body>
 </html>
-`
-    .replace('{game}', crypt ? crypter(game, 'jeronimo') : game)
-    .replace('{crypted}', crypt)
-    .replace('{title}', makeTitle(settings));
+`;
 
-export default format;
+const compile = (state, crypt) => {
+  const zip = new JSZip();
+
+  zip.file('index.html', format(JSON.stringify(state), crypt, state.settings));
+
+  // const images = zip.folder('images');
+
+  zip
+    .generateAsync({ type: 'blob' })
+    .then((blob) => saveAs(blob, 'game.zip'))
+    .catch(() => console.log('error'));
+};
+
+export { format, compile };
