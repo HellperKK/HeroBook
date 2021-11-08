@@ -1,17 +1,16 @@
-const makeTitle = settings => (
-  settings.gameTitle + 
-  (settings.author ? ` by ${settings.author}` : "")
-)
+const makeTitle = (settings) =>
+  settings.gameTitle + (settings.author ? ` by ${settings.author}` : '');
 
 const crypter = (str, key) => {
-  const chars = str.split("")
+  const chars = str.split('');
   const codes = chars.map((char, index) => {
-    return char.charCodeAt(0) + key.charCodeAt(index % key.length)
-  })
-  return codes.join(",")
-}
+    return char.charCodeAt(0) + key.charCodeAt(index % key.length);
+  });
+  return codes.join(',');
+};
 
-const format = (game, crypt, settings) => (`
+const format = (game, crypt, settings) =>
+  `
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -21,11 +20,11 @@ const format = (game, crypt, settings) => (`
       body {
         text-align: center;
       }
-      
+
       .story {
         margin:10%;
       }
-      
+
       .story-choices button {
         background-color: transparent;
         border: none;
@@ -128,9 +127,9 @@ const format = (game, crypt, settings) => (`
     </script>
   </body>
 </html>
-`.replace('{game}', crypt? crypter(game, "jeronimo") : game)
-.replace('{crypted}', crypt)
-.replace('{title}', makeTitle(settings))
-)
+`
+    .replace('{game}', crypt ? crypter(game, 'jeronimo') : game)
+    .replace('{crypted}', crypt)
+    .replace('{title}', makeTitle(settings));
 
-export default format
+export default format;
