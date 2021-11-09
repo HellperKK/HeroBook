@@ -1,22 +1,30 @@
 /* eslint-disable no-console */
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
-import FlagSharpIcon from '@mui/icons-material/FlagSharp';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AddSharpIcon from '@mui/icons-material/AddSharp';
-import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
-import { useState } from 'react';
-import './App.global.css';
-import { lens } from 'lens.ts';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Box } from '@mui/system';
+import Box from '@mui/system/Box';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+
+import FlagSharpIcon from '@mui/icons-material/FlagSharp';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import AddSharpIcon from '@mui/icons-material/AddSharp';
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import EditSharpIcon from '@mui/icons-material/EditSharp';
+import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
+import CodeSharpIcon from '@mui/icons-material/CodeSharp';
+
+import { useState, ReactNode } from 'react';
+import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import './App.global.css';
+import { lens } from 'lens.ts';
 import {
   initialState,
   initialPage,
@@ -29,10 +37,39 @@ import { compile } from '../utils/format';
 
 import TopBar from './components/topBar';
 
+interface TabPanelProps {
+  // eslint-disable-next-line react/require-default-props
+  children?: ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
 const Editor = () => {
   const [state, setState] = useState(initialState());
   const [selectedPage, setSelectedPage] = useState(0);
   const [pageId, setPageId] = useState(3);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const stateL = lens<State>();
   const pageL = lens<Page>();
@@ -173,73 +210,93 @@ const Editor = () => {
         </Grid>
         {/* Page Data */}
         <Grid item xs={9} xl={10}>
+          <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={selectedTab}
+                onChange={(_e, value: number) => setSelectedTab(value)}
+                aria-label="basic tabs example"
+              >
+                <Tab icon={<EditSharpIcon />} />
+                <Tab icon={<PlayArrowSharpIcon />} />
+                <Tab icon={<CodeSharpIcon />} />
+              </Tabs>
+            </Box>
+            <TabPanel value={selectedTab} index={0}>
+              <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
+                <TextField
+                  label="Page Title"
+                  variant="outlined"
+                  value={state.pages[selectedPage].name}
+                  onChange={(e) => changeTitle(selectedPage, e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => setFirst(selectedPage)}
+                  disabled={state.pages[selectedPage].isFirst}
+                >
+                  <FlagSharpIcon />
+                </Button>
+              </Box>
+              <Box sx={{ height: '55vh', paddingTop: '20px' }}>
+                <TextField
+                  multiline
+                  fullWidth
+                  label="Page Content"
+                  variant="outlined"
+                  value={state.pages[selectedPage].text}
+                  onChange={(e) => changeText(selectedPage, e.target.value)}
+                  sx={{ height: '100%', width: '100%' }}
+                />
+              </Box>
+              {/* Choice List */}
+              <Box sx={{ height: '30vh' }}>
+                <Container>
+                  <List sx={{ overflow: 'auto' }}>
+                    {state.pages[selectedPage].next.map((choice, index) => (
+                      <ListItem key={`choice-${index + 42}`}>
+                        <TextField
+                          label="Choice Text"
+                          variant="outlined"
+                          value={choice.action}
+                          sx={{ width: '50%' }}
+                        />
+                        <Select
+                          value={findPage(state.pages, choice.pageId).id}
+                          sx={{ width: '30%' }}
+                        >
+                          {state.pages.map((page) => (
+                            <MenuItem key={page.id} value={page.id}>
+                              {page.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <Button variant="contained" onClick={() => {}}>
+                          <DeleteSharpIcon />
+                        </Button>
+                      </ListItem>
+                    ))}
+                    <ListItem>
+                      <Button
+                        variant="contained"
+                        onClick={() => addChoice(selectedPage)}
+                        sx={{ width: '85%' }}
+                      >
+                        <AddSharpIcon />
+                      </Button>
+                    </ListItem>
+                  </List>
+                </Container>
+              </Box>
+            </TabPanel>
+            <TabPanel value={selectedTab} index={1}>
+              Item Two
+            </TabPanel>
+            <TabPanel value={selectedTab} index={2}>
+              Item Three
+            </TabPanel>
+          </Box>
           {/* <Divider textAlign="left">Page Data</Divider> */}
-          <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
-            <TextField
-              label="Page Title"
-              variant="outlined"
-              value={state.pages[selectedPage].name}
-              onChange={(e) => changeTitle(selectedPage, e.target.value)}
-            />
-            <Button
-              variant="contained"
-              onClick={() => setFirst(selectedPage)}
-              disabled={state.pages[selectedPage].isFirst}
-              sx={{ height: '100%' }}
-            >
-              <FlagSharpIcon />
-            </Button>
-          </Box>
-          <Box sx={{ height: '55vh', paddingTop: '20px' }}>
-            <TextField
-              multiline
-              fullWidth
-              label="Page Content"
-              variant="outlined"
-              value={state.pages[selectedPage].text}
-              onChange={(e) => changeText(selectedPage, e.target.value)}
-              sx={{ height: '100%', width: '100%' }}
-            />
-          </Box>
-          {/* Choice List */}
-          <Box sx={{ height: '30vh' }}>
-            <Container>
-              <List sx={{ overflow: 'auto' }}>
-                {state.pages[selectedPage].next.map((choice, index) => (
-                  <ListItem key={`choice-${index + 42}`}>
-                    <TextField
-                      label="Choice Text"
-                      variant="outlined"
-                      value={choice.action}
-                      sx={{ width: '50%' }}
-                    />
-                    <Select
-                      value={findPage(state.pages, choice.pageId).id}
-                      sx={{ width: '30%' }}
-                    >
-                      {state.pages.map((page) => (
-                        <MenuItem key={page.id} value={page.id}>
-                          {page.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <Button variant="contained" onClick={() => {}}>
-                      <DeleteSharpIcon />
-                    </Button>
-                  </ListItem>
-                ))}
-                <ListItem>
-                  <Button
-                    variant="contained"
-                    onClick={() => addChoice(selectedPage)}
-                    sx={{ width: '85%' }}
-                  >
-                    <AddSharpIcon />
-                  </Button>
-                </ListItem>
-              </List>
-            </Container>
-          </Box>
         </Grid>
       </Grid>
     </Box>
