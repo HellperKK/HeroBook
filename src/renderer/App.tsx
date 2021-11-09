@@ -82,8 +82,8 @@ const Editor = () => {
     if (state.pages.length > 1) {
       const newPages = state.pages.slice();
       newPages.splice(index, 1);
-      if (selectedPage === index) {
-        setSelectedPage(selectedPage === 0 ? 0 : selectedPage - 1);
+      if (selectedPage === newPages.length) {
+        setSelectedPage(selectedPage - 1);
       }
       setState(stateL.pages.set(newPages)(state));
     }
