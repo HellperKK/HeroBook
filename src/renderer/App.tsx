@@ -6,11 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import FlagSharpIcon from '@mui/icons-material/FlagSharp';
@@ -36,6 +32,7 @@ import { openAFile, download } from '../utils/utils';
 import { compile } from '../utils/format';
 
 import TopBar from './components/topBar';
+import PageEditor from './components/PageEditor';
 
 interface TabPanelProps {
   // eslint-disable-next-line react/require-default-props
@@ -120,8 +117,8 @@ const Editor = () => {
     }
   };
 
-  const findPage = (pages: Array<Page>, id: number) => {
-    const page = pages.find((p) => p.id === id);
+  const findPage = (id: number) => {
+    const page = state.pages.find((p) => p.id === id);
     if (page !== undefined) {
       return page;
     }
@@ -223,71 +220,15 @@ const Editor = () => {
               </Tabs>
             </Box>
             <TabPanel value={selectedTab} index={0}>
-              <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
-                <TextField
-                  label="Page Title"
-                  variant="outlined"
-                  value={state.pages[selectedPage].name}
-                  onChange={(e) => changeTitle(selectedPage, e.target.value)}
-                />
-                <Button
-                  variant="contained"
-                  onClick={() => setFirst(selectedPage)}
-                  disabled={state.pages[selectedPage].isFirst}
-                >
-                  <FlagSharpIcon />
-                </Button>
-              </Box>
-              <Box sx={{ height: '55vh', paddingTop: '20px' }}>
-                <TextField
-                  multiline
-                  fullWidth
-                  label="Page Content"
-                  variant="outlined"
-                  value={state.pages[selectedPage].text}
-                  onChange={(e) => changeText(selectedPage, e.target.value)}
-                  sx={{ height: '100%', width: '100%' }}
-                />
-              </Box>
-              {/* Choice List */}
-              <Box sx={{ height: '30vh' }}>
-                <Container>
-                  <List sx={{ overflow: 'auto' }}>
-                    {state.pages[selectedPage].next.map((choice, index) => (
-                      <ListItem key={`choice-${index + 42}`}>
-                        <TextField
-                          label="Choice Text"
-                          variant="outlined"
-                          value={choice.action}
-                          sx={{ width: '50%' }}
-                        />
-                        <Select
-                          value={findPage(state.pages, choice.pageId).id}
-                          sx={{ width: '30%' }}
-                        >
-                          {state.pages.map((page) => (
-                            <MenuItem key={page.id} value={page.id}>
-                              {page.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        <Button variant="contained" onClick={() => {}}>
-                          <DeleteSharpIcon />
-                        </Button>
-                      </ListItem>
-                    ))}
-                    <ListItem>
-                      <Button
-                        variant="contained"
-                        onClick={() => addChoice(selectedPage)}
-                        sx={{ width: '85%' }}
-                      >
-                        <AddSharpIcon />
-                      </Button>
-                    </ListItem>
-                  </List>
-                </Container>
-              </Box>
+              <PageEditor
+                addChoice={addChoice}
+                changeTitle={changeTitle}
+                setFirst={setFirst}
+                changeText={changeText}
+                findPage={findPage}
+                selectedPage={selectedPage}
+                state={state}
+              />
             </TabPanel>
             <TabPanel value={selectedTab} index={1}>
               Item Two
