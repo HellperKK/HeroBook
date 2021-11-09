@@ -7,7 +7,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/system/Box';
-import Typography from '@mui/material/Typography';
 
 import FlagSharpIcon from '@mui/icons-material/FlagSharp';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -17,7 +16,7 @@ import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CodeSharpIcon from '@mui/icons-material/CodeSharp';
 
-import { useState, ReactNode } from 'react';
+import { useState } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
 import { lens } from 'lens.ts';
@@ -31,36 +30,9 @@ import {
 import { openAFile, download } from '../utils/utils';
 import { compile } from '../utils/format';
 
-import TopBar from './components/topBar';
+import TabPanel from './components/TabPanel';
+import TopBar from './components/TopBar';
 import PageEditor from './components/PageEditor';
-
-interface TabPanelProps {
-  // eslint-disable-next-line react/require-default-props
-  children?: ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
 
 const Editor = () => {
   const [state, setState] = useState(initialState());
