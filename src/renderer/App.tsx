@@ -33,6 +33,8 @@ import { compile } from '../utils/format';
 import TabPanel from './components/TabPanel';
 import TopBar from './components/TopBar';
 import PageEditor from './components/PageEditor';
+import GameWindow from './components/GameWindow';
+import Space from './components/Space';
 
 const Editor = () => {
   const [state, setState] = useState(initialState());
@@ -138,15 +140,21 @@ const Editor = () => {
                     color: 'text.primary',
                   }}
                 >
-                  {page.isFirst ? (
+                  <Button
+                    variant={page.isFirst ? 'contained' : 'outlined'}
+                    disabled={page.isFirst}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFirst(index);
+                    }}
+                  >
                     <FlagSharpIcon
                       sx={{
-                        color: index === selectedPage ? 'white' : '',
+                        color: page.isFirst ? 'yellow' : 'black',
                       }}
                     />
-                  ) : (
-                    <div />
-                  )}
+                  </Button>
+                  <Space size={2} />
                 </ListItemIcon>
                 <ListItemText
                   sx={{
@@ -177,9 +185,11 @@ const Editor = () => {
             </ListItem>
           </List>
         </Grid>
+
         {/* Page Data */}
         <Grid item xs={9} xl={10}>
-          <Box sx={{ width: '100%' }}>
+          <Box>
+            {/* Tabs */}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
                 value={selectedTab}
@@ -191,6 +201,8 @@ const Editor = () => {
                 <Tab icon={<CodeSharpIcon />} />
               </Tabs>
             </Box>
+
+            {/* Game Edition */}
             <TabPanel value={selectedTab} index={0}>
               <PageEditor
                 addChoice={addChoice}
@@ -202,8 +214,10 @@ const Editor = () => {
                 state={state}
               />
             </TabPanel>
+
+            {/* Game Visualisation */}
             <TabPanel value={selectedTab} index={1}>
-              Item Two
+              <GameWindow state={state} findPage={findPage} playable={false} />
             </TabPanel>
             <TabPanel value={selectedTab} index={2}>
               Item Three
