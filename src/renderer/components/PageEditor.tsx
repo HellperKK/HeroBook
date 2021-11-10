@@ -7,7 +7,6 @@ import ListItem from '@mui/material/ListItem/ListItem';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import FlagSharpIcon from '@mui/icons-material/FlagSharp';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 
@@ -17,22 +16,14 @@ interface CompProp {
   selectedPage: number;
   state: State;
   changeTitle: (pageIndex: number, title: string) => void;
-  setFirst: (pageIndex: number) => void;
   changeText: (pageIndex: number, title: string) => void;
   findPage: (pageId: number) => Page;
   addChoice: (pageIndex: number) => void;
 }
 
 export default function PageEditor(props: CompProp) {
-  const {
-    changeTitle,
-    setFirst,
-    changeText,
-    findPage,
-    addChoice,
-    selectedPage,
-    state,
-  } = props;
+  const { changeTitle, changeText, findPage, addChoice, selectedPage, state } =
+    props;
   return (
     <Box>
       <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
@@ -42,13 +33,6 @@ export default function PageEditor(props: CompProp) {
           value={state.pages[selectedPage].name}
           onChange={(e) => changeTitle(selectedPage, e.target.value)}
         />
-        <Button
-          variant="contained"
-          onClick={() => setFirst(selectedPage)}
-          disabled={state.pages[selectedPage].isFirst}
-        >
-          <FlagSharpIcon />
-        </Button>
       </Box>
       <Box sx={{ height: '55vh', paddingTop: '20px' }}>
         <TextField

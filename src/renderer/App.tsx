@@ -207,7 +207,6 @@ const Editor = () => {
               <PageEditor
                 addChoice={addChoice}
                 changeTitle={changeTitle}
-                setFirst={setFirst}
                 changeText={changeText}
                 findPage={findPage}
                 selectedPage={selectedPage}
@@ -219,6 +218,7 @@ const Editor = () => {
             <TabPanel value={selectedTab} index={1}>
               <GameWindow state={state} findPage={findPage} playable={false} />
             </TabPanel>
+
             <TabPanel value={selectedTab} index={2}>
               Item Three
             </TabPanel>
