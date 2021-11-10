@@ -15,6 +15,8 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CodeSharpIcon from '@mui/icons-material/CodeSharp';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 import { useState } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
@@ -34,7 +36,7 @@ import {
   Page,
   State,
 } from '../utils/initialStuff';
-import { download, nothing } from '../utils/utils';
+import { nothing, openAZip } from '../utils/utils';
 import { compile } from '../utils/format';
 
 const Editor = () => {
@@ -42,22 +44,32 @@ const Editor = () => {
   const [selectedPage, setSelectedPage] = useState(0);
   const [pageId, setPageId] = useState(3);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [zip, setZip] = useState(new JSZip());
 
   const stateL = lens<State>();
   const pageL = lens<Page>();
 
-  /* const loadState = () => {
-    console.log('test');
-    openAFile((file: File) => {
-      file
-        .text()
-        .then((content) => setState(JSON.parse(content)))
-        .catch(() => {});
+  const loadState = () => {
+    openAZip((z: JSZip) => {
+      const data = z.file('data.json');
+
+      if (data !== null) {
+        data
+          .async('text')
+          .then((text) => setState(JSON.parse(text)))
+          .catch(nothing);
+        setZip(z);
+      }
     });
-  }; */
+  };
 
   const saveState = () => {
-    download('gameData.json', JSON.stringify(state));
+    const zipLoad = new JSZip();
+    zipLoad.file('data.json', JSON.stringify(state));
+    zipLoad
+      .generateAsync({ type: 'blob' })
+      .then((blob) => saveAs(blob, 'game.zip'))
+      .catch(nothing);
   };
 
   const compileState = () => {
@@ -121,7 +133,7 @@ const Editor = () => {
 
   return (
     <Box sx={{ padding: '8px' }}>
-      <TopBar load={nothing} save={saveState} compile={compileState} />
+      <TopBar load={loadState} save={saveState} compile={compileState} />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>

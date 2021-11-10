@@ -49,6 +49,7 @@ export default function GameWindow(props: CompProp) {
         className="story"
         sx={{
           height: '100%',
+          padding: '8px',
           textAlign: 'center',
           backgroundColor:
             findPage(currentPage).format.page ?? state.format.page,
