@@ -2,10 +2,13 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const makeTitle = (settings) =>
+import { nothing } from './utils';
+import { Settings, State } from './initialStuff';
+
+const makeTitle = (settings: Settings) =>
   settings.gameTitle + (settings.author ? ` by ${settings.author}` : '');
 
-const crypter = (str, key) => {
+const crypter = (str: string, key: string) => {
   const chars = str.split('');
   const codes = chars.map((char, index) => {
     return char.charCodeAt(0) + key.charCodeAt(index % key.length);
@@ -13,7 +16,7 @@ const crypter = (str, key) => {
   return codes.join(',');
 };
 
-const format = (game, crypt, settings) =>
+const format = (game: string, crypt: boolean, settings: Settings) =>
   `
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -133,7 +136,7 @@ const format = (game, crypt, settings) =>
 </html>
 `;
 
-const compile = (state, crypt) => {
+const compile = (state: State, crypt: boolean) => {
   const zip = new JSZip();
 
   zip.file('index.html', format(JSON.stringify(state), crypt, state.settings));
@@ -143,7 +146,7 @@ const compile = (state, crypt) => {
   zip
     .generateAsync({ type: 'blob' })
     .then((blob) => saveAs(blob, 'game.zip'))
-    .catch(() => console.log('error'));
+    .catch(nothing);
 };
 
 export { format, compile };

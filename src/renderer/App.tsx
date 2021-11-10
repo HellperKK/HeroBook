@@ -20,6 +20,13 @@ import { useState } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
 import { lens } from 'lens.ts';
+
+import TabPanel from './components/TabPanel';
+import TopBar from './components/TopBar';
+import PageEditor from './components/PageEditor';
+import GameWindow from './components/GameWindow';
+import Space from './components/Space';
+
 import {
   initialState,
   initialPage,
@@ -27,14 +34,8 @@ import {
   Page,
   State,
 } from '../utils/initialStuff';
-import { openAFile, download } from '../utils/utils';
+import { download, nothing } from '../utils/utils';
 import { compile } from '../utils/format';
-
-import TabPanel from './components/TabPanel';
-import TopBar from './components/TopBar';
-import PageEditor from './components/PageEditor';
-import GameWindow from './components/GameWindow';
-import Space from './components/Space';
 
 const Editor = () => {
   const [state, setState] = useState(initialState());
@@ -45,7 +46,7 @@ const Editor = () => {
   const stateL = lens<State>();
   const pageL = lens<Page>();
 
-  const loadState = () => {
+  /* const loadState = () => {
     console.log('test');
     openAFile((file: File) => {
       file
@@ -53,7 +54,7 @@ const Editor = () => {
         .then((content) => setState(JSON.parse(content)))
         .catch(() => {});
     });
-  };
+  }; */
 
   const saveState = () => {
     download('gameData.json', JSON.stringify(state));
@@ -120,7 +121,7 @@ const Editor = () => {
 
   return (
     <Box sx={{ padding: '8px' }}>
-      <TopBar load={loadState} save={saveState} compile={compileState} />
+      <TopBar load={nothing} save={saveState} compile={compileState} />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>

@@ -165,6 +165,7 @@
     "@testing-library/react": "^12.1.2",
     "@types/enzyme": "^3.10.9",
     "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/file-saver": "^2.0.3",
     "@types/history": "4.7.9",
     "@types/jest": "^27.0.2",
     "@types/node": "16.10.2",

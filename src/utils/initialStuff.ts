@@ -101,4 +101,13 @@ function initialState(): State {
   };
 }
 
-export { initialChoice, initialPage, initialState, Page, State, Choice };
+export {
+  initialChoice,
+  initialPage,
+  initialState,
+  Page,
+  State,
+  Choice,
+  Format,
+  Settings,
+};
