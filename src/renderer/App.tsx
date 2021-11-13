@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -44,7 +45,8 @@ const Editor = () => {
   const [selectedPage, setSelectedPage] = useState(0);
   const [pageId, setPageId] = useState(3);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [zip, setZip] = useState(new JSZip());
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [_zip, setZip] = useState(new JSZip());
 
   const stateL = lens<State>();
   const pageL = lens<Page>();
@@ -133,7 +135,13 @@ const Editor = () => {
 
   return (
     <Box sx={{ padding: '8px' }}>
-      <TopBar load={loadState} save={saveState} compile={compileState} />
+      <TopBar
+        load={loadState}
+        save={saveState}
+        compile={compileState}
+        findPage={findPage}
+        state={state}
+      />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>
