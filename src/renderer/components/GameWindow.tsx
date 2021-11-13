@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import styled from '@emotion/styled';
 
 import { State, Page, Choice } from '../../utils/initialStuff';
+import { nothing } from '../../utils/utils';
 
 const StyledButton = styled.button`
   color: ${(props) => props.color};
@@ -23,12 +24,11 @@ export default function GameWindow(props: CompProp) {
 
   const choiceButton = (choice: Choice, index: number) => {
     const play = () => setCurrentPage(choice.pageId);
-    const noPlay = () => {};
     return (
       <StyledButton
         type="button"
         key={`poll_${index + 42}`}
-        onClick={playable ? play : noPlay}
+        onClick={playable ? play : nothing}
         color={findPage(currentPage).format.btnColor ?? state.format.btnColor}
       >
         {'>'} {choice.action}

@@ -27,7 +27,7 @@ import { lens } from 'lens.ts';
 import TabPanel from './components/TabPanel';
 import TopBar from './components/TopBar';
 import PageEditor from './components/PageEditor';
-import GameWindow from './components/GameWindow';
+import ViewWindow from './components/ViewWindow';
 import Space from './components/Space';
 
 import {
@@ -237,7 +237,7 @@ const Editor = () => {
 
             {/* Game Visualisation */}
             <TabPanel value={selectedTab} index={1}>
-              <GameWindow state={state} findPage={findPage} playable={false} />
+              <ViewWindow state={state} findPage={findPage} playable={false} />
             </TabPanel>
 
             <TabPanel value={selectedTab} index={2}>
