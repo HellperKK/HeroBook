@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-restricted-syntax */
 import JSZip from 'jszip';
+import { initialPage, Page } from './initialStuff';
+
+const findPage = (pages: Array<Page>, id: number) => {
+  const page = pages.find((p) => p.id === id);
+  if (page !== undefined) {
+    return page;
+  }
+
+  return initialPage(1);
+};
 
 const nothing = () => {};
 
@@ -66,6 +76,16 @@ const openAZip = (then: (zip: JSZip) => void) => {
   });
 };
 
+const identity = <T>(x: T): T => x;
+
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
-export { download, formatStory, openFiles, nothing, openAZip };
+export {
+  download,
+  formatStory,
+  openFiles,
+  openAZip,
+  findPage,
+  nothing,
+  identity,
+};

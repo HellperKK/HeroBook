@@ -10,28 +10,28 @@ import MenuItem from '@mui/material/MenuItem';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 
-import { State, Page } from '../../utils/initialStuff';
+import { useSelector, useDispatch } from 'react-redux';
 
-interface CompProp {
-  selectedPage: number;
-  state: State;
-  changeTitle: (pageIndex: number, title: string) => void;
-  changeText: (pageIndex: number, title: string) => void;
-  findPage: (pageId: number) => Page;
-  addChoice: (pageIndex: number) => void;
-}
+import { State } from '../../utils/state';
+import { findPage, identity } from '../../utils/utils';
 
-export default function PageEditor(props: CompProp) {
-  const { changeTitle, changeText, findPage, addChoice, selectedPage, state } =
-    props;
+export default function PageEditor() {
+  const { game, selectedPage } = useSelector<State, State>(identity);
+  const dispatch = useDispatch();
+
   return (
     <Box>
       <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
         <TextField
           label="Page Title"
           variant="outlined"
-          value={state.pages[selectedPage].name}
-          onChange={(e) => changeTitle(selectedPage, e.target.value)}
+          value={game.pages[selectedPage].name}
+          onChange={(e) =>
+            dispatch({
+              type: 'changeTitle',
+              title: e.target.value,
+            })
+          }
         />
       </Box>
       <Box sx={{ height: '55vh', paddingTop: '20px' }}>
@@ -40,8 +40,13 @@ export default function PageEditor(props: CompProp) {
           fullWidth
           label="Page Content"
           variant="outlined"
-          value={state.pages[selectedPage].text}
-          onChange={(e) => changeText(selectedPage, e.target.value)}
+          value={game.pages[selectedPage].text}
+          onChange={(e) =>
+            dispatch({
+              type: 'changeText',
+              text: e.target.value,
+            })
+          }
           sx={{ height: '100%', width: '100%' }}
         />
       </Box>
@@ -49,7 +54,7 @@ export default function PageEditor(props: CompProp) {
       <Box sx={{ height: '30vh' }}>
         <Container>
           <List sx={{ overflow: 'auto' }}>
-            {state.pages[selectedPage].next.map((choice, index) => (
+            {game.pages[selectedPage].next.map((choice, index) => (
               <ListItem key={`choice-${index + 42}`}>
                 <TextField
                   label="Choice Text"
@@ -58,10 +63,10 @@ export default function PageEditor(props: CompProp) {
                   sx={{ width: '50%' }}
                 />
                 <Select
-                  value={findPage(choice.pageId).id}
+                  value={findPage(game.pages, choice.pageId).id}
                   sx={{ width: '30%' }}
                 >
-                  {state.pages.map((page) => (
+                  {game.pages.map((page) => (
                     <MenuItem key={page.id} value={page.id}>
                       {page.name}
                     </MenuItem>
@@ -75,7 +80,11 @@ export default function PageEditor(props: CompProp) {
             <ListItem>
               <Button
                 variant="contained"
-                onClick={() => addChoice(selectedPage)}
+                onClick={() =>
+                  dispatch({
+                    type: 'addChoice',
+                  })
+                }
                 sx={{ width: '85%' }}
               >
                 <AddSharpIcon />

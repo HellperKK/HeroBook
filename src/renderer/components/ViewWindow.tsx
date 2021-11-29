@@ -8,30 +8,29 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import GameWindow from './GameWindow';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { State } from '../../utils/state';
+import { identity, nothing } from '../../utils/utils';
+
+import GameViewer from './GameViewer';
 import ColorPicker from './ColorPicker';
-
-import { State, Page } from '../../utils/initialStuff';
-
-interface CompProp {
-  state: State;
-  findPage: (pageId: number) => Page;
-  playable: boolean;
-}
 
 const FixedTypo = styled(Typography)`
   width: 100px;
 `;
 
-export default function ViewWindow(props: CompProp) {
-  const { state, findPage, playable } = props;
+export default function ViewWindow() {
+  const { game, selectedPage } = useSelector<State, State>(identity);
+  const dispatch = useDispatch();
+  const page = game.pages[selectedPage];
 
   const [editing, setEditing] = useState(false);
 
   return (
     <Grid container spacing={0.2} alignItems="stretch">
       <Grid item xs={editing ? 8 : 11}>
-        <GameWindow state={state} findPage={findPage} playable={playable} />
+        <GameViewer page={page} onClick={nothing} />
       </Grid>
       <Grid item xs={editing ? 4 : 1}>
         <Button variant="contained" onClick={() => setEditing(!editing)}>
@@ -41,19 +40,51 @@ export default function ViewWindow(props: CompProp) {
           <Box>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Text</FixedTypo>
-              <ColorPicker />
+              <ColorPicker
+                value={page.format.textColor ?? 'black'}
+                onChange={(color) =>
+                  dispatch({
+                    type: 'updateFormat',
+                    format: { textColor: color },
+                  })
+                }
+              />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Choice</FixedTypo>
-              <ColorPicker />
+              <ColorPicker
+                value={page.format.btnColor ?? 'black'}
+                onChange={(color) =>
+                  dispatch({
+                    type: 'updateFormat',
+                    format: { btnColor: color },
+                  })
+                }
+              />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Page</FixedTypo>
-              <ColorPicker />
+              <ColorPicker
+                value={page.format.page ?? 'black'}
+                onChange={(color) =>
+                  dispatch({
+                    type: 'updateFormat',
+                    format: { page: color },
+                  })
+                }
+              />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Background</FixedTypo>
-              <ColorPicker />
+              <ColorPicker
+                value={page.format.background ?? 'black'}
+                onChange={(color) =>
+                  dispatch({
+                    type: 'updateFormat',
+                    format: { background: color },
+                  })
+                }
+              />
             </Stack>
           </Box>
         ) : (

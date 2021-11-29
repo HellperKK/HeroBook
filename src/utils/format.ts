@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 import { nothing } from './utils';
-import { Settings, State } from './initialStuff';
+import { Settings, Game } from './initialStuff';
 
 const makeTitle = (settings: Settings) =>
   settings.gameTitle + (settings.author ? ` by ${settings.author}` : '');
@@ -136,7 +136,7 @@ const format = (game: string, crypt: boolean, settings: Settings) =>
 </html>
 `;
 
-const compile = (state: State, crypt: boolean) => {
+const compile = (state: Game, crypt: boolean) => {
   const zip = new JSZip();
 
   zip.file('index.html', format(JSON.stringify(state), crypt, state.settings));

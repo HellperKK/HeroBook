@@ -16,13 +16,11 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CodeSharpIcon from '@mui/icons-material/CodeSharp';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
-import { lens } from 'lens.ts';
 
 import TabPanel from './components/TabPanel';
 import TopBar from './components/TopBar';
@@ -30,126 +28,26 @@ import PageEditor from './components/PageEditor';
 import ViewWindow from './components/ViewWindow';
 import Space from './components/Space';
 
-import {
-  initialState,
-  initialPage,
-  initialChoice,
-  Page,
-  State,
-} from '../utils/initialStuff';
-import { nothing, openAZip } from '../utils/utils';
-import { compile } from '../utils/format';
+import { State } from '../utils/state';
+import { identity } from '../utils/utils';
 
 const Editor = () => {
-  const [state, setState] = useState(initialState());
-  const [selectedPage, setSelectedPage] = useState(0);
-  const [pageId, setPageId] = useState(3);
   const [selectedTab, setSelectedTab] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [_zip, setZip] = useState(new JSZip());
 
-  const stateL = lens<State>();
-  const pageL = lens<Page>();
-
-  const loadState = () => {
-    openAZip((z: JSZip) => {
-      const data = z.file('data.json');
-
-      if (data !== null) {
-        data
-          .async('text')
-          .then((text) => setState(JSON.parse(text)))
-          .catch(nothing);
-        setZip(z);
-      }
-    });
-  };
-
-  const saveState = () => {
-    const zipLoad = new JSZip();
-    zipLoad.file('data.json', JSON.stringify(state));
-    zipLoad
-      .generateAsync({ type: 'blob' })
-      .then((blob) => saveAs(blob, 'game.zip'))
-      .catch(nothing);
-  };
-
-  const compileState = () => {
-    // download('game.html', format(JSON.stringify(state), false, state.settings));
-    compile(state, false);
-  };
-
-  const addPage = () => {
-    const newPage = pageL.id.set(pageId)(initialPage());
-    setState(stateL.pages.set(state.pages.concat([newPage]))(state));
-    setPageId(pageId + 1);
-  };
-
-  const addChoice = (index: number) => {
-    const newChoices = initialChoice();
-    setState(
-      stateL.pages[index].next.set(
-        state.pages[index].next.concat([newChoices])
-      )(state)
-    );
-    setPageId(pageId + 1);
-  };
-
-  const removePage = (index: number) => {
-    if (state.pages.length > 1) {
-      const newPages = state.pages.slice();
-      newPages.splice(index, 1);
-      if (selectedPage === newPages.length) {
-        setSelectedPage(selectedPage - 1);
-      }
-      setState(stateL.pages.set(newPages)(state));
-    }
-  };
-
-  const findPage = (id: number) => {
-    const page = state.pages.find((p) => p.id === id);
-    if (page !== undefined) {
-      return page;
-    }
-
-    return initialPage();
-  };
-
-  const changeTitle = (index: number, title: string) => {
-    setState(stateL.pages[index].name.set(title)(state));
-  };
-
-  const changeText = (index: number, text: string) => {
-    setState(stateL.pages[index].text.set(text)(state));
-  };
-
-  const setFirst = (index: number) => {
-    const firstPageIndex = state.pages.findIndex((page) => page.isFirst);
-    if (firstPageIndex !== -1) {
-      setState(stateL.pages[firstPageIndex].isFirst.set(false)(state));
-    }
-    setState((currentState) =>
-      stateL.pages[index].isFirst.set(true)(currentState)
-    );
-  };
+  const { game, selectedPage } = useSelector<State, State>(identity);
+  const dispatch = useDispatch();
 
   return (
     <Box sx={{ padding: '8px' }}>
-      <TopBar
-        load={loadState}
-        save={saveState}
-        compile={compileState}
-        findPage={findPage}
-        state={state}
-      />
+      <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={3} xl={2}>
           {/* Page List */}
           <List sx={{ overflow: 'auto' }}>
-            {state.pages.map((page, index) => (
+            {game.pages.map((page, index) => (
               <ListItem
-                onClick={() => setSelectedPage(index)}
+                onClick={() => dispatch({ type: 'setSelectedPage', index })}
                 key={page.id}
                 sx={{
                   bgcolor: index === selectedPage ? 'secondary.main' : '',
@@ -166,7 +64,10 @@ const Editor = () => {
                     disabled={page.isFirst}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setFirst(index);
+                      dispatch({
+                        type: 'setFirst',
+                        index,
+                      });
                     }}
                   >
                     <FlagSharpIcon
@@ -185,10 +86,13 @@ const Editor = () => {
                 />
                 <Button
                   variant="contained"
-                  disabled={state.pages.length === 1}
+                  disabled={game.pages.length === 1}
                   onClick={(e) => {
                     e.stopPropagation();
-                    removePage(index);
+                    dispatch({
+                      type: 'removePage',
+                      index,
+                    });
                   }}
                 >
                   <DeleteSharpIcon />
@@ -199,7 +103,11 @@ const Editor = () => {
               <Button
                 variant="contained"
                 sx={{ width: '100%' }}
-                onClick={addPage}
+                onClick={() =>
+                  dispatch({
+                    type: 'addPage',
+                  })
+                }
               >
                 <AddSharpIcon />
               </Button>
@@ -225,19 +133,12 @@ const Editor = () => {
 
             {/* Game Edition */}
             <TabPanel value={selectedTab} index={0}>
-              <PageEditor
-                addChoice={addChoice}
-                changeTitle={changeTitle}
-                changeText={changeText}
-                findPage={findPage}
-                selectedPage={selectedPage}
-                state={state}
-              />
+              <PageEditor />
             </TabPanel>
 
             {/* Game Visualisation */}
             <TabPanel value={selectedTab} index={1}>
-              <ViewWindow state={state} findPage={findPage} playable={false} />
+              <ViewWindow />
             </TabPanel>
 
             <TabPanel value={selectedTab} index={2}>

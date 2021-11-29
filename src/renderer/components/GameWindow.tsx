@@ -1,68 +1,28 @@
 import { useState } from 'react';
-import { Box } from '@mui/system';
-import styled from '@emotion/styled';
 
-import { State, Page, Choice } from '../../utils/initialStuff';
-import { nothing } from '../../utils/utils';
+import { useSelector } from 'react-redux';
 
-const StyledButton = styled.button`
-  color: ${(props) => props.color};
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
+import { findPage, identity } from '../../utils/utils';
+import { State } from '../../utils/state';
+
+import GameViewer from './GameViewer';
 
 interface CompProp {
-  state: State;
-  findPage: (pageId: number) => Page;
-  playable: boolean;
+  start: number;
 }
 
 export default function GameWindow(props: CompProp) {
-  const { state, findPage, playable } = props;
-  const [currentPage, setCurrentPage] = useState(state.pages[0].id);
+  const { game } = useSelector<State, State>(identity);
 
-  const choiceButton = (choice: Choice, index: number) => {
-    const play = () => setCurrentPage(choice.pageId);
-    return (
-      <StyledButton
-        type="button"
-        key={`poll_${index + 42}`}
-        onClick={playable ? play : nothing}
-        color={findPage(currentPage).format.btnColor ?? state.format.btnColor}
-      >
-        {'>'} {choice.action}
-      </StyledButton>
-    );
-  };
+  const { start } = props;
+  const [currentPage, setCurrentPage] = useState(start);
+
+  const truePage = findPage(game.pages, currentPage);
 
   return (
-    <Box
-      sx={{
-        padding: '10%',
-        height: '50vh',
-        backgroundColor:
-          findPage(currentPage).format.background ?? state.format.background,
-      }}
-    >
-      <Box
-        className="story"
-        sx={{
-          height: '100%',
-          padding: '8px',
-          textAlign: 'center',
-          backgroundColor:
-            findPage(currentPage).format.page ?? state.format.page,
-          color:
-            findPage(currentPage).format.textColor ?? state.format.textColor,
-        }}
-      >
-        <div className="story-image" />
-        <p className="story-text">{findPage(currentPage).text}</p>
-        <Box className="story-choices">
-          {findPage(currentPage).next.map(choiceButton)}
-        </Box>
-      </Box>
-    </Box>
+    <GameViewer
+      page={truePage}
+      onClick={(choice) => setCurrentPage(choice.pageId)}
+    />
   );
 }
