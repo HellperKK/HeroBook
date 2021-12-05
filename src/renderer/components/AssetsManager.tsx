@@ -90,6 +90,8 @@ export default function AssetsManager(props: CompProps) {
   };
 
   const removeAsset = (assetType: string, assetName: string) => () => {
+    // eslint-disable-next-line no-console
+    console.log('here I am!', assetName);
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
@@ -100,7 +102,7 @@ export default function AssetsManager(props: CompProps) {
     dispatch({
       type: 'removeAsset',
       fileName: assetName,
-      fileType: 'images',
+      fileType: assetType,
     });
   };
 
@@ -120,7 +122,7 @@ export default function AssetsManager(props: CompProps) {
                   <Button
                     variant="contained"
                     disabled={game.pages.length === 1}
-                    onClick={() => removeAsset('images', fileName)}
+                    onClick={removeAsset('images', fileName)}
                   >
                     <DeleteSharpIcon />
                   </Button>
