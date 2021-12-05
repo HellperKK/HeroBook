@@ -29,9 +29,6 @@ interface Settings {
 
 interface Game {
   settings: Settings;
-  assets: {
-    images: Array<string>;
-  };
   format: Format;
   pages: Array<Page>;
 }
@@ -52,14 +49,11 @@ function initialPage(id = 1): Page {
   };
 }
 
-const initialGame = {
+const initialGame: Game = {
   settings: {
     author: '',
     gameTitle: '',
     pageCount: 2,
-  },
-  assets: {
-    images: [],
   },
   format: {
     textColor: 'initial',

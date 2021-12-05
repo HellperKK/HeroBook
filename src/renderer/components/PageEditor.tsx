@@ -61,18 +61,43 @@ export default function PageEditor() {
                   variant="outlined"
                   value={choice.action}
                   sx={{ width: '50%' }}
+                  onChange={(e) =>
+                    dispatch({
+                      type: 'changeAction',
+                      text: e.target.value,
+                      index,
+                    })
+                  }
                 />
                 <Select
                   value={findPage(game.pages, choice.pageId).id}
                   sx={{ width: '30%' }}
                 >
                   {game.pages.map((page) => (
-                    <MenuItem key={page.id} value={page.id}>
+                    <MenuItem
+                      key={page.id}
+                      value={page.id}
+                      onClick={() =>
+                        dispatch({
+                          type: 'changeChoice',
+                          id: page.id,
+                          index,
+                        })
+                      }
+                    >
                       {page.name}
                     </MenuItem>
                   ))}
                 </Select>
-                <Button variant="contained" onClick={() => {}}>
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    dispatch({
+                      type: 'removeChoice',
+                      index,
+                    })
+                  }
+                >
                   <DeleteSharpIcon />
                 </Button>
               </ListItem>

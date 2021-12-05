@@ -12,6 +12,14 @@ const findPage = (pages: Array<Page>, id: number) => {
   return initialPage(1);
 };
 
+const readImage = (file: Blob, then: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    then(reader.result as string);
+  };
+  reader.readAsDataURL(file);
+};
+
 const nothing = () => {};
 
 const download = (filename: string, text: string) => {
@@ -57,23 +65,32 @@ const formatStory = (obj: Array<any>) => {
 
 const openFiles = (
   then: (files: FileList | null) => void,
+  accept: Array<string> = [],
   multiple = false
 ) => {
   const fileSelector = document.createElement('input');
   fileSelector.type = 'file';
   fileSelector.multiple = multiple;
+
+  if (accept.length > 0) {
+    fileSelector.accept = accept.join(',');
+  }
+
   fileSelector.addEventListener('change', () => then(fileSelector.files));
   fileSelector.click();
 };
 
 const openAZip = (then: (zip: JSZip) => void) => {
-  openFiles((files) => {
-    if (files && files.length > 0) {
-      const file = files[0];
-      const zip = new JSZip();
-      zip.loadAsync(file).then(then).catch(nothing);
-    }
-  });
+  openFiles(
+    (files) => {
+      if (files && files.length > 0) {
+        const file = files[0];
+        const zip = new JSZip();
+        zip.loadAsync(file).then(then).catch(nothing);
+      }
+    },
+    ['.zip']
+  );
 };
 
 const identity = <T>(x: T): T => x;
@@ -88,4 +105,5 @@ export {
   findPage,
   nothing,
   identity,
+  readImage,
 };
