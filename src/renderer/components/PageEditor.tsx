@@ -9,18 +9,30 @@ import MenuItem from '@mui/material/MenuItem';
 
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import { State } from '../../utils/state';
 import { findPage, identity } from '../../utils/utils';
 
+import Space from './Space';
+
 export default function PageEditor() {
-  const { game, selectedPage } = useSelector<State, State>(identity);
+  const { game, selectedPage, assets } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
   return (
     <Box>
+      <PermMediaSharpIcon />
+      <Space size={2} />
+      <Select value={game.pages[selectedPage].image}>
+        {Array.from(assets.images.keys()).map((image, index) => (
+          <MenuItem key={`image${index + 42}`} value={image}>
+            {image}
+          </MenuItem>
+        ))}
+      </Select>
       <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
         <TextField
           label="Page Title"

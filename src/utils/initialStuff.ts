@@ -19,6 +19,7 @@ interface Page {
   text: string;
   next: Array<Choice>;
   format: Format;
+  image: string;
 }
 
 interface Settings {
@@ -46,6 +47,7 @@ function initialPage(id = 1): Page {
     text: 'This is a new page',
     next: [initialChoice],
     format: {},
+    image: '',
   };
 }
 
@@ -76,6 +78,7 @@ const initialGame: Game = {
         },
       ],
       format: {},
+      image: '',
     },
     {
       id: 2,
@@ -89,6 +92,7 @@ const initialGame: Game = {
         },
       ],
       format: {},
+      image: '',
     },
   ],
 };

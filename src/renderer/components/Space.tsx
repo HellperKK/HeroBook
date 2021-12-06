@@ -11,6 +11,7 @@ export default function Space(props: CompProp) {
     <Box
       sx={{
         width: `${size * 4}px`,
+        display: 'inline-block',
       }}
     />
   );
