@@ -19,7 +19,8 @@ import { State } from '../../utils/state';
 import { identity, openFiles, readImage } from '../../utils/utils';
 
 const StyledImage = styled.img`
-  height: 100%;
+  max-width: 85vw;
+  max-height: 85vh;
 `;
 
 const assetPath = (assetType: string, assetName: string) =>
@@ -50,9 +51,9 @@ export default function AssetsManager(props: CompProps) {
   const { game, zip, assets } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
-  const [assetIndex, setAssetIndex] = useState(-1);
+  const [selectedAsset, setSelectedAsset] = useState(-1);
   // eslint-disable-next-line no-console
-  console.log(assetIndex);
+  console.log(selectedAsset);
   const { images } = assets;
 
   const addAsset = (assetType: string) => () => {
@@ -79,7 +80,7 @@ export default function AssetsManager(props: CompProps) {
                 files: newAssets,
                 fileType: 'images',
               });
-              setAssetIndex(index);
+              setSelectedAsset(index);
             }
           });
         });
@@ -95,8 +96,8 @@ export default function AssetsManager(props: CompProps) {
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
-    if (assets.images.size === 1 || assets.images.size === assetIndex + 1) {
-      setAssetIndex(assets.images.size - 2);
+    if (assets.images.size === 1 || assets.images.size === selectedAsset + 1) {
+      setSelectedAsset(assets.images.size - 2);
     }
 
     dispatch({
@@ -115,10 +116,19 @@ export default function AssetsManager(props: CompProps) {
             <List sx={{ overflow: 'auto' }}>
               {Array.from(images.keys()).map((fileName, index) => (
                 <ListItem
-                  onClick={() => setAssetIndex(index)}
+                  onClick={() => setSelectedAsset(index)}
                   key={`item${index + 42}`}
+                  sx={{
+                    bgcolor: index === selectedAsset ? 'secondary.main' : '',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <ListItemText primary={fileName} />
+                  <ListItemText
+                    primary={fileName}
+                    sx={{
+                      color: index === selectedAsset ? 'white' : '',
+                    }}
+                  />
                   <Button
                     variant="contained"
                     disabled={game.pages.length === 1}
@@ -144,7 +154,7 @@ export default function AssetsManager(props: CompProps) {
           <Grid item xs={9} xl={10}>
             <Box>
               <StyledImage
-                src={Array.from(assets.images.values())[assetIndex]}
+                src={Array.from(assets.images.values())[selectedAsset]}
               />
             </Box>
           </Grid>

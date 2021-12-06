@@ -25,7 +25,7 @@ import { nothing, openAZip, identity } from '../../utils/utils';
 import { compile } from '../../utils/format';
 
 export default function TopBar() {
-  const { game } = useSelector<State, State>(identity);
+  const { game, zip } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
   const [playing, setPlaying] = useState(false);
@@ -47,9 +47,8 @@ export default function TopBar() {
   };
 
   const saveState = () => {
-    const zipLoad = new JSZip();
-    zipLoad.file('data.json', JSON.stringify(game));
-    zipLoad
+    zip.file('data.json', JSON.stringify(game));
+    zip
       .generateAsync({ type: 'blob' })
       .then((blob) => saveAs(blob, 'game.zip'))
       .catch(nothing);
