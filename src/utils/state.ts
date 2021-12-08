@@ -65,6 +65,10 @@ type Action =
       index: number;
     }
   | {
+      type: 'changeImage';
+      image: string;
+    }
+  | {
       type: 'setFirst';
       index: number;
     }
@@ -186,6 +190,13 @@ function reducer(state = initialState, action: Action) {
         game: gameL.pages[state.selectedPage].next[action.index].pageId.set(
           action.id
         )(state.game),
+      };
+    case 'changeImage':
+      return {
+        ...state,
+        game: gameL.pages[state.selectedPage].image.set(action.image)(
+          state.game
+        ),
       };
     case 'setFirst':
       return {

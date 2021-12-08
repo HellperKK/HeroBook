@@ -12,15 +12,23 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 
 import { useSelector, useDispatch } from 'react-redux';
+import styled from '@emotion/styled';
 
 import { State } from '../../utils/state';
 import { findPage, identity } from '../../utils/utils';
 
 import Space from './Space';
 
+const StyledImg = styled.img`
+  max-height: 75px;
+  transform: translateY(25px);
+`;
+
 export default function PageEditor() {
   const { game, selectedPage, assets } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
+
+  const page = game.pages[selectedPage];
 
   return (
     <Box>
@@ -28,11 +36,22 @@ export default function PageEditor() {
       <Space size={2} />
       <Select value={game.pages[selectedPage].image}>
         {Array.from(assets.images.keys()).map((image, index) => (
-          <MenuItem key={`image${index + 42}`} value={image}>
+          <MenuItem
+            key={`image${index + 42}`}
+            value={image}
+            onClick={() =>
+              dispatch({
+                type: 'changeImage',
+                image,
+              })
+            }
+          >
             {image}
           </MenuItem>
         ))}
       </Select>
+      <Space size={2} />
+      <StyledImg src={assets.images.get(page.image)} alt="" />
       <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
         <TextField
           label="Page Title"
@@ -85,19 +104,19 @@ export default function PageEditor() {
                   value={findPage(game.pages, choice.pageId).id}
                   sx={{ width: '30%' }}
                 >
-                  {game.pages.map((page) => (
+                  {game.pages.map((pa) => (
                     <MenuItem
-                      key={page.id}
-                      value={page.id}
+                      key={pa.id}
+                      value={pa.id}
                       onClick={() =>
                         dispatch({
                           type: 'changeChoice',
-                          id: page.id,
+                          id: pa.id,
                           index,
                         })
                       }
                     >
-                      {page.name}
+                      {pa.name}
                     </MenuItem>
                   ))}
                 </Select>

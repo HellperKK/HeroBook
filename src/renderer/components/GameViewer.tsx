@@ -1,4 +1,5 @@
 import { Box } from '@mui/system';
+// import { Button } from '@mui/material';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -14,13 +15,17 @@ const StyledButton = styled.button`
   cursor: pointer;
 `;
 
+const StyledImg = styled.img`
+  max-width: 80%;
+`;
+
 interface CompProp {
   page: Page;
-  onClick: (choice: Choice) => void;
+  onClick: ((choice: Choice) => void) | null;
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game } = useSelector<State, State>(identity);
+  const { game, assets } = useSelector<State, State>(identity);
 
   const { page, onClick } = props;
 
@@ -29,7 +34,7 @@ export default function GameViewer(props: CompProp) {
       <StyledButton
         type="button"
         key={`poll_${index + 42}`}
-        onClick={() => onClick(choice)}
+        onClick={() => onClick && onClick(choice)}
         color={page.format.btnColor ?? game.format.btnColor}
       >
         {'>'} {choice.action}
@@ -41,8 +46,9 @@ export default function GameViewer(props: CompProp) {
     <Box
       sx={{
         padding: '10%',
-        height: '50vh',
+        minHeight: '50vh',
         backgroundColor: page.format.background ?? game.format.background,
+        overflowX: 'auto',
       }}
     >
       <Box
@@ -55,7 +61,16 @@ export default function GameViewer(props: CompProp) {
           color: page.format.textColor ?? game.format.textColor,
         }}
       >
-        <div className="story-image" />
+        <div className="story-image">
+          <StyledImg src={assets.images.get(page.image)} alt="" />
+          {/*
+          page.image !== '' ? (
+            <img src={assets.images.get(page.image)} alt="" />
+          ) : (
+            <Button variant="outlined">hello</Button>
+          )
+          */}
+        </div>
         <p className="story-text">{page.text}</p>
         <Box
           className="story"

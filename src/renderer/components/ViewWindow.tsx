@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { State } from '../../utils/state';
-import { identity, nothing } from '../../utils/utils';
+import { identity } from '../../utils/utils';
 
 import GameViewer from './GameViewer';
 import ColorPicker from './ColorPicker';
@@ -30,7 +30,7 @@ export default function ViewWindow() {
   return (
     <Grid container spacing={0.2} alignItems="stretch">
       <Grid item xs={editing ? 8 : 11}>
-        <GameViewer page={page} onClick={nothing} />
+        <GameViewer page={page} onClick={null} />
       </Grid>
       <Grid item xs={editing ? 4 : 1}>
         <Button variant="contained" onClick={() => setEditing(!editing)}>
