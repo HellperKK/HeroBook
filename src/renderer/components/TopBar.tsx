@@ -92,7 +92,9 @@ export default function TopBar() {
         </Button>
       </Grid>
       <Modal open={playing}>
-        <Box sx={{ height: '100vh', backgroundColor: 'white' }}>
+        <Box
+          sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}
+        >
           <GameWindow start={game.pages[0].id} />
 
           <Container>
