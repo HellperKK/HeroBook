@@ -3,6 +3,10 @@
 import JSZip from 'jszip';
 import { initialPage, Page } from './initialStuff';
 
+type Partial<Type> = {
+  [Property in keyof Type]?: Type[Property];
+};
+
 const findPage = (pages: Array<Page>, id: number) => {
   const page = pages.find((p) => p.id === id);
   if (page !== undefined) {
@@ -97,6 +101,7 @@ const identity = <T>(x: T): T => x;
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
 export {
+  Partial,
   download,
   formatStory,
   openFiles,
