@@ -8,6 +8,7 @@ import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/system/Box';
@@ -86,34 +87,29 @@ export default function TopBar() {
   return (
     <Grid container spacing={0.2} justifyContent="center" alignItems="stretch">
       <Grid item xs={1}>
-        <Button variant="contained" onClick={loadState}>
-          <FolderOpenSharpIcon />
-        </Button>
-      </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained" onClick={saveState}>
-          <SaveSharpIcon />
-        </Button>
-      </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained">
-          <SettingsSharpIcon />
-        </Button>
-      </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained" onClick={() => setPlaying(true)}>
-          <PlayArrowSharpIcon />
-        </Button>
-      </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained" onClick={() => setAssets(true)}>
-          <PermMediaSharpIcon />
-        </Button>
-      </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained" onClick={compileState}>
-          <FileDownloadSharpIcon />
-        </Button>
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined primary button group"
+        >
+          <Button variant="contained" onClick={loadState}>
+            <FolderOpenSharpIcon />
+          </Button>
+          <Button variant="contained" onClick={saveState}>
+            <SaveSharpIcon />
+          </Button>
+          <Button variant="contained">
+            <SettingsSharpIcon />
+          </Button>
+          <Button variant="contained" onClick={() => setPlaying(true)}>
+            <PlayArrowSharpIcon />
+          </Button>
+          <Button variant="contained" onClick={() => setAssets(true)}>
+            <PermMediaSharpIcon />
+          </Button>
+          <Button variant="contained" onClick={compileState}>
+            <FileDownloadSharpIcon />
+          </Button>
+        </ButtonGroup>
       </Grid>
       <Modal open={playing}>
         <Box

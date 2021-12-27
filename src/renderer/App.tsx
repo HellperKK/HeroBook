@@ -127,7 +127,7 @@ const Editor = () => {
               >
                 <Tab icon={<EditSharpIcon />} />
                 <Tab icon={<PlayArrowSharpIcon />} />
-                <Tab icon={<CodeSharpIcon />} />
+                <Tab icon={<CodeSharpIcon />} disabled />
               </Tabs>
             </Box>
 
