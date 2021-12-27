@@ -16,7 +16,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 
 import { State } from '../../utils/state';
-import { identity, openFiles, readImage } from '../../utils/utils';
+import { identity, openFiles, readImage, noExt } from '../../utils/utils';
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -124,7 +124,7 @@ export default function AssetsManager(props: CompProps) {
                   }}
                 >
                   <ListItemText
-                    primary={fileName}
+                    primary={noExt(fileName)}
                     sx={{
                       color: index === selectedAsset ? 'white' : '',
                     }}

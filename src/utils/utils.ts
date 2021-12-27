@@ -31,11 +31,8 @@ const download = (filename: string, text: string) => {
   element.setAttribute('download', filename);
 
   element.style.display = 'none';
-  document.body.appendChild(element);
 
   element.click();
-
-  document.body.removeChild(element);
 };
 
 const formatStory = (obj: Array<any>) => {
@@ -93,6 +90,8 @@ const openAZip = (then: (zip: JSZip) => void) => {
   );
 };
 
+const noExt = (name: string) => name.split('.').shift();
+
 const identity = <T>(x: T): T => x;
 
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
@@ -106,4 +105,5 @@ export {
   nothing,
   identity,
   readImage,
+  noExt,
 };

@@ -1,3 +1,4 @@
+/* eslint-disable promise/no-nesting */
 import FolderOpenSharpIcon from '@mui/icons-material/FolderOpenSharp';
 import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
@@ -21,7 +22,7 @@ import GameWindow from './GameWindow';
 import AssetsManager from './AssetsManager';
 
 import { State } from '../../utils/state';
-import { nothing, openAZip, identity } from '../../utils/utils';
+import { nothing, openAZip, identity, readImage } from '../../utils/utils';
 import { compile } from '../../utils/format';
 
 export default function TopBar() {
@@ -38,9 +39,32 @@ export default function TopBar() {
       if (data !== null) {
         data
           .async('text')
-          .then((text) =>
-            dispatch({ type: 'loadGame', game: JSON.parse(text), zip: z })
-          )
+          .then((text) => {
+            dispatch({ type: 'loadGame', game: JSON.parse(text), zip: z });
+            const images = z.folder('assets/images');
+
+            if (images !== null) {
+              Object.entries(images.files).forEach((pair) => {
+                const matches = pair[0].match(/assets\/images\/(.*)/);
+                if (!matches || !matches[1]) return;
+
+                pair[1]
+                  .async('blob')
+                  .then((blob) =>
+                    readImage(blob, (url) =>
+                      dispatch({
+                        type: 'addAssets',
+                        files: new Map([[matches[1], url]]),
+                        fileType: 'images',
+                      })
+                    )
+                  )
+                  .catch(nothing);
+              });
+            }
+
+            return text;
+          })
           .catch(nothing);
       }
     });
