@@ -52,8 +52,6 @@ export default function AssetsManager(props: CompProps) {
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
-  // eslint-disable-next-line no-console
-  console.log(selectedAsset);
   const { images } = assets;
 
   const addAsset = (assetType: string) => () => {
@@ -91,8 +89,6 @@ export default function AssetsManager(props: CompProps) {
   };
 
   const removeAsset = (assetType: string, assetName: string) => () => {
-    // eslint-disable-next-line no-console
-    console.log('here I am!', assetName);
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
