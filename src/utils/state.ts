@@ -8,7 +8,12 @@ import {
   initialGame,
   Game,
   Format,
+  Settings,
+  Page,
+  Choice,
 } from './initialStuff';
+
+import { Partial } from './utils';
 
 const gameL = lens<Game>();
 
@@ -55,18 +60,17 @@ type Action =
       text: string;
     }
   | {
-      type: 'changeAction';
-      text: string;
-      index: number;
+      type: 'changeImage';
+      image: string;
+    }
+  | {
+      type: 'changePage';
+      page: Partial<Page>;
     }
   | {
       type: 'changeChoice';
-      id: number;
+      choice: Partial<Choice>;
       index: number;
-    }
-  | {
-      type: 'changeImage';
-      image: string;
     }
   | {
       type: 'setFirst';
@@ -89,6 +93,10 @@ type Action =
       type: 'removeAsset';
       fileName: string;
       fileType: 'images';
+    }
+  | {
+      type: 'updateSettings';
+      settings: Partial<Settings>;
     };
 
 const initialState: State = {
@@ -165,38 +173,21 @@ function reducer(state = initialState, action: Action) {
         game: action.game,
         zip: action.zip,
       };
-    case 'changeTitle':
+    case 'changePage':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].name.set(action.title)(
-          state.game
-        ),
-      };
-    case 'changeText':
-      return {
-        ...state,
-        game: gameL.pages[state.selectedPage].text.set(action.text)(state.game),
-      };
-    case 'changeAction':
-      return {
-        ...state,
-        game: gameL.pages[state.selectedPage].next[action.index].action.set(
-          action.text
-        )(state.game),
+        game: gameL.pages[state.selectedPage].set({
+          ...state.game.pages[state.selectedPage],
+          ...action.page,
+        })(state.game),
       };
     case 'changeChoice':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].next[action.index].pageId.set(
-          action.id
-        )(state.game),
-      };
-    case 'changeImage':
-      return {
-        ...state,
-        game: gameL.pages[state.selectedPage].image.set(action.image)(
-          state.game
-        ),
+        game: gameL.pages[state.selectedPage].next[action.index].set({
+          ...state.game.pages[state.selectedPage].next[action.index],
+          ...action.choice,
+        })(state.game),
       };
     case 'setFirst':
       return {
@@ -243,6 +234,15 @@ function reducer(state = initialState, action: Action) {
             action.fileName
           ),
         },
+      };
+
+    case 'updateSettings':
+      return {
+        ...state,
+        game: gameL.settings.set({
+          ...state.game.settings,
+          ...action.settings,
+        })(state.game),
       };
 
     default:

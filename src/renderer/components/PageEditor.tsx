@@ -34,15 +34,26 @@ export default function PageEditor() {
     <Box>
       <PermMediaSharpIcon />
       <Space size={2} />
-      <Select value={game.pages[selectedPage].image}>
+      <Select value={game.pages[selectedPage].image ?? 'nothing'}>
+        <MenuItem
+          value="nothing"
+          onClick={() =>
+            dispatch({
+              type: 'changePage',
+              page: { image: undefined },
+            })
+          }
+        >
+          nothing
+        </MenuItem>
         {Array.from(assets.images.keys()).map((image, index) => (
           <MenuItem
             key={`image${index + 42}`}
             value={image}
             onClick={() =>
               dispatch({
-                type: 'changeImage',
-                image,
+                type: 'changePage',
+                page: { image },
               })
             }
           >
@@ -59,8 +70,8 @@ export default function PageEditor() {
           value={game.pages[selectedPage].name}
           onChange={(e) =>
             dispatch({
-              type: 'changeTitle',
-              title: e.target.value,
+              type: 'changePage',
+              page: { name: e.target.value },
             })
           }
         />
@@ -74,8 +85,8 @@ export default function PageEditor() {
           value={game.pages[selectedPage].text}
           onChange={(e) =>
             dispatch({
-              type: 'changeText',
-              text: e.target.value,
+              type: 'changePage',
+              page: { text: e.target.value },
             })
           }
           sx={{ height: '100%', width: '100%' }}
@@ -94,8 +105,8 @@ export default function PageEditor() {
                   sx={{ width: '50%' }}
                   onChange={(e) =>
                     dispatch({
-                      type: 'changeAction',
-                      text: e.target.value,
+                      type: 'changeChoice',
+                      choice: { action: e.target.value },
                       index,
                     })
                   }
@@ -111,7 +122,7 @@ export default function PageEditor() {
                       onClick={() =>
                         dispatch({
                           type: 'changeChoice',
-                          id: pa.id,
+                          choice: { pageId: pa.id },
                           index,
                         })
                       }

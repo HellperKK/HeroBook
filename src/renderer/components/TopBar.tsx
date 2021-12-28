@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/system/Box';
 import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
 
 import { useState } from 'react';
 import JSZip from 'jszip';
@@ -30,6 +31,7 @@ export default function TopBar() {
   const { game, zip } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
+  const [settings, setSettings] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [assets, setAssets] = useState(false);
 
@@ -97,7 +99,7 @@ export default function TopBar() {
           <Button variant="contained" onClick={saveState}>
             <SaveSharpIcon />
           </Button>
-          <Button variant="contained">
+          <Button variant="contained" onClick={() => setSettings(true)}>
             <SettingsSharpIcon />
           </Button>
           <Button variant="contained" onClick={() => setPlaying(true)}>
@@ -111,6 +113,49 @@ export default function TopBar() {
           </Button>
         </ButtonGroup>
       </Grid>
+      <Modal open={settings}>
+        <Box
+          sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}
+        >
+          <Container>
+            <Box sx={{ height: '60px', paddingTop: '20px' }}>
+              <TextField
+                label="Author"
+                variant="outlined"
+                value={game.settings.author}
+                onChange={(e) =>
+                  dispatch({
+                    type: 'updateSettings',
+                    settings: { author: e.target.value },
+                  })
+                }
+              />
+            </Box>
+            <Box sx={{ height: '60px', paddingTop: '20px' }}>
+              <TextField
+                label="Title"
+                variant="outlined"
+                value={game.settings.gameTitle}
+                onChange={(e) =>
+                  dispatch({
+                    type: 'updateSettings',
+                    settings: { gameTitle: e.target.value },
+                  })
+                }
+              />
+            </Box>
+          </Container>
+          <Container>
+            <Button
+              variant="contained"
+              onClick={() => setSettings(false)}
+              sx={{ width: '100%' }}
+            >
+              <CloseSharpIcon />
+            </Button>
+          </Container>
+        </Box>
+      </Modal>
       <Modal open={playing}>
         <Box
           sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}
