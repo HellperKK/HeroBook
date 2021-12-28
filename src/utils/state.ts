@@ -14,18 +14,9 @@ import {
 } from './initialStuff';
 
 import { Partial } from './utils';
+import { format } from './format';
 
 const gameL = lens<Game>();
-
-export interface State {
-  game: Game;
-  selectedPage: number;
-  pageId: number;
-  zip: JSZip;
-  assets: {
-    images: Map<string, string>;
-  };
-}
 
 type Action =
   | {
@@ -99,11 +90,22 @@ type Action =
       settings: Partial<Settings>;
     };
 
+const initialZip = new JSZip();
+initialZip.file('index.html', format);
+
+export interface State {
+  game: Game;
+  selectedPage: number;
+  zip: JSZip;
+  assets: {
+    images: Map<string, string>;
+  };
+}
+
 const initialState: State = {
   game: initialGame,
   selectedPage: 0,
-  pageId: 0,
-  zip: new JSZip(),
+  zip: initialZip,
   assets: {
     images: new Map<string, string>(),
   },
@@ -136,10 +138,16 @@ function reducer(state = initialState, action: Action) {
     case 'addPage':
       return {
         ...state,
-        game: gameL.pages.set(
-          state.game.pages.concat([initialPage(state.pageId)])
-        )(state.game),
-        pageId: state.pageId + 1,
+        game: {
+          ...state.game,
+          pages: state.game.pages.concat([
+            initialPage(state.game.settings.pageCount),
+          ]),
+          settings: {
+            ...state.game.settings,
+            pageCount: state.game.settings.pageCount + 1,
+          },
+        },
       };
     case 'removePage':
       return {
@@ -158,7 +166,7 @@ function reducer(state = initialState, action: Action) {
         game: gameL.pages[state.selectedPage].next.set(
           state.game.pages[state.selectedPage].next.concat([initialChoice])
         )(state.game),
-        pageId: state.pageId + 1,
+        pageId: state.game.settings.pageCount + 1,
       };
     case 'removeChoice':
       return {

@@ -3,26 +3,14 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 import { nothing } from './utils';
-import { Settings, Game } from './initialStuff';
+import { Game } from './initialStuff';
 
-const makeTitle = (settings: Settings) =>
-  settings.gameTitle + (settings.author ? ` by ${settings.author}` : '');
-
-const crypter = (str: string, key: string) => {
-  const chars = str.split('');
-  const codes = chars.map((char, index) => {
-    return char.charCodeAt(0) + key.charCodeAt(index % key.length);
-  });
-  return codes.join(',');
-};
-
-const format = (game: string, crypt: boolean, settings: Settings) =>
-  `
+const format = `
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>${makeTitle(settings)}</title>
+    <title>A herobook game</title>
     <style>
       body {
         text-align: center;
@@ -55,12 +43,8 @@ const format = (game: string, crypt: boolean, settings: Settings) =>
 
       </div>
     </div>
-    <p style="display: none;" id="game-data">
-        ${crypt ? crypter(game, 'jeronimo') : game}
-    </p>
     <script>
       let data
-      const crypted = ${crypt}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
       const divText = divStory.querySelector(".story-text")
@@ -84,13 +68,14 @@ const format = (game: string, crypt: boolean, settings: Settings) =>
 
         const pageFormat = page.format
         const globalFormat = data.format
+        console.log(page.image)
         console.log(pageFormat)
         console.log(globalFormat)
 
         divImage.innerHTML = ""
-        if (page.format.image) {
+        if (page.image) {
           const img = document.createElement("img")
-          img.src = page.format.image
+          img.src = "assets/images/" + page.image
           divImage.appendChild(img)
         }
 
@@ -114,38 +99,28 @@ const format = (game: string, crypt: boolean, settings: Settings) =>
         }
       }
 
-      const dataT = document.querySelector("#game-data")
+      fetch('./data.json')
+      .then(data => data.json())
+      .then(json => {
+        data = json
 
-      if (dataT && dataT.innerText) {
-        try {
-          const text = crypted? decrypter(dataT.innerText, "jeronimo") : dataT.innerText
-          console.log(text)
-          data = JSON.parse(text)
-          dataT.remove()
-          format(data.pages.find(p => p.isFirst).id)
-        } catch (error) {
-          console.log(error)
-          alert("error while reading data")
+        if(data.gameTitle) {
+          document.title = data.gameTitle + data.author ? ' by ' + data.author : ''
         }
-      }
-      else {
-        alert("No game data found")
-      }
+
+        format(data.pages.find(p => p.isFirst).id)
+      })
+      .catch((error) => alert(error))
     </script>
   </body>
 </html>
 `;
 
-const compile = (state: Game, crypt: boolean) => {
-  const zip = new JSZip();
-
-  zip.file('index.html', format(JSON.stringify(state), crypt, state.settings));
-
-  // const images = zip.folder('images');
-
+const compile = async (state: Game, zip: JSZip) => {
+  zip.file('data.json', JSON.stringify(state));
   zip
     .generateAsync({ type: 'blob' })
-    .then((blob) => saveAs(blob, 'game.zip'))
+    .then((blob) => saveAs(blob, `${state.settings.gameTitle || 'game'}.zip`))
     .catch(nothing);
 };
 

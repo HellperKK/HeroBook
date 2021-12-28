@@ -83,7 +83,7 @@ export default function TopBar() {
 
   const compileState = () => {
     // download('game.html', format(JSON.stringify(state), false, state.settings));
-    compile(game, false);
+    compile(game, zip);
   };
 
   return (
