@@ -14,6 +14,12 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/system/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+// import DialogContentText from '@mui/material/DialogContentText';
 
 import { useState } from 'react';
 import JSZip from 'jszip';
@@ -93,30 +99,41 @@ export default function TopBar() {
           variant="contained"
           aria-label="outlined primary button group"
         >
-          <Button variant="contained" onClick={loadState}>
-            <FolderOpenSharpIcon />
-          </Button>
-          <Button variant="contained" onClick={saveState}>
-            <SaveSharpIcon />
-          </Button>
-          <Button variant="contained" onClick={() => setSettings(true)}>
-            <SettingsSharpIcon />
-          </Button>
-          <Button variant="contained" onClick={() => setPlaying(true)}>
-            <PlayArrowSharpIcon />
-          </Button>
-          <Button variant="contained" onClick={() => setAssets(true)}>
-            <PermMediaSharpIcon />
-          </Button>
-          <Button variant="contained" onClick={compileState}>
-            <FileDownloadSharpIcon />
-          </Button>
+          <Tooltip title="load a game" arrow>
+            <Button variant="contained" onClick={loadState}>
+              <FolderOpenSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="save a game" arrow>
+            <Button variant="contained" onClick={saveState}>
+              <SaveSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="game settings" arrow>
+            <Button variant="contained" onClick={() => setSettings(true)}>
+              <SettingsSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="test game" arrow>
+            <Button variant="contained" onClick={() => setPlaying(true)}>
+              <PlayArrowSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="manage assets" arrow>
+            <Button variant="contained" onClick={() => setAssets(true)}>
+              <PermMediaSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="compile game game" arrow>
+            <Button variant="contained" onClick={compileState}>
+              <FileDownloadSharpIcon />
+            </Button>
+          </Tooltip>
         </ButtonGroup>
       </Grid>
-      <Modal open={settings}>
-        <Box
-          sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}
-        >
+      <Dialog open={settings} onClose={() => setSettings(false)}>
+        <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
+        <DialogContent>
           <Container>
             <Box sx={{ height: '60px', paddingTop: '20px' }}>
               <TextField
@@ -145,17 +162,13 @@ export default function TopBar() {
               />
             </Box>
           </Container>
-          <Container>
-            <Button
-              variant="contained"
-              onClick={() => setSettings(false)}
-              sx={{ width: '100%' }}
-            >
-              <CloseSharpIcon />
-            </Button>
-          </Container>
-        </Box>
-      </Modal>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => setSettings(false)}>
+            <CloseSharpIcon />
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Modal open={playing}>
         <Box
           sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}

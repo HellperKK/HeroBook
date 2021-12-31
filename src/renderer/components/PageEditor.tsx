@@ -15,37 +15,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 
 import { State } from '../../utils/state';
-import { findPage, identity } from '../../utils/utils';
+import { findPage, identity, noExt } from '../../utils/utils';
 
 import Space from './Space';
 
 const StyledImg = styled.img`
-  max-height: 75px;
-  transform: translateY(25px);
+  max-width: 80px;
+  max-height: 40px;
 `;
 
 export default function PageEditor() {
   const { game, selectedPage, assets } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
-  const page = game.pages[selectedPage];
+  // const page = game.pages[selectedPage];
 
   return (
     <Box>
       <PermMediaSharpIcon />
       <Space size={2} />
-      <Select value={game.pages[selectedPage].image ?? 'nothing'}>
-        <MenuItem
-          value="nothing"
-          onClick={() =>
-            dispatch({
-              type: 'changePage',
-              page: { image: undefined },
-            })
-          }
-        >
-          nothing
-        </MenuItem>
+      <Select value={game.pages[selectedPage].image}>
         {Array.from(assets.images.keys()).map((image, index) => (
           <MenuItem
             key={`image${index + 42}`}
@@ -57,12 +46,26 @@ export default function PageEditor() {
               })
             }
           >
-            {image}
+            <StyledImg src={assets.images.get(image)} alt="" />
+            <Space size={2} />
+            {noExt(image)}
           </MenuItem>
         ))}
       </Select>
       <Space size={2} />
-      <StyledImg src={assets.images.get(page.image)} alt="" />
+      <Button
+        disabled={!game.pages[selectedPage].image}
+        variant="contained"
+        onClick={() =>
+          dispatch({
+            type: 'changePage',
+            page: { image: undefined },
+          })
+        }
+      >
+        <DeleteSharpIcon />
+      </Button>
+      <Space size={2} />
       <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
         <TextField
           label="Page Title"

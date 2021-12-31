@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/system/Box';
+import Tooltip from '@mui/material/Tooltip';
 
 import FlagSharpIcon from '@mui/icons-material/FlagSharp';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -59,23 +60,25 @@ const Editor = () => {
                     color: 'text.primary',
                   }}
                 >
-                  <Button
-                    variant={page.isFirst ? 'contained' : 'outlined'}
-                    disabled={page.isFirst}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      dispatch({
-                        type: 'setFirst',
-                        index,
-                      });
-                    }}
-                  >
-                    <FlagSharpIcon
-                      sx={{
-                        color: page.isFirst ? 'yellow' : 'black',
+                  <Tooltip title="set this page to start the game on" arrow>
+                    <Button
+                      variant={page.isFirst ? 'contained' : 'outlined'}
+                      disabled={page.isFirst}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dispatch({
+                          type: 'setFirst',
+                          index,
+                        });
                       }}
-                    />
-                  </Button>
+                    >
+                      <FlagSharpIcon
+                        sx={{
+                          color: page.isFirst ? 'yellow' : 'black',
+                        }}
+                      />
+                    </Button>
+                  </Tooltip>
                   <Space size={2} />
                 </ListItemIcon>
                 <ListItemText
@@ -84,33 +87,37 @@ const Editor = () => {
                   }}
                   primary={page.name}
                 />
-                <Button
-                  variant="contained"
-                  disabled={game.pages.length === 1}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch({
-                      type: 'removePage',
-                      index,
-                    });
-                  }}
-                >
-                  <DeleteSharpIcon />
-                </Button>
+                <Tooltip title="delete page" arrow>
+                  <Button
+                    variant="contained"
+                    disabled={game.pages.length === 1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch({
+                        type: 'removePage',
+                        index,
+                      });
+                    }}
+                  >
+                    <DeleteSharpIcon />
+                  </Button>
+                </Tooltip>
               </ListItem>
             ))}
             <ListItem>
-              <Button
-                variant="contained"
-                sx={{ width: '100%' }}
-                onClick={() =>
-                  dispatch({
-                    type: 'addPage',
-                  })
-                }
-              >
-                <AddSharpIcon />
-              </Button>
+              <Tooltip title="add a page" arrow>
+                <Button
+                  variant="contained"
+                  sx={{ width: '100%' }}
+                  onClick={() =>
+                    dispatch({
+                      type: 'addPage',
+                    })
+                  }
+                >
+                  <AddSharpIcon />
+                </Button>
+              </Tooltip>
             </ListItem>
           </List>
         </Grid>
@@ -125,9 +132,15 @@ const Editor = () => {
                 onChange={(_e, value: number) => setSelectedTab(value)}
                 aria-label="basic tabs example"
               >
-                <Tab icon={<EditSharpIcon />} />
-                <Tab icon={<PlayArrowSharpIcon />} />
-                <Tab icon={<CodeSharpIcon />} disabled />
+                <Tooltip title="content edition" arrow>
+                  <Tab icon={<EditSharpIcon />} />
+                </Tooltip>
+                <Tooltip title="content visualization" arrow>
+                  <Tab icon={<PlayArrowSharpIcon />} />
+                </Tooltip>
+                <Tooltip title="script edition" arrow>
+                  <Tab icon={<CodeSharpIcon />} disabled />
+                </Tooltip>
               </Tabs>
             </Box>
 
