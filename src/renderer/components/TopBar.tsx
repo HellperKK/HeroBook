@@ -6,6 +6,7 @@ import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+// import HelpSharp from '@mui/icons-material/HelpSharp';
 
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -19,6 +20,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+// import Card from '@mui/material/Card';
 // import DialogContentText from '@mui/material/DialogContentText';
 
 import { useState } from 'react';
@@ -40,6 +42,7 @@ export default function TopBar() {
   const [settings, setSettings] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [assets, setAssets] = useState(false);
+  // const [infos, setInfos] = useState(false);
 
   const loadState = () => {
     openAZip((z: JSZip) => {
@@ -124,11 +127,16 @@ export default function TopBar() {
               <PermMediaSharpIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="compile game game" arrow>
+          <Tooltip title="compile game" arrow>
             <Button variant="contained" onClick={compileState}>
               <FileDownloadSharpIcon />
             </Button>
           </Tooltip>
+          {/* <Tooltip title="infos" arrow>
+            <Button variant="contained" onClick={() => setInfos(true)}>
+              <HelpSharp />
+            </Button>
+            </Tooltip> */}
         </ButtonGroup>
       </Grid>
       <Dialog open={settings} onClose={() => setSettings(false)}>
@@ -187,6 +195,14 @@ export default function TopBar() {
         </Box>
       </Modal>
       <AssetsManager open={assets} close={() => setAssets(false)} />
+      {/* <Modal open={infos}>
+        <Card>
+          hi
+          <Button variant="contained" onClick={() => setInfos(false)}>
+            <CloseSharpIcon />
+          </Button>
+        </Card>
+      </Modal> */}
     </Grid>
   );
 }

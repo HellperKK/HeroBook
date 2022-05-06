@@ -34,8 +34,6 @@ const download = (filename: string, text: string) => {
   );
   element.setAttribute('download', filename);
 
-  element.style.display = 'none';
-
   element.click();
 };
 
