@@ -1,7 +1,7 @@
 {
   "name": "herobook",
   "productName": "Herobook",
-  "description": "text base game editor",
+  "description": "text based game editor",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -30,8 +30,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Herobook",
+    "appId": "org.erb.Herobook",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -96,11 +96,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
-  },
-  "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
   },
   "contributors": [
     {

@@ -1,20 +1,29 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import styled from '@emotion/styled';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import BrushSharpIcon from '@mui/icons-material/BrushSharp';
 import Box from '@mui/system/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+
+import BrushSharpIcon from '@mui/icons-material/BrushSharp';
+import SettingsBackupRestoreSharpIcon from '@mui/icons-material/SettingsBackupRestoreSharp';
+import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { lens } from 'lens.ts';
 
 import { State } from '../../utils/state';
 import { identity } from '../../utils/utils';
 
 import GameViewer from './GameViewer';
 import ColorPicker from './ColorPicker';
+import { Format, Page } from '../../utils/initialStuff';
+
+const pageL = lens<Page>();
 
 const FixedTypo = styled(Typography)`
   width: 100px;
@@ -26,65 +35,74 @@ export default function ViewWindow() {
   const page = game.pages[selectedPage];
 
   const [editing, setEditing] = useState(false);
+  const [format, setFormat] = useState(page.format);
+
+  const updateFormat = (newFormat: Partial<Format>) =>
+    setFormat({ ...format, ...newFormat });
 
   return (
     <Grid container spacing={0.2} alignItems="stretch">
       <Grid item xs={editing ? 8 : 11}>
-        <GameViewer page={page} onClick={null} />
+        <GameViewer page={pageL.format.set(format)(page)} onClick={null} />
       </Grid>
       <Grid item xs={editing ? 4 : 1}>
-        <Button variant="contained" onClick={() => setEditing(!editing)}>
-          <BrushSharpIcon />
-        </Button>
+        <Tooltip title="edit colors" arrow>
+          <Button variant="contained" onClick={() => setEditing(!editing)}>
+            <BrushSharpIcon />
+          </Button>
+        </Tooltip>
         {editing ? (
           <Box>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Text</FixedTypo>
               <ColorPicker
-                value={page.format.textColor ?? 'black'}
-                onChange={(color) =>
-                  dispatch({
-                    type: 'updateFormat',
-                    format: { textColor: color },
-                  })
-                }
+                value={format.textColor ?? 'black'}
+                onChange={(color) => updateFormat({ textColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Choice</FixedTypo>
               <ColorPicker
-                value={page.format.btnColor ?? 'black'}
-                onChange={(color) =>
-                  dispatch({
-                    type: 'updateFormat',
-                    format: { btnColor: color },
-                  })
-                }
+                value={format.btnColor ?? 'black'}
+                onChange={(color) => updateFormat({ btnColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Page</FixedTypo>
               <ColorPicker
-                value={page.format.page ?? 'black'}
-                onChange={(color) =>
-                  dispatch({
-                    type: 'updateFormat',
-                    format: { page: color },
-                  })
-                }
+                value={format.page ?? 'black'}
+                onChange={(color) => updateFormat({ page: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Background</FixedTypo>
               <ColorPicker
-                value={page.format.background ?? 'black'}
-                onChange={(color) =>
-                  dispatch({
-                    type: 'updateFormat',
-                    format: { background: color },
-                  })
-                }
+                value={format.background ?? 'black'}
+                onChange={(color) => updateFormat({ background: color })}
               />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Tooltip title="revert changes" arrow>
+                <Button
+                  variant="contained"
+                  onClick={() => setFormat(page.format)}
+                >
+                  <SettingsBackupRestoreSharpIcon />
+                </Button>
+              </Tooltip>
+              <Tooltip title="save" arrow>
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    dispatch({
+                      type: 'updateFormat',
+                      format,
+                    })
+                  }
+                >
+                  <SaveSharpIcon />
+                </Button>
+              </Tooltip>
             </Stack>
           </Box>
         ) : (
