@@ -141,7 +141,7 @@ function reducer(state = initialState, action: Action) {
         game: {
           ...state.game,
           pages: state.game.pages.concat([
-            initialPage(state.game.settings.pageCount),
+            initialPage(state.game.settings.pageCount + 1),
           ]),
           settings: {
             ...state.game.settings,
@@ -150,11 +150,16 @@ function reducer(state = initialState, action: Action) {
         },
       };
     case 'removePage':
+      // eslint-disable-next-line no-case-declarations
+      const removeFirst = state.game.pages[action.index].isFirst;
+      // eslint-disable-next-line no-case-declarations
+      const newPages = removeElem(state.game.pages, action.index).map(
+        (page, index) =>
+          removeFirst && index === 0 ? { ...page, isFirst: true } : page
+      );
       return {
         ...state,
-        game: gameL.pages.set(removeElem(state.game.pages, action.index))(
-          state.game
-        ),
+        game: gameL.pages.set(newPages)(state.game),
         selectedPage:
           state.selectedPage === state.game.pages.length - 1
             ? state.selectedPage - 1
@@ -163,16 +168,16 @@ function reducer(state = initialState, action: Action) {
     case 'addChoice':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].next.set(
-          state.game.pages[state.selectedPage].next.concat([initialChoice])
+        game: gameL.pages[state.selectedPage].next.set((nex) =>
+          nex.concat([initialChoice])
         )(state.game),
         pageId: state.game.settings.pageCount + 1,
       };
     case 'removeChoice':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].next.set(
-          removeElem(state.game.pages[state.selectedPage].next, action.index)
+        game: gameL.pages[state.selectedPage].next.set((nex) =>
+          removeElem(nex, action.index)
         )(state.game),
       };
     case 'loadGame':
@@ -184,24 +189,26 @@ function reducer(state = initialState, action: Action) {
     case 'changePage':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].set({
-          ...state.game.pages[state.selectedPage],
+        game: gameL.pages[state.selectedPage].set((page) => ({
+          ...page,
           ...action.page,
-        })(state.game),
+        }))(state.game),
       };
     case 'changeChoice':
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].next[action.index].set({
-          ...state.game.pages[state.selectedPage].next[action.index],
-          ...action.choice,
-        })(state.game),
+        game: gameL.pages[state.selectedPage].next[action.index].set(
+          (choice) => ({
+            ...choice,
+            ...action.choice,
+          })
+        )(state.game),
       };
     case 'setFirst':
       return {
         ...state,
-        game: gameL.pages.set(
-          state.game.pages.map((page, index) => ({
+        game: gameL.pages.set((pages) =>
+          pages.map((page, index) => ({
             ...page,
             isFirst: action.index === index,
           }))

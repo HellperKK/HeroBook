@@ -48,7 +48,10 @@ const Editor = () => {
           <List sx={{ overflow: 'auto' }}>
             {game.pages.map((page, index) => (
               <ListItem
-                onClick={() => dispatch({ type: 'setSelectedPage', index })}
+                onClick={() => {
+                  console.log(page);
+                  dispatch({ type: 'setSelectedPage', index });
+                }}
                 key={page.id}
                 sx={{
                   bgcolor: index === selectedPage ? 'secondary.main' : '',

@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+import { lens } from 'lens.ts';
 
 import { nothing } from './utils';
 import { Game } from './initialStuff';
@@ -116,11 +119,19 @@ const format = `
 </html>
 `;
 
-const compile = async (state: Game, zip: JSZip) => {
-  zip.file('data.json', JSON.stringify(state));
+const compile = async (game: Game, zip: JSZip) => {
+  const gameL = lens<Game>();
+  const cleanState = gameL.pages.set((pages) =>
+    pages.map((page) => ({
+      ...page,
+      text: DOMPurify.sanitize(marked(page.text)),
+    }))
+  )(game);
+  console.log(cleanState);
+  zip.file('data.json', JSON.stringify(cleanState));
   zip
     .generateAsync({ type: 'blob' })
-    .then((blob) => saveAs(blob, `${state.settings.gameTitle || 'game'}.zip`))
+    .then((blob) => saveAs(blob, `${game.settings.gameTitle || 'game'}.zip`))
     .catch(nothing);
 };
 
