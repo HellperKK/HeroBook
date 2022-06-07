@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
 import { lens } from 'lens.ts';
 
-import { nothing } from './utils';
+import { nothing, safeMarkdown } from './utils';
 import { Game } from './initialStuff';
 
 const format = `
@@ -124,7 +122,11 @@ const compile = async (game: Game, zip: JSZip) => {
   const cleanState = gameL.pages.set((pages) =>
     pages.map((page) => ({
       ...page,
-      text: DOMPurify.sanitize(marked(page.text)),
+      text: safeMarkdown(page.text),
+      next: page.next.map((nex) => ({
+        ...nex,
+        action: safeMarkdown(nex.action),
+      })),
     }))
   )(game);
   console.log(cleanState);

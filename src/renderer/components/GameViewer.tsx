@@ -3,11 +3,9 @@ import { Box } from '@mui/system';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
 
 import { Choice, Page } from '../../utils/initialStuff';
-import { identity } from '../../utils/utils';
+import { identity, safeMarkdown } from '../../utils/utils';
 import { State } from '../../utils/state';
 
 const StyledButton = styled.button`
@@ -27,8 +25,6 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  // eslint-disable-next-line no-console
-  console.log(marked);
   const { game, assets } = useSelector<State, State>(identity);
 
   const { page, onClick } = props;
@@ -40,9 +36,10 @@ export default function GameViewer(props: CompProp) {
         key={`poll_${index + 42}`}
         onClick={() => onClick && onClick(choice)}
         color={page.format.btnColor ?? game.format.btnColor}
-      >
-        {'>'} {choice.action}
-      </StyledButton>
+        dangerouslySetInnerHTML={{
+          __html: safeMarkdown(` > ${choice.action}`),
+        }}
+      />
     );
   };
 
@@ -79,7 +76,7 @@ export default function GameViewer(props: CompProp) {
           className="story-text"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(marked(page.text)),
+            __html: safeMarkdown(page.text),
           }}
         />
         <Box

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-restricted-syntax */
 import JSZip from 'jszip';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+
 import { initialPage, Page } from './initialStuff';
 
 type Partial<Type> = {
@@ -96,6 +99,8 @@ const noExt = (name: string) => name.split('.').shift();
 
 const identity = <T>(x: T): T => x;
 
+const safeMarkdown = (md: string): string => DOMPurify.sanitize(marked(md));
+
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
 export {
@@ -109,4 +114,5 @@ export {
   identity,
   readImage,
   noExt,
+  safeMarkdown,
 };
