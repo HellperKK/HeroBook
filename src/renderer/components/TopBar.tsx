@@ -34,6 +34,7 @@ import AssetsManager from './AssetsManager';
 import { State } from '../../utils/state';
 import { nothing, openAZip, identity, readImage } from '../../utils/utils';
 import { compile } from '../../utils/format';
+import GraphViewer from './GraphViewer';
 
 export default function TopBar() {
   const { game, zip } = useSelector<State, State>(identity);
@@ -42,6 +43,7 @@ export default function TopBar() {
   const [settings, setSettings] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [assets, setAssets] = useState(false);
+  const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
 
   const loadState = () => {
@@ -132,6 +134,11 @@ export default function TopBar() {
               <FileDownloadSharpIcon />
             </Button>
           </Tooltip>
+          <Tooltip title="visualize graph" arrow>
+            <Button variant="contained" onClick={() => setGraph(true)}>
+              graph
+            </Button>
+          </Tooltip>
           {/* <Tooltip title="infos" arrow>
             <Button variant="contained" onClick={() => setInfos(true)}>
               <HelpSharp />
@@ -187,6 +194,23 @@ export default function TopBar() {
             <Button
               variant="contained"
               onClick={() => setPlaying(false)}
+              sx={{ width: '100%' }}
+            >
+              <CloseSharpIcon />
+            </Button>
+          </Container>
+        </Box>
+      </Modal>
+      <Modal open={graph}>
+        <Box
+          sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}
+        >
+          <GraphViewer />
+
+          <Container>
+            <Button
+              variant="contained"
+              onClick={() => setGraph(false)}
               sx={{ width: '100%' }}
             >
               <CloseSharpIcon />
