@@ -6,7 +6,7 @@ interface CompProps {
   onChange: (color: string) => void;
 }
 
-export default function ViewWindow(props: CompProps) {
+export default function ColorPicker(props: CompProps) {
   const { value, onChange } = props;
 
   const pick = () => {
