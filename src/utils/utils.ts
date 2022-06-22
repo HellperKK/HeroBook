@@ -19,6 +19,13 @@ const findPage = (pages: Array<Page>, id: number) => {
   return initialPage(1);
 };
 
+const pageIsLinked = (pages: Array<Page>, page: Page) => {
+  const linkPages = pages.filter((pageLink) =>
+    pageLink.next.some((nex) => nex.pageId === page.id)
+  );
+  return linkPages.length !== 0;
+};
+
 const readImage = (file: Blob, then: (url: string) => void) => {
   const reader = new FileReader();
   reader.onloadend = () => {
@@ -115,4 +122,5 @@ export {
   readImage,
   noExt,
   safeMarkdown,
+  pageIsLinked,
 };

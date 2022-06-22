@@ -18,6 +18,7 @@ import { State } from '../../utils/state';
 import { findPage, identity, noExt } from '../../utils/utils';
 
 import Space from './Space';
+import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
   max-width: 80px;
@@ -80,20 +81,7 @@ export default function PageEditor() {
         />
       </Box>
       <Box sx={{ height: '55vh', paddingTop: '20px' }}>
-        <TextField
-          multiline
-          fullWidth
-          label="Page Content"
-          variant="outlined"
-          value={game.pages[selectedPage].text}
-          onChange={(e) =>
-            dispatch({
-              type: 'changePage',
-              page: { text: e.target.value },
-            })
-          }
-          sx={{ height: '100%', width: '100%' }}
-        />
+        <MarkdownEditor page={game.pages[selectedPage]} />
       </Box>
       {/* Choice List */}
       <Box sx={{ height: '30vh' }}>

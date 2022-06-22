@@ -166,6 +166,7 @@
     "@types/jest": "^27.0.2",
     "@types/marked": "^4.0.3",
     "@types/node": "16.10.2",
+    "@types/prismjs": "^1.26.0",
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
     "@types/react-router": "^5.1.16",
@@ -221,6 +222,7 @@
   },
   "dependencies": {
     "@antv/g6": "^4.6.4",
+    "@emotion/css": "^11.9.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.4",
@@ -234,12 +236,17 @@
     "jszip": "^3.7.1",
     "lens.ts": "^0.5.1",
     "marked": "^4.0.16",
+    "marked-ast": "^0.3.0",
+    "prismjs": "^1.28.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
     "redux": "^4.1.2",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "slate": "^0.81.0",
+    "slate-history": "^0.66.0",
+    "slate-react": "^0.81.0"
   },
   "devEngines": {
     "node": ">=14.x",
