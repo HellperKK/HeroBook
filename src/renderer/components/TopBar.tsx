@@ -6,6 +6,7 @@ import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 import FileDownloadSharpIcon from '@mui/icons-material/FileDownloadSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 // import HelpSharp from '@mui/icons-material/HelpSharp';
 
 import Button from '@mui/material/Button';
@@ -124,26 +125,21 @@ export default function TopBar() {
               <PlayArrowSharpIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="manage assets" arrow>
-            <Button variant="contained" onClick={() => setAssets(true)}>
-              <PermMediaSharpIcon />
-            </Button>
-          </Tooltip>
           <Tooltip title="compile game" arrow>
             <Button variant="contained" onClick={compileState}>
               <FileDownloadSharpIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="visualize graph" arrow>
-            <Button variant="contained" onClick={() => setGraph(true)}>
-              graph
+          <Tooltip title="manage assets" arrow>
+            <Button variant="contained" onClick={() => setAssets(true)}>
+              <PermMediaSharpIcon />
             </Button>
           </Tooltip>
-          {/* <Tooltip title="infos" arrow>
-            <Button variant="contained" onClick={() => setInfos(true)}>
-              <HelpSharp />
+          <Tooltip title="visualize graph" arrow>
+            <Button variant="contained" onClick={() => setGraph(true)}>
+              <AccountTreeIcon />
             </Button>
-            </Tooltip> */}
+          </Tooltip>
         </ButtonGroup>
       </Grid>
       <Dialog open={settings} onClose={() => setSettings(false)}>

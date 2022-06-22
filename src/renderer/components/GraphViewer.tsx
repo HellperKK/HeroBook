@@ -2,7 +2,7 @@
 import { useSelector } from 'react-redux';
 import G6 from '@antv/g6';
 
-import { identity } from '../../utils/utils';
+import { identity, pageIsLinked } from '../../utils/utils';
 import { State } from '../../utils/state';
 import { Choice, Page } from '../../utils/initialStuff';
 
@@ -10,6 +10,13 @@ export default function GraphViewer() {
   const { game } = useSelector<State, State>(identity);
 
   const nodeName = (page: Page) => `${page.name} (${page.id})`;
+
+  const nodeColor = (page: Page) => {
+    if (page.isFirst) return '#70ff7e';
+    if (!pageIsLinked(game.pages, page)) return '#ff8170';
+
+    return '#8fddff';
+  };
 
   const pagesDict = new Map<number, Page>();
   const nodes: any[] = [];
@@ -23,7 +30,7 @@ export default function GraphViewer() {
     nodes.push({
       id: nodeName(page),
       label: nodeName(page),
-      style: { fill: page.isFirst ? '#70ff7e' : '#8fddff' },
+      style: { fill: nodeColor(page) },
     });
     page.next.forEach((nex: Choice) => {
       edges.push({
@@ -54,7 +61,6 @@ export default function GraphViewer() {
         angleRatio: 1,
       },
       defaultNode: {
-        type: 'arc',
         size: 40,
       },
       defaultEdge: {
