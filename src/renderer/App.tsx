@@ -49,7 +49,6 @@ const Editor = () => {
             {game.pages.map((page, index) => (
               <ListItem
                 onClick={() => {
-                  console.log(page);
                   dispatch({ type: 'setSelectedPage', index });
                 }}
                 key={page.id}
