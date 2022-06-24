@@ -108,6 +108,8 @@ const identity = <T>(x: T): T => x;
 
 const safeMarkdown = (md: string): string => DOMPurify.sanitize(marked(md));
 
+const safeFileName = (fileName: string) => fileName.replaceAll(/\s+/g, '-');
+
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
 export {
@@ -123,4 +125,5 @@ export {
   noExt,
   safeMarkdown,
   pageIsLinked,
+  safeFileName,
 };

@@ -14,7 +14,6 @@ import {
 } from './initialStuff';
 
 import { Partial } from './utils';
-import { format } from './format';
 
 const gameL = lens<Game>();
 
@@ -91,7 +90,6 @@ type Action =
     };
 
 const initialZip = new JSZip();
-initialZip.file('index.html', format);
 
 export interface State {
   game: Game;
@@ -124,8 +122,6 @@ const mergeMap = <K, V>(map1: Map<K, V>, map2: Map<K, V>): Map<K, V> => {
 };
 
 const removeMap = <K, V>(map1: Map<K, V>, key: K): Map<K, V> => {
-  // eslint-disable-next-line no-console
-  console.log(key);
   const newMap = new Map(map1.entries());
   newMap.delete(key);
   return newMap;

@@ -3,15 +3,15 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { lens } from 'lens.ts';
 
-import { nothing, safeMarkdown } from './utils';
+import { nothing, safeFileName, safeMarkdown } from './utils';
 import { Game } from './initialStuff';
 
-const format = `
+const format = (game: Game) => `
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>A herobook game</title>
+    <title>${game.settings.gameTitle ?? 'A herobook game'}</title>
     <style>
       body {
         text-align: center;
@@ -45,7 +45,7 @@ const format = `
       </div>
     </div>
     <script>
-      let data
+      const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
       const divText = divStory.querySelector(".story-text")
@@ -56,7 +56,6 @@ const format = `
         const codes = chars.map((char, index) => {
           return String.fromCharCode(parseInt(char) - key.charCodeAt(index % key.length))
         })
-        console.log(codes)
         return codes.join("")
       }
 
@@ -69,9 +68,6 @@ const format = `
 
         const pageFormat = page.format
         const globalFormat = data.format
-        console.log(page.image)
-        console.log(pageFormat)
-        console.log(globalFormat)
 
         divImage.innerHTML = ""
         if (page.image) {
@@ -100,18 +96,7 @@ const format = `
         }
       }
 
-      fetch('./data.json')
-      .then(data => data.json())
-      .then(json => {
-        data = json
-
-        if(data.gameTitle) {
-          document.title = data.gameTitle + data.author ? ' by ' + data.author : ''
-        }
-
-        format(data.pages.find(p => p.isFirst).id)
-      })
-      .catch((error) => alert(error))
+      format(data.pages.find(p => p.isFirst).id)
     </script>
   </body>
 </html>
@@ -129,11 +114,14 @@ const compile = async (game: Game, zip: JSZip) => {
       })),
     }))
   )(game);
-  console.log(cleanState);
   zip.file('data.json', JSON.stringify(cleanState));
+  zip.file('index.html', format(game));
   zip
     .generateAsync({ type: 'blob' })
-    .then((blob) => saveAs(blob, `${game.settings.gameTitle || 'game'}.zip`))
+    .then((blob) => {
+      // eslint-disable-next-line promise/always-return
+      saveAs(blob, safeFileName(`${game.settings.gameTitle || 'game'}.zip`));
+    })
     .catch(nothing);
 };
 

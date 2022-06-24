@@ -15,12 +15,7 @@ import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/system/Box';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 // import Card from '@mui/material/Card';
 // import DialogContentText from '@mui/material/DialogContentText';
 
@@ -36,6 +31,7 @@ import { State } from '../../utils/state';
 import { nothing, openAZip, identity, readImage } from '../../utils/utils';
 import { compile } from '../../utils/format';
 import GraphViewer from './GraphViewer';
+import SettingsWindow from './SettingsWindow';
 
 export default function TopBar() {
   const { game, zip } = useSelector<State, State>(identity);
@@ -142,44 +138,7 @@ export default function TopBar() {
           </Tooltip>
         </ButtonGroup>
       </Grid>
-      <Dialog open={settings} onClose={() => setSettings(false)}>
-        <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
-        <DialogContent>
-          <Container>
-            <Box sx={{ height: '60px', paddingTop: '20px' }}>
-              <TextField
-                label="Author"
-                variant="outlined"
-                value={game.settings.author}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'updateSettings',
-                    settings: { author: e.target.value },
-                  })
-                }
-              />
-            </Box>
-            <Box sx={{ height: '60px', paddingTop: '20px' }}>
-              <TextField
-                label="Title"
-                variant="outlined"
-                value={game.settings.gameTitle}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'updateSettings',
-                    settings: { gameTitle: e.target.value },
-                  })
-                }
-              />
-            </Box>
-          </Container>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={() => setSettings(false)}>
-            <CloseSharpIcon />
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <SettingsWindow open={settings} close={() => setSettings(false)} />
       <Modal open={playing}>
         <Box
           sx={{ height: '100vh', backgroundColor: 'white', overflowX: 'auto' }}

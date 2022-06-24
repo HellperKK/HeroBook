@@ -32,42 +32,61 @@ export default function PageEditor() {
   // const page = game.pages[selectedPage];
 
   return (
-    <Box>
-      <PermMediaSharpIcon />
-      <Space size={2} />
-      <Select value={game.pages[selectedPage].image}>
-        {Array.from(assets.images.keys()).map((image, index) => (
-          <MenuItem
-            key={`image${index + 42}`}
-            value={image}
-            onClick={() =>
-              dispatch({
-                type: 'changePage',
-                page: { image },
-              })
-            }
-          >
-            <StyledImg src={assets.images.get(image)} alt="" />
-            <Space size={2} />
-            {noExt(image)}
-          </MenuItem>
-        ))}
-      </Select>
-      <Space size={2} />
-      <Button
-        disabled={!game.pages[selectedPage].image}
-        variant="contained"
-        onClick={() =>
-          dispatch({
-            type: 'changePage',
-            page: { image: undefined },
-          })
-        }
+    <Box
+      sx={{
+        height: 'calc(100vh - 120px)',
+        display: 'grid',
+        gridTemplateAreas: '"asset" "name" "content" "choices"',
+        gridTemplateRows: '100px 100px 1fr 200px',
+      }}
+    >
+      <Box
+        sx={{
+          gridArea: 'asset',
+        }}
       >
-        <DeleteSharpIcon />
-      </Button>
-      <Space size={2} />
-      <Box sx={{ height: 'calc(10vh-20px)', paddingTop: '20px' }}>
+        <PermMediaSharpIcon />
+        <Space size={2} />
+        <Select value={game.pages[selectedPage].image}>
+          {Array.from(assets.images.keys()).map((image, index) => (
+            <MenuItem
+              key={`image${index + 42}`}
+              value={image}
+              onClick={() =>
+                dispatch({
+                  type: 'changePage',
+                  page: { image },
+                })
+              }
+            >
+              <StyledImg src={assets.images.get(image)} alt="" />
+              <Space size={2} />
+              {noExt(image)}
+            </MenuItem>
+          ))}
+        </Select>
+        <Space size={2} />
+        <Button
+          disabled={!game.pages[selectedPage].image}
+          variant="contained"
+          onClick={() =>
+            dispatch({
+              type: 'changePage',
+              page: { image: undefined },
+            })
+          }
+        >
+          <DeleteSharpIcon />
+        </Button>
+        <Space size={2} />
+      </Box>
+      <Box
+        sx={{
+          height: 'calc(10vh-20px)',
+          paddingTop: '20px',
+          gridArea: 'name',
+        }}
+      >
         <TextField
           label="Page Title"
           variant="outlined"
@@ -80,7 +99,7 @@ export default function PageEditor() {
           }
         />
       </Box>
-      <Box sx={{ height: '55vh', paddingTop: '20px' }}>
+      <Box sx={{ paddingTop: '20px', gridArea: 'content' }}>
         <TextField
           multiline
           fullWidth
@@ -98,7 +117,11 @@ export default function PageEditor() {
         {/* <MarkdownEditor page={game.pages[selectedPage]} /> */}
       </Box>
       {/* Choice List */}
-      <Box sx={{ height: '30vh' }}>
+      <Box
+        sx={{
+          gridArea: 'choices',
+        }}
+      >
         <Container>
           <List sx={{ overflow: 'auto' }}>
             {game.pages[selectedPage].next.map((choice, index) => (

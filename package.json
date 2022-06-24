@@ -227,6 +227,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.4",
     "@mui/material": "^5.0.4",
+    "caniuse-lite": "^1.0.30001359",
     "dompurify": "^2.3.8",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.1",
