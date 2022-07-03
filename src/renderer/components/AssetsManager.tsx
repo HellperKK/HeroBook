@@ -54,38 +54,27 @@ export default function AssetsManager(props: CompProps) {
   const [selectedAsset, setSelectedAsset] = useState(-1);
   const { images } = assets;
 
-  const addAsset = (assetType: string) => () => {
-    openFiles(
-      (files) => {
-        if (files === null) {
-          return;
-        }
+  const addAsset = (assetType: string) => async () => {
+    const files = await openFiles(getExtensions(assetType), true);
+    const newAssets = new Map<string, string>();
 
-        const newAssets = new Map<string, string>();
-        const urls: Array<string> = [];
+    const arrFiles = Array.from(files);
 
-        const arrFiles = Array.from(files);
-        arrFiles.forEach((fi, index) => {
-          const pathName = assetPath(assetType, fi.name);
-          zip.file(pathName, fi);
-          readImage(fi, (url) => {
-            newAssets.set(fi.name, url);
-            urls.push(url);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const fi of arrFiles) {
+      const pathName = assetPath(assetType, fi.name);
+      zip.file(pathName, fi);
 
-            if (index + 1 === arrFiles.length) {
-              dispatch({
-                type: 'addAssets',
-                files: newAssets,
-                fileType: 'images',
-              });
-              setSelectedAsset(index);
-            }
-          });
-        });
-      },
-      getExtensions(assetType),
-      true
-    );
+      // eslint-disable-next-line no-await-in-loop
+      const image = await readImage(fi);
+      newAssets.set(fi.name, image);
+    }
+
+    dispatch({
+      type: 'addAssets',
+      files: newAssets,
+      fileType: 'images',
+    });
   };
 
   const removeAsset = (assetType: string, assetName: string) => () => {

@@ -4,7 +4,7 @@ import JSZip from 'jszip';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-import { initialPage, Page } from './initialStuff';
+import { initialGame, initialPage, Page } from './initialStuff';
 
 type Partial<Type> = {
   [Property in keyof Type]?: Type[Property];
@@ -26,12 +26,14 @@ const pageIsLinked = (pages: Array<Page>, page: Page) => {
   return linkPages.length !== 0;
 };
 
-const readImage = (file: Blob, then: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    then(reader.result as string);
-  };
-  reader.readAsDataURL(file);
+const readImage = (file: Blob): Promise<string> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  });
 };
 
 const nothing = () => {};
@@ -73,33 +75,62 @@ const formatStory = (obj: Array<any>) => {
 };
 
 const openFiles = (
-  then: (files: FileList | null) => void,
   accept: Array<string> = [],
   multiple = false
-) => {
-  const fileSelector = document.createElement('input');
-  fileSelector.type = 'file';
-  fileSelector.multiple = multiple;
+): Promise<FileList> => {
+  return new Promise((resolve, reject) => {
+    const fileSelector = document.createElement('input');
+    fileSelector.type = 'file';
+    fileSelector.multiple = multiple;
 
-  if (accept.length > 0) {
-    fileSelector.accept = accept.join(',');
-  }
+    if (accept.length > 0) {
+      fileSelector.accept = accept.join(',');
+    }
 
-  fileSelector.addEventListener('change', () => then(fileSelector.files));
-  fileSelector.click();
+    fileSelector.addEventListener('change', () => {
+      if (fileSelector.files !== null) {
+        resolve(fileSelector.files);
+      } else {
+        reject(new Error('no file selected'));
+      }
+    });
+    fileSelector.click();
+  });
 };
 
-const openAZip = (then: (zip: JSZip) => void) => {
-  openFiles(
-    (files) => {
-      if (files && files.length > 0) {
-        const file = files[0];
-        const zip = new JSZip();
-        zip.loadAsync(file).then(then).catch(nothing);
+const openAZip = async () => {
+  const files = await openFiles(['.zip']);
+  const file = files[0];
+  const zip = new JSZip();
+  return zip.loadAsync(file);
+};
+
+const loadState = async () => {
+  const zip = await openAZip();
+  let game = initialGame;
+
+  const data = zip.file('data.json');
+  if (data !== null) {
+    const text = await data.async('text');
+    game = JSON.parse(text);
+  }
+
+  const images = zip.folder('assets/images');
+
+  const assets = new Map<string, string>();
+
+  if (images !== null) {
+    for (const pair of Object.entries(images.files)) {
+      const matches = pair[0].match(/assets\/images\/(.+)/);
+      if (matches) {
+        // eslint-disable-next-line no-await-in-loop
+        const img = await pair[1].async('blob').then((blob) => readImage(blob));
+        assets.set(matches[1], img);
       }
-    },
-    ['.zip']
-  );
+    }
+  }
+
+  return { game, assets, zip };
 };
 
 const noExt = (name: string) => name.split('.').shift();
@@ -126,4 +157,5 @@ export {
   safeMarkdown,
   pageIsLinked,
   safeFileName,
+  loadState,
 };

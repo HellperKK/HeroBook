@@ -20,7 +20,6 @@ import Tooltip from '@mui/material/Tooltip';
 // import DialogContentText from '@mui/material/DialogContentText';
 
 import { useState } from 'react';
-import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -28,7 +27,7 @@ import GameWindow from './GameWindow';
 import AssetsManager from './AssetsManager';
 
 import { State } from '../../utils/state';
-import { nothing, openAZip, identity, readImage } from '../../utils/utils';
+import { nothing, identity, loadState } from '../../utils/utils';
 import { compile } from '../../utils/format';
 import GraphViewer from './GraphViewer';
 import SettingsWindow from './SettingsWindow';
@@ -43,41 +42,13 @@ export default function TopBar() {
   const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
 
-  const loadState = () => {
-    openAZip((z: JSZip) => {
-      const data = z.file('data.json');
-
-      if (data !== null) {
-        data
-          .async('text')
-          .then((text) => {
-            dispatch({ type: 'loadGame', game: JSON.parse(text), zip: z });
-            const images = z.folder('assets/images');
-
-            if (images !== null) {
-              Object.entries(images.files).forEach((pair) => {
-                const matches = pair[0].match(/assets\/images\/(.*)/);
-                if (!matches || !matches[1]) return;
-
-                pair[1]
-                  .async('blob')
-                  .then((blob) =>
-                    readImage(blob, (url) =>
-                      dispatch({
-                        type: 'addAssets',
-                        files: new Map([[matches[1], url]]),
-                        fileType: 'images',
-                      })
-                    )
-                  )
-                  .catch(nothing);
-              });
-            }
-
-            return text;
-          })
-          .catch(nothing);
-      }
+  const loadAState = async () => {
+    const state = await loadState();
+    dispatch({ type: 'loadGame', game: state.game, zip: state.zip });
+    dispatch({
+      type: 'addAssets',
+      files: state.assets,
+      fileType: 'images',
     });
   };
 
@@ -102,7 +73,7 @@ export default function TopBar() {
           aria-label="outlined primary button group"
         >
           <Tooltip title="load a game" arrow>
-            <Button variant="contained" onClick={loadState}>
+            <Button variant="contained" onClick={loadAState}>
               <FolderOpenSharpIcon />
             </Button>
           </Tooltip>
