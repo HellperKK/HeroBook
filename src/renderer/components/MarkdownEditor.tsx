@@ -1,9 +1,6 @@
-/* eslint-disable no-console */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
-// import * as marked from 'marked-ast';
 import Prism from 'prismjs';
 import { useCallback, useMemo } from 'react';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
@@ -197,7 +194,7 @@ const MarkdownEditor = (propss: EditorProps) => {
     const tokens = Prism.tokenize(node.text, Prism.languages.markdown);
     let start = 0;
 
-    for (const token of tokens) {
+    tokens.forEach((token) => {
       const length = getLength(token);
       const end = start + length;
 
@@ -210,7 +207,7 @@ const MarkdownEditor = (propss: EditorProps) => {
       }
 
       start = end;
-    }
+    });
 
     return ranges;
   }, []);

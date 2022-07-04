@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { lens } from 'lens.ts';
 
-import { nothing, safeFileName, safeMarkdown } from './utils';
+import { safeFileName, safeMarkdown } from './utils';
 import { Game } from './initialStuff';
 
 const format = (game: Game) => `
@@ -114,15 +113,12 @@ const compile = async (game: Game, zip: JSZip) => {
       })),
     }))
   )(game);
+
   zip.file('data.json', JSON.stringify(cleanState));
   zip.file('index.html', format(game));
-  zip
-    .generateAsync({ type: 'blob' })
-    .then((blob) => {
-      // eslint-disable-next-line promise/always-return
-      saveAs(blob, safeFileName(`${game.settings.gameTitle || 'game'}.zip`));
-    })
-    .catch(nothing);
+
+  const blob = await zip.generateAsync({ type: 'blob' });
+  saveAs(blob, safeFileName(`${game.settings.gameTitle || 'game'}.zip`));
 };
 
 export { format, compile };

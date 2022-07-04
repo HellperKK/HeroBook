@@ -1,4 +1,3 @@
-/* eslint-disable promise/no-nesting */
 import FolderOpenSharpIcon from '@mui/icons-material/FolderOpenSharp';
 import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';

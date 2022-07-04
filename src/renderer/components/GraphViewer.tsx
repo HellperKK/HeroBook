@@ -69,7 +69,6 @@ export default function GraphViewer() {
         },
       },
       modes: {
-        // 支持的 behavior
         default: ['drag-canvas', 'zoom-canvas'],
         edit: ['click-select'],
       },

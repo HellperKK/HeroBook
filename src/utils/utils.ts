@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import JSZip from 'jszip';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-import { initialGame, initialPage, Page } from './initialStuff';
+import { Choice, initialGame, initialPage, Page } from './initialStuff';
 
 type Partial<Type> = {
   [Property in keyof Type]?: Type[Property];
@@ -52,18 +51,17 @@ const formatStory = (obj: Array<Page>) => {
   let count = 0;
 
   obj.forEach((page) => {
-    // eslint-disable-next-line no-plusplus
-    page.id = ++count;
+    count += 1;
+    page.id = count;
     page.format = {};
   });
 
   obj.forEach((page) => {
-    page.next = page.next?.map((nex: any) => {
-      const nextPage = obj.find((p) => p.name === nex.page) ?? obj[0];
+    page.next = page.next?.map((nex: Choice) => {
+      const nextPage = obj.find((p) => p.id === nex.pageId) ?? obj[0];
 
       return {
         action: nex.action,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         pageId: nextPage.id,
       };
     });

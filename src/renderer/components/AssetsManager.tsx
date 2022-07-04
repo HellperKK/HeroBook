@@ -60,15 +60,13 @@ export default function AssetsManager(props: CompProps) {
 
     const arrFiles = Array.from(files);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const fi of arrFiles) {
+    arrFiles.forEach(async (fi) => {
       const pathName = assetPath(assetType, fi.name);
       zip.file(pathName, fi);
 
-      // eslint-disable-next-line no-await-in-loop
       const image = await readImage(fi);
       newAssets.set(fi.name, image);
-    }
+    });
 
     dispatch({
       type: 'addAssets',

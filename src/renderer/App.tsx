@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
