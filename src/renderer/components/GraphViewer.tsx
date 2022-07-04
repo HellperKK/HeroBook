@@ -2,7 +2,8 @@
 import { useSelector } from 'react-redux';
 import G6 from '@antv/g6';
 
-import { identity, pageIsLinked } from '../../utils/utils';
+import { identity } from '../../utils/utils';
+import { pageIsLinked } from '../../utils/page';
 import { State } from '../../utils/state';
 import { Choice, Page } from '../../utils/initialStuff';
 

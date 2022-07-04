@@ -15,7 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 
 import { State } from '../../utils/state';
-import { findPage, identity, noExt } from '../../utils/utils';
+import { identity, noExt } from '../../utils/utils';
+import { findPage } from '../../utils/page';
 
 import Space from './Space';
 // import MarkdownEditor from './MarkdownEditor';

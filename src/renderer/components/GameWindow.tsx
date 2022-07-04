@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { findPage, identity } from '../../utils/utils';
+import { identity } from '../../utils/utils';
+import { findPage } from '../../utils/page';
 import { State } from '../../utils/state';
 
 import GameViewer from './GameViewer';

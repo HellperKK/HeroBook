@@ -2,26 +2,10 @@ import JSZip from 'jszip';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-import { Choice, initialGame, initialPage, Page } from './initialStuff';
+import { Choice, initialGame, Page } from './initialStuff';
 
 type Partial<Type> = {
   [Property in keyof Type]?: Type[Property];
-};
-
-const findPage = (pages: Array<Page>, id: number) => {
-  const page = pages.find((p) => p.id === id);
-  if (page !== undefined) {
-    return page;
-  }
-
-  return initialPage(1);
-};
-
-const pageIsLinked = (pages: Array<Page>, page: Page) => {
-  const linkPages = pages.filter((pageLink) =>
-    pageLink.next.some((nex) => nex.pageId === page.id)
-  );
-  return linkPages.length !== 0;
 };
 
 const readImage = (file: Blob): Promise<string> => {
@@ -158,13 +142,11 @@ export {
   formatStory,
   openFiles,
   openAZip,
-  findPage,
   nothing,
   identity,
   readImage,
   noExt,
   safeMarkdown,
-  pageIsLinked,
   safeFileName,
   loadState,
 };
