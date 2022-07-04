@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-restricted-syntax */
 import JSZip from 'jszip';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
@@ -49,25 +48,26 @@ const download = (filename: string, text: string) => {
   element.click();
 };
 
-const formatStory = (obj: Array<any>) => {
+const formatStory = (obj: Array<Page>) => {
   let count = 0;
 
-  for (const page of obj) {
+  obj.forEach((page) => {
     // eslint-disable-next-line no-plusplus
     page.id = ++count;
     page.format = {};
-  }
+  });
 
-  for (const page of obj) {
-    page.next = page.next.map((nex: any) => {
+  obj.forEach((page) => {
+    page.next = page.next?.map((nex: any) => {
       const nextPage = obj.find((p) => p.name === nex.page) ?? obj[0];
+
       return {
         action: nex.action,
         // eslint-disable-next-line @typescript-eslint/no-shadow
-        pageId: nextPage,
+        pageId: nextPage.id,
       };
     });
-  }
+  });
 
   obj[0].isFirst = true;
 
@@ -120,14 +120,13 @@ const loadState = async () => {
   const assets = new Map<string, string>();
 
   if (images !== null) {
-    for (const pair of Object.entries(images.files)) {
+    Object.entries(images.files).forEach(async (pair) => {
       const matches = pair[0].match(/assets\/images\/(.+)/);
       if (matches) {
-        // eslint-disable-next-line no-await-in-loop
         const img = await pair[1].async('blob').then((blob) => readImage(blob));
         assets.set(matches[1], img);
       }
-    }
+    });
   }
 
   return { game, assets, zip };
