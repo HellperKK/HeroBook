@@ -29,6 +29,7 @@ interface Settings {
 }
 
 interface Game {
+  version: '1.0.0';
   settings: Settings;
   format: Format;
   pages: Array<Page>;
@@ -52,6 +53,7 @@ function initialPage(id = 1): Page {
 }
 
 const initialGame: Game = {
+  version: '1.0.0',
   settings: {
     author: '',
     gameTitle: '',

@@ -56,17 +56,22 @@ export default function AssetsManager(props: CompProps) {
 
   const addAsset = (assetType: string) => async () => {
     const files = await openFiles(getExtensions(assetType), true);
-    const newAssets = new Map<string, string>();
+    // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
 
-    arrFiles.forEach(async (fi) => {
-      const pathName = assetPath(assetType, fi.name);
-      zip.file(pathName, fi);
+    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
+      async (assetsMemoPromise: Promise<Map<string, string>>, fi: File) => {
+        const assetsMemo = await assetsMemoPromise;
+        const pathName = assetPath(assetType, fi.name);
+        zip.file(pathName, fi);
 
-      const image = await readImage(fi);
-      newAssets.set(fi.name, image);
-    });
+        const image = await readImage(fi);
+        assetsMemo.set(fi.name, image);
+        return assetsMemo;
+      },
+      Promise.resolve(new Map<string, string>())
+    );
 
     dispatch({
       type: 'addAssets',

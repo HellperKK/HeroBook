@@ -115,16 +115,28 @@ const loadState = async () => {
 
   const images = zip.folder('assets/images');
 
-  const assets = new Map<string, string>();
+  let assets = new Map<string, string>();
 
   if (images !== null) {
-    Object.entries(images.files).forEach(async (pair) => {
-      const matches = pair[0].match(/assets\/images\/(.+)/);
-      if (matches) {
-        const img = await pair[1].async('blob').then((blob) => readImage(blob));
-        assets.set(matches[1], img);
-      }
-    });
+    assets = await Object.entries(images.files).reduce<
+      Promise<Map<string, string>>
+    >(
+      async (
+        assetsMemoPromise: Promise<Map<string, string>>,
+        pair: [string, JSZip.JSZipObject]
+      ) => {
+        const assetsMemo = await assetsMemoPromise;
+        const matches = pair[0].match(/assets\/images\/(.+)/);
+        if (matches) {
+          const blob = await pair[1].async('blob');
+          const img = await readImage(blob);
+
+          assetsMemo.set(matches[1], img);
+        }
+        return assetsMemo;
+      },
+      Promise.resolve(new Map<string, string>())
+    );
   }
 
   return { game, assets, zip };
