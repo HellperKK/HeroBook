@@ -26,7 +26,7 @@ import GameWindow from './GameWindow';
 import AssetsManager from './AssetsManager';
 
 import { State } from '../../utils/state';
-import { nothing, identity, loadState } from '../../utils/utils';
+import { identity, loadState } from '../../utils/utils';
 import { compile } from '../../utils/format';
 import GraphViewer from './GraphViewer';
 import SettingsWindow from './SettingsWindow';
@@ -51,12 +51,10 @@ export default function TopBar() {
     });
   };
 
-  const saveState = () => {
+  const saveState = async () => {
     zip.file('data.json', JSON.stringify(game));
-    zip
-      .generateAsync({ type: 'blob' })
-      .then((blob) => saveAs(blob, 'game.zip'))
-      .catch(nothing);
+    const blob = await zip.generateAsync({ type: 'blob' });
+    saveAs(blob, 'game.zip');
   };
 
   const compileState = () => {
