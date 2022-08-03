@@ -15,6 +15,7 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 import CodeSharpIcon from '@mui/icons-material/CodeSharp';
+import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,12 +30,19 @@ import Space from './components/Space';
 
 import { State } from '../utils/state';
 import { identity } from '../utils/utils';
+import { pageIsLinked } from '../utils/page';
 
 const Editor = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const { game, selectedPage } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
+
+  const defineColor = (index: number) => {
+    if (index === selectedPage) return 'secondary.light';
+
+    return '';
+  };
 
   return (
     <Box sx={{ padding: '8px', backgroundColor: 'white' }}>
@@ -51,7 +59,7 @@ const Editor = () => {
                 }}
                 key={page.id}
                 sx={{
-                  bgcolor: index === selectedPage ? 'secondary.main' : '',
+                  bgcolor: defineColor(index),
                   cursor: 'pointer',
                 }}
               >
@@ -87,6 +95,17 @@ const Editor = () => {
                   }}
                   primary={page.name}
                 />
+                {!pageIsLinked(game.pages, page) ? (
+                  <Tooltip title="no link to this page" arrow>
+                    <ListItemIcon
+                      sx={{
+                        color: index === selectedPage ? 'yellow' : 'black',
+                      }}
+                    >
+                      <PriorityHighSharpIcon />
+                    </ListItemIcon>
+                  </Tooltip>
+                ) : null}
                 <Tooltip title="delete page" arrow>
                   <Button
                     variant="contained"
