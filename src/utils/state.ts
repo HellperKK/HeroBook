@@ -87,6 +87,14 @@ type Action =
   | {
       type: 'updateSettings';
       settings: Partial<Settings>;
+    }
+  | {
+      type: 'changeGameState';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: any;
+    }
+  | {
+      type: 'resetGameState';
     };
 
 const initialZip = new JSZip();
@@ -98,7 +106,10 @@ export interface State {
   assets: {
     images: Map<string, string>;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  gameState: any;
 }
+const stateL = lens<State>();
 
 const initialState: State = {
   game: initialGame,
@@ -107,6 +118,7 @@ const initialState: State = {
   assets: {
     images: new Map<string, string>(),
   },
+  gameState: {},
 };
 
 const removeElem = <T>(pages: Array<T>, index: number): Array<T> => {
@@ -255,6 +267,13 @@ function reducer(state = initialState, action: Action) {
           ...action.settings,
         })(state.game),
       };
+
+    case 'changeGameState':
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return stateL.gameState.set(action.value)(state);
+
+    case 'resetGameState':
+      return stateL.gameState.set({})(state);
 
     default:
       return state;

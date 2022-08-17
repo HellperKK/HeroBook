@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box } from '@mui/system';
 // import { Button } from '@mui/material';
 
 import styled from '@emotion/styled';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Choice, Page } from '../../utils/initialStuff';
 import { identity, safeMarkdown } from '../../utils/utils';
 import { State } from '../../utils/state';
+import * as ejs from '../../utils/ejs';
 
 const StyledButton = styled.button`
   color: ${(props) => props.color};
@@ -25,22 +27,36 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game, assets } = useSelector<State, State>(identity);
+  const { game, assets, gameState } = useSelector<State, State>(identity);
 
   const { page, onClick } = props;
+
+  const dispatch = useDispatch();
 
   const choiceButton = (choice: Choice, index: number) => {
     return (
       <StyledButton
         type="button"
         key={`poll_${index + 42}`}
-        onClick={() => onClick && onClick(choice)}
+        onClick={() => {
+          if (onClick !== null) {
+            dispatch({
+              type: 'changePage',
+              page: { image: undefined },
+            });
+            onClick(choice);
+          }
+        }}
         color={page.format.btnColor ?? game.format.btnColor}
         dangerouslySetInnerHTML={{
           __html: safeMarkdown(` > ${choice.action}`),
         }}
       />
     );
+  };
+
+  const defs: any = {
+    $state: gameState,
   };
 
   return (
@@ -76,7 +92,7 @@ export default function GameViewer(props: CompProp) {
           className="story-text"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: safeMarkdown(page.text),
+            __html: safeMarkdown(ejs.render(page.text, defs)),
           }}
         />
         <Box

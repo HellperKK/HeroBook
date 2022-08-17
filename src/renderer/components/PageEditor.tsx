@@ -6,6 +6,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem/ListItem';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
@@ -13,9 +14,10 @@ import PermMediaSharpIcon from '@mui/icons-material/PermMediaSharp';
 
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 import { State } from '../../utils/state';
-import { identity, noExt } from '../../utils/utils';
+import { identity, noExt, readImage } from '../../utils/utils';
 import { findPage } from '../../utils/page';
 
 import Space from './Space';
@@ -26,9 +28,15 @@ const StyledImg = styled.img`
   max-height: 40px;
 `;
 
+const assetPath = (assetType: string, assetName: string) =>
+  `assets/${assetType}/${assetName}`;
+
 export default function PageEditor() {
-  const { game, selectedPage, assets } = useSelector<State, State>(identity);
+  const { game, selectedPage, assets, zip } = useSelector<State, State>(
+    identity
+  );
   const dispatch = useDispatch();
+  const [draging, setDraging] = useState(false);
 
   // const page = game.pages[selectedPage];
 
@@ -44,6 +52,55 @@ export default function PageEditor() {
       <Box
         sx={{
           gridArea: 'asset',
+          border: draging ? '1px dashed black' : '',
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDraging(true);
+        }}
+        onDragLeave={() => {
+          setDraging(false);
+        }}
+        onDrop={async (e) => {
+          e.preventDefault();
+
+          const newAssets = await Array.from(e.dataTransfer.files).reduce<
+            Promise<Map<string, string>>
+          >(
+            async (
+              assetsMemoPromise: Promise<Map<string, string>>,
+              fi: File,
+              index: number
+            ) => {
+              const assetsMemo = await assetsMemoPromise;
+
+              if (/^image/.test(fi.type)) {
+                const pathName = assetPath('images', fi.name);
+                zip.file(pathName, fi);
+
+                const image = await readImage(fi);
+                assetsMemo.set(fi.name, image);
+
+                if (index === 0) {
+                  dispatch({
+                    type: 'changePage',
+                    page: { image: fi.name },
+                  });
+                }
+              }
+
+              return assetsMemo;
+            },
+            Promise.resolve(new Map<string, string>())
+          );
+
+          dispatch({
+            type: 'addAssets',
+            files: newAssets,
+            fileType: 'images',
+          });
+
+          setDraging(false);
         }}
       >
         <PermMediaSharpIcon />
@@ -62,7 +119,7 @@ export default function PageEditor() {
             >
               <StyledImg src={assets.images.get(image)} alt="" />
               <Space size={2} />
-              {noExt(image)}
+              <Typography>{noExt(image)}</Typography>
             </MenuItem>
           ))}
         </Select>
@@ -80,6 +137,7 @@ export default function PageEditor() {
           <DeleteSharpIcon />
         </Button>
         <Space size={2} />
+        <Typography>{draging ? 'drag images here' : ''}</Typography>
       </Box>
       <Box
         sx={{

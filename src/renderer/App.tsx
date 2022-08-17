@@ -14,7 +14,6 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
-import CodeSharpIcon from '@mui/icons-material/CodeSharp';
 import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 
 import { useState } from 'react';
@@ -157,9 +156,6 @@ const Editor = () => {
                 <Tooltip title="content visualization" arrow>
                   <Tab icon={<PlayArrowSharpIcon />} />
                 </Tooltip>
-                <Tooltip title="script edition" arrow>
-                  <Tab icon={<CodeSharpIcon />} disabled />
-                </Tooltip>
               </Tabs>
             </Box>
 
@@ -173,9 +169,9 @@ const Editor = () => {
               <ViewWindow />
             </TabPanel>
 
-            <TabPanel value={selectedTab} index={2}>
-              Item Three
-            </TabPanel>
+            {/* <TabPanel value={selectedTab} index={2}>
+              <CodeEditor />
+                </TabPanel> */}
           </Box>
           {/* <Divider textAlign="left">Page Data</Divider> */}
         </Grid>

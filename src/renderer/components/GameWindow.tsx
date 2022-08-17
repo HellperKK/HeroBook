@@ -7,6 +7,7 @@ import { findPage } from '../../utils/page';
 import { State } from '../../utils/state';
 
 import GameViewer from './GameViewer';
+import { Choice } from '../../utils/initialStuff';
 
 interface CompProp {
   start: number;
@@ -19,11 +20,9 @@ export default function GameWindow(props: CompProp) {
   const [currentPage, setCurrentPage] = useState(start);
 
   const truePage = findPage(game.pages, currentPage);
+  const changePage = (choice: Choice) => {
+    setCurrentPage(choice.pageId);
+  };
 
-  return (
-    <GameViewer
-      page={truePage}
-      onClick={(choice) => setCurrentPage(choice.pageId)}
-    />
-  );
+  return <GameViewer page={truePage} onClick={changePage} />;
 }

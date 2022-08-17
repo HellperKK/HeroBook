@@ -23,6 +23,10 @@ const StyledImage = styled.img`
   max-width: 85vw;
   max-height: 85vh;
 `;
+const StyledMiniature = styled.img`
+  max-width: 80px;
+  max-height: 40px;
+`;
 
 const assetPath = (assetType: string, assetName: string) =>
   `assets/${assetType}/${assetName}`;
@@ -113,6 +117,7 @@ export default function AssetsManager(props: CompProps) {
                     cursor: 'pointer',
                   }}
                 >
+                  <StyledMiniature src={assets.images.get(fileName)} alt="" />
                   <ListItemText
                     primary={noExt(fileName)}
                     sx={{
@@ -143,49 +148,69 @@ export default function AssetsManager(props: CompProps) {
           {/* Image Display */}
           <Grid item xs={9} xl={10}>
             <Box
-              sx={{ height: '90vh' }}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDraging(true);
-              }}
-              onDragLeave={() => {
-                setDraging(false);
-              }}
-              onDrop={async (e) => {
-                e.preventDefault();
-
-                const newAssets = await Array.from(e.dataTransfer.files).reduce<
-                  Promise<Map<string, string>>
-                >(
-                  async (
-                    assetsMemoPromise: Promise<Map<string, string>>,
-                    fi: File
-                  ) => {
-                    const assetsMemo = await assetsMemoPromise;
-
-                    if (/^image/.test(fi.type)) {
-                      const pathName = assetPath('images', fi.name);
-                      zip.file(pathName, fi);
-
-                      const image = await readImage(fi);
-                      assetsMemo.set(fi.name, image);
-                    }
-
-                    return assetsMemo;
-                  },
-                  Promise.resolve(new Map<string, string>())
-                );
-
-                dispatch({
-                  type: 'addAssets',
-                  files: newAssets,
-                  fileType: 'images',
-                });
-
-                setDraging(false);
+              sx={{
+                height: '90vh',
+                padding: '12px',
               }}
             >
-              <Typography>{draging ? 'drag images here' : ''}</Typography>
+              <Box
+                sx={{
+                  height: '100px',
+                  backgroundColor: 'lightgray',
+                  textAlign: 'center',
+                  border: draging ? '1px dashed black' : '',
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDraging(true);
+                }}
+                onDragLeave={() => {
+                  setDraging(false);
+                }}
+                onDrop={async (e) => {
+                  e.preventDefault();
+
+                  const newAssets = await Array.from(
+                    e.dataTransfer.files
+                  ).reduce<Promise<Map<string, string>>>(
+                    async (
+                      assetsMemoPromise: Promise<Map<string, string>>,
+                      fi: File,
+                      index: number
+                    ) => {
+                      const assetsMemo = await assetsMemoPromise;
+
+                      if (/^image/.test(fi.type)) {
+                        const pathName = assetPath('images', fi.name);
+                        zip.file(pathName, fi);
+
+                        const image = await readImage(fi);
+                        assetsMemo.set(fi.name, image);
+
+                        if (index === 0) {
+                          dispatch({
+                            type: 'changePage',
+                            page: { image: fi.name },
+                          });
+                        }
+                      }
+
+                      return assetsMemo;
+                    },
+                    Promise.resolve(new Map<string, string>())
+                  );
+
+                  dispatch({
+                    type: 'addAssets',
+                    files: newAssets,
+                    fileType: 'images',
+                  });
+
+                  setDraging(false);
+                }}
+              >
+                <Typography>drag images here</Typography>
+              </Box>
               <StyledImage
                 src={Array.from(assets.images.values())[selectedAsset]}
               />
