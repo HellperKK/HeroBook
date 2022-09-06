@@ -3,6 +3,7 @@
   "productName": "Herobook",
   "version": "1.0.0",
   "description": "text based game editor",
+  "author": "HellperKK",
   "main": "./dist/main/main.js",
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
