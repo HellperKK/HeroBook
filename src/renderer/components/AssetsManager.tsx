@@ -21,7 +21,7 @@ import { identity, openFiles, readImage, noExt } from '../../utils/utils';
 
 const StyledImage = styled.img`
   max-width: 85vw;
-  max-height: 85vh;
+  max-height: 80vh;
 `;
 const StyledMiniature = styled.img`
   max-width: 80px;
