@@ -14,7 +14,7 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
-import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
+// import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,7 +29,6 @@ import Space from './components/Space';
 
 import { State } from '../utils/state';
 import { identity } from '../utils/utils';
-import { pageIsLinked } from '../utils/page';
 
 const Editor = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -62,6 +61,17 @@ const Editor = () => {
                   cursor: 'pointer',
                 }}
               >
+                {/* !pageIsLinked(game.pages, page) ? (
+                  <Tooltip title="no link to this page" arrow>
+                    <ListItemIcon
+                      sx={{
+                        color: index === selectedPage ? 'yellow' : 'black',
+                      }}
+                    >
+                      <PriorityHighSharpIcon />
+                    </ListItemIcon>
+                  </Tooltip>
+                    ) : null */}
                 <ListItemIcon
                   sx={{
                     color: 'text.primary',
@@ -94,17 +104,6 @@ const Editor = () => {
                   }}
                   primary={page.name}
                 />
-                {!pageIsLinked(game.pages, page) ? (
-                  <Tooltip title="no link to this page" arrow>
-                    <ListItemIcon
-                      sx={{
-                        color: index === selectedPage ? 'yellow' : 'black',
-                      }}
-                    >
-                      <PriorityHighSharpIcon />
-                    </ListItemIcon>
-                  </Tooltip>
-                ) : null}
                 <Tooltip title="delete page" arrow>
                   <Button
                     variant="contained"
