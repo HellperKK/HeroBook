@@ -75,6 +75,10 @@ type Action =
       format: Format;
     }
   | {
+      type: 'updateGlobalFormat';
+      format: Format;
+    }
+  | {
       type: 'addAssets';
       files: Map<string, string>;
       fileType: 'images';
@@ -232,6 +236,14 @@ function reducer(state = initialState, action: Action) {
         ...state,
         game: gameL.pages[state.selectedPage].format.set({
           ...state.game.pages[state.selectedPage].format,
+          ...action.format,
+        })(state.game),
+      };
+    case 'updateGlobalFormat':
+      return {
+        ...state,
+        game: gameL.format.set({
+          ...state.game.format,
           ...action.format,
         })(state.game),
       };

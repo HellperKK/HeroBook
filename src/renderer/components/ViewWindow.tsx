@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import BrushSharpIcon from '@mui/icons-material/BrushSharp';
 import SettingsBackupRestoreSharpIcon from '@mui/icons-material/SettingsBackupRestoreSharp';
 import SaveSharpIcon from '@mui/icons-material/SaveSharp';
+import ApprovalSharpIcon from '@mui/icons-material/ApprovalSharp';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { lens } from 'lens.ts';
@@ -100,6 +101,19 @@ export default function ViewWindow() {
                   }
                 >
                   <SaveSharpIcon />
+                </Button>
+              </Tooltip>
+              <Tooltip title="make global" arrow>
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    dispatch({
+                      type: 'updateGlobalFormat',
+                      format,
+                    })
+                  }
+                >
+                  <ApprovalSharpIcon />
                 </Button>
               </Tooltip>
             </Stack>
