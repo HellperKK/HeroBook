@@ -2,9 +2,10 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { lens } from 'lens.ts';
 
-import { safeFileName, safeMarkdown } from './utils';
+import { safeFileName } from './utils';
 import { Game } from './initialStuff';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const format = (game: Game) => `
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -26,10 +27,6 @@ const format = (game: Game) => `
         cursor: pointer;
       }
 
-      .story-choices button::before {
-        content: '> ';
-      }
-
       .story-image img {
         max-width: 80%;
       }
@@ -43,7 +40,15 @@ const format = (game: Game) => `
 
       </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.1.0/marked.min.js"></script>
+    <script src="https://github.com/mde/ejs/releases/download/v3.1.8/ejs.min.js"></script>
     <script>
+      const state = {$state: {}}
+
+      const safeMarkdown = (md) => DOMPurify.sanitize(marked.parse(md));
+
       const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
@@ -79,12 +84,12 @@ const format = (game: Game) => `
         divStory.style.backgroundColor = pageFormat.page || globalFormat.page
         divText.style.color = pageFormat.textColor || globalFormat.textColor
 
-        divText.innerText = page.text
+        divText.innerHTML = safeMarkdown(ejs.render(page.text, state))
         divChoices.innerHTML = ""
 
         for (nex of page.next) {
           let button = document.createElement("button")
-          button.innerText = nex.action
+          button.innerHTML = safeMarkdown(ejs.render(nex.action, state))
           button.setAttribute("pageId", nex.pageId)
           button.addEventListener("click", function() {
             format(this.getAttribute("pageId"))
@@ -106,10 +111,10 @@ const compile = async (game: Game, zip: JSZip) => {
   const cleanState = gameL.pages.set((pages) =>
     pages.map((page) => ({
       ...page,
-      text: safeMarkdown(page.text),
+      text: page.text,
       next: page.next.map((nex) => ({
         ...nex,
-        action: safeMarkdown(nex.action),
+        action: nex.action,
       })),
     }))
   )(game);
