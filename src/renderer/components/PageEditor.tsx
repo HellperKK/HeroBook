@@ -181,8 +181,8 @@ export default function PageEditor() {
           gridArea: 'choices',
         }}
       >
-        <Container>
-          <List sx={{ overflow: 'auto' }}>
+        <Container sx={{ overflow: 'auto' }}>
+          <List>
             {game.pages[selectedPage].next.map((choice, index) => (
               <ListItem key={`choice-${index + 42}`}>
                 <TextField
@@ -198,6 +198,7 @@ export default function PageEditor() {
                     })
                   }
                 />
+                <Space size={2} />
                 <Select
                   value={findPage(game.pages, choice.pageId).id}
                   sx={{ width: '30%' }}
@@ -218,6 +219,7 @@ export default function PageEditor() {
                     </MenuItem>
                   ))}
                 </Select>
+                <Space size={2} />
                 <Button
                   variant="contained"
                   onClick={() =>
