@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 
 import Grid from '@mui/material/Grid';
@@ -36,6 +36,10 @@ export default function ViewWindow() {
 
   const [editing, setEditing] = useState(false);
   const [format, setFormat] = useState(page.format);
+  useMemo(() => {
+    setFormat(page.format);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page.id]);
 
   const updateFormat = (newFormat: Partial<Format>) =>
     setFormat({ ...format, ...newFormat });
