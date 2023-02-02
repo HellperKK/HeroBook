@@ -234,7 +234,7 @@
     "electron-updater": "^4.3.9",
     "file-saver": "^2.0.5",
     "history": "4.x.x",
-    "jszip": "^3.7.1",
+    "jszip": "^3.8.0",
     "lens.ts": "^0.5.1",
     "marked": "^4.0.16",
     "marked-ast": "^0.3.0",
