@@ -24,6 +24,7 @@ import TopBar from "./components/TopBar";
 import PageEditor from "./components/PageEditor";
 import ViewWindow from "./components/ViewWindow";
 import Space from "./components/Space";
+import PageTitleEdition from "./components/PageTitleEdition";
 
 import { State } from "./utils/state";
 import { identity } from "./utils/utils";
@@ -94,14 +95,10 @@ export default function Editor() {
                       />
                     </Button>
                   </Tooltip>
-                  <Space size={2} />
                 </ListItemIcon>
-                <ListItemText
-                  sx={{
-                    color: index === selectedPage ? "white" : "",
-                  }}
-                  primary={page.name}
-                />
+                <Space size={2} />
+                <PageTitleEdition pagePosition={index} pageTitle={page.name} />
+                <Space size={2} />
                 <Tooltip title="delete page" arrow>
                   <Button
                     variant="contained"

@@ -56,6 +56,11 @@ type Action =
       page: Partial<Page>;
     }
   | {
+      type: "changePageAt";
+      page: Partial<Page>;
+      position: number;
+    }
+  | {
       type: "changeChoice";
       choice: Partial<Choice>;
       index: number;
@@ -200,6 +205,14 @@ function reducer(state = initialState, action: Action) {
       return {
         ...state,
         game: gameL.pages[state.selectedPage].set((page) => ({
+          ...page,
+          ...action.page,
+        }))(state.game),
+      };
+    case "changePageAt":
+      return {
+        ...state,
+        game: gameL.pages[action.position].set((page) => ({
           ...page,
           ...action.page,
         }))(state.game),
