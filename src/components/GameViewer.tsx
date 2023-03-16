@@ -40,10 +40,6 @@ export default function GameViewer(props: CompProp) {
         key={`poll_${index + 42}`}
         onClick={() => {
           if (onClick !== null) {
-            dispatch({
-              type: "changePage",
-              page: { image: undefined },
-            });
             onClick(choice);
           }
         }}
