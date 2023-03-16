@@ -1,6 +1,6 @@
-import { createStore } from 'redux';
-import { lens } from 'lens.ts';
-import JSZip from 'jszip';
+import { createStore } from "redux";
+import { lens } from "lens.ts";
+import JSZip from "jszip";
 
 import {
   initialChoice,
@@ -11,94 +11,92 @@ import {
   Settings,
   Page,
   Choice,
-} from './initialStuff';
-
-import { Partial } from './utils';
+} from "./initialStuff";
 
 const gameL = lens<Game>();
 
 type Action =
   | {
-      type: 'changeSelectedPage';
+      type: "changeSelectedPage";
       index: number;
     }
   | {
-      type: 'addPage';
+      type: "addPage";
     }
   | {
-      type: 'removePage';
+      type: "removePage";
       index: number;
     }
   | {
-      type: 'addChoice';
+      type: "addChoice";
     }
   | {
-      type: 'removeChoice';
+      type: "removeChoice";
       index: number;
     }
   | {
-      type: 'loadGame';
+      type: "loadGame";
       game: Game;
       zip: JSZip;
     }
   | {
-      type: 'changeTitle';
+      type: "changeTitle";
       title: string;
     }
   | {
-      type: 'changeText';
+      type: "changeText";
       text: string;
     }
   | {
-      type: 'changeImage';
+      type: "changeImage";
       image: string;
     }
   | {
-      type: 'changePage';
+      type: "changePage";
       page: Partial<Page>;
     }
   | {
-      type: 'changeChoice';
+      type: "changeChoice";
       choice: Partial<Choice>;
       index: number;
     }
   | {
-      type: 'setFirst';
+      type: "setFirst";
       index: number;
     }
   | {
-      type: 'setSelectedPage';
+      type: "setSelectedPage";
       index: number;
     }
   | {
-      type: 'updateFormat';
+      type: "updateFormat";
       format: Format;
     }
   | {
-      type: 'updateGlobalFormat';
+      type: "updateGlobalFormat";
       format: Format;
     }
   | {
-      type: 'addAssets';
+      type: "addAssets";
       files: Map<string, string>;
-      fileType: 'images';
+      fileType: "images";
     }
   | {
-      type: 'removeAsset';
+      type: "removeAsset";
       fileName: string;
-      fileType: 'images';
+      fileType: "images";
     }
   | {
-      type: 'updateSettings';
+      type: "updateSettings";
       settings: Partial<Settings>;
     }
   | {
-      type: 'changeGameState';
+      type: "changeGameState";
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       value: any;
     }
   | {
-      type: 'resetGameState';
+      type: "resetGameState";
     };
 
 const initialZip = new JSZip();
@@ -145,9 +143,9 @@ const removeMap = <K, V>(map1: Map<K, V>, key: K): Map<K, V> => {
 
 function reducer(state = initialState, action: Action) {
   switch (action.type) {
-    case 'changeSelectedPage':
+    case "changeSelectedPage":
       return { ...state, selectedPage: action.index };
-    case 'addPage':
+    case "addPage":
       return {
         ...state,
         game: {
@@ -161,7 +159,7 @@ function reducer(state = initialState, action: Action) {
           },
         },
       };
-    case 'removePage':
+    case "removePage":
       // eslint-disable-next-line no-case-declarations
       const removeFirst = state.game.pages[action.index].isFirst;
       // eslint-disable-next-line no-case-declarations
@@ -177,7 +175,7 @@ function reducer(state = initialState, action: Action) {
             ? state.selectedPage - 1
             : state.selectedPage,
       };
-    case 'addChoice':
+    case "addChoice":
       return {
         ...state,
         game: gameL.pages[state.selectedPage].next.set((nex) =>
@@ -185,20 +183,20 @@ function reducer(state = initialState, action: Action) {
         )(state.game),
         pageId: state.game.settings.pageCount + 1,
       };
-    case 'removeChoice':
+    case "removeChoice":
       return {
         ...state,
         game: gameL.pages[state.selectedPage].next.set((nex) =>
           removeElem(nex, action.index)
         )(state.game),
       };
-    case 'loadGame':
+    case "loadGame":
       return {
         ...state,
         game: action.game,
         zip: action.zip,
       };
-    case 'changePage':
+    case "changePage":
       return {
         ...state,
         game: gameL.pages[state.selectedPage].set((page) => ({
@@ -206,7 +204,7 @@ function reducer(state = initialState, action: Action) {
           ...action.page,
         }))(state.game),
       };
-    case 'changeChoice':
+    case "changeChoice":
       return {
         ...state,
         game: gameL.pages[state.selectedPage].next[action.index].set(
@@ -216,7 +214,7 @@ function reducer(state = initialState, action: Action) {
           })
         )(state.game),
       };
-    case 'setFirst':
+    case "setFirst":
       return {
         ...state,
         game: gameL.pages.set((pages) =>
@@ -226,12 +224,12 @@ function reducer(state = initialState, action: Action) {
           }))
         )(state.game),
       };
-    case 'setSelectedPage':
+    case "setSelectedPage":
       return {
         ...state,
         selectedPage: action.index,
       };
-    case 'updateFormat':
+    case "updateFormat":
       return {
         ...state,
         game: gameL.pages[state.selectedPage].format.set({
@@ -239,7 +237,7 @@ function reducer(state = initialState, action: Action) {
           ...action.format,
         })(state.game),
       };
-    case 'updateGlobalFormat':
+    case "updateGlobalFormat":
       return {
         ...state,
         game: gameL.format.set({
@@ -247,7 +245,7 @@ function reducer(state = initialState, action: Action) {
           ...action.format,
         })(state.game),
       };
-    case 'addAssets':
+    case "addAssets":
       return {
         ...state,
         assets: {
@@ -259,7 +257,7 @@ function reducer(state = initialState, action: Action) {
         },
       };
 
-    case 'removeAsset':
+    case "removeAsset":
       return {
         ...state,
         assets: {
@@ -271,7 +269,7 @@ function reducer(state = initialState, action: Action) {
         },
       };
 
-    case 'updateSettings':
+    case "updateSettings":
       return {
         ...state,
         game: gameL.settings.set({
@@ -280,11 +278,11 @@ function reducer(state = initialState, action: Action) {
         })(state.game),
       };
 
-    case 'changeGameState':
+    case "changeGameState":
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return stateL.gameState.set(action.value)(state);
 
-    case 'resetGameState':
+    case "resetGameState":
       return stateL.gameState.set({})(state);
 
     default:
