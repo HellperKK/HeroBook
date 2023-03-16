@@ -42,7 +42,9 @@
         "resizable": true,
         "title": "herobook-tauri",
         "width": 1200,
-        "height": 800
+        "height": 800,
+        "fileDropEnabled": false,
+        "maximized": true
       }
     ]
   }
