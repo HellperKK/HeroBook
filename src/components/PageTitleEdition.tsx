@@ -31,12 +31,17 @@ export default function PageTitleEdition(props: CompProp) {
           position: pagePosition,
         })
       }
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && e.shiftKey) {
+          setEditing(false);
+        }
+      }}
     />
   ) : (
     <Typography
       onClick={(e) => {
         if (e.detail == 2) {
-          // setEditing(true);
+          setEditing(true);
         }
       }}
     >
