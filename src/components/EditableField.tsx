@@ -1,8 +1,6 @@
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { safeMarkdown } from "../utils/utils";
 
 interface CompProp {
