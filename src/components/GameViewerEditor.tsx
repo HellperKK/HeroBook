@@ -116,7 +116,7 @@ export default function GameViewerEditor(props: CompProp) {
         <EditableField
           content={`${choice.action}`}
           pagePosition={selectedPage}
-          label="page content"
+          label="Choice Text"
           multiline={false}
           onChange={(e) => {
             dispatch({
@@ -230,7 +230,7 @@ export default function GameViewerEditor(props: CompProp) {
         <EditableField
           content={page.text}
           pagePosition={selectedPage}
-          label="page content"
+          label="Page Content"
           multiline={true}
           onChange={(e) => {
             dispatch({
