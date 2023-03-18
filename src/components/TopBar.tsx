@@ -6,6 +6,7 @@ import FileDownloadSharpIcon from "@mui/icons-material/FileDownloadSharp";
 import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import FeedSharpIcon from "@mui/icons-material/FeedSharp";
 // import HelpSharp from '@mui/icons-material/HelpSharp';
 
 import Button from "@mui/material/Button";
@@ -51,6 +52,10 @@ export default function TopBar() {
     });
   };
 
+  const newProject = () => {
+    dispatch({ type: "newProject" });
+  };
+
   const saveState = async () => {
     zip.file("data.json", JSON.stringify(game));
     const blob = await zip.generateAsync({ type: "blob" });
@@ -69,6 +74,11 @@ export default function TopBar() {
           variant="contained"
           aria-label="outlined primary button group"
         >
+          <Tooltip title="load a game" arrow>
+            <Button variant="contained" onClick={newProject}>
+              <FeedSharpIcon />
+            </Button>
+          </Tooltip>
           <Tooltip title="load a game" arrow>
             <Button variant="contained" onClick={loadAState}>
               <FolderOpenSharpIcon />

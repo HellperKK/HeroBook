@@ -102,6 +102,9 @@ type Action =
     }
   | {
       type: "resetGameState";
+    }
+  | {
+      type: "newProject";
     };
 
 const initialZip = new JSZip();
@@ -297,6 +300,17 @@ function reducer(state = initialState, action: Action) {
 
     case "resetGameState":
       return stateL.gameState.set({})(state);
+
+    case "newProject":
+      return {
+        game: initialGame,
+        selectedPage: 0,
+        zip: new JSZip(),
+        assets: {
+          images: new Map<string, string>(),
+        },
+        gameState: {},
+      };
 
     default:
       return state;
