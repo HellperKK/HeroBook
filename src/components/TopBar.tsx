@@ -74,7 +74,7 @@ export default function TopBar() {
           variant="contained"
           aria-label="outlined primary button group"
         >
-          <Tooltip title="load a game" arrow>
+          <Tooltip title="new game" arrow>
             <Button variant="contained" onClick={newProject}>
               <FeedSharpIcon />
             </Button>
