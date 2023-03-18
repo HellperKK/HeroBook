@@ -13,10 +13,6 @@ const format = (game: Game) => `
     <meta charset="utf-8">
     <title>${game.settings.gameTitle ?? "A herobook game"}</title>
     <style>
-      body {
-        text-align: center;
-      }
-
       .story {
         margin:10%;
       }
