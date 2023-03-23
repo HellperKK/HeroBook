@@ -15,8 +15,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 
-import { State } from "../utils/state";
-import { identity } from "../utils/utils";
+import { State } from "../../utils/state";
+import { identity } from "../../utils/utils";
 
 interface CompProps {
   open: boolean;

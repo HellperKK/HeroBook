@@ -23,10 +23,10 @@ import { useState } from "react";
 import { saveAs } from "file-saver";
 import { useSelector, useDispatch } from "react-redux";
 
-import GameWindow from "./GameWindow";
-import AssetsManager from "./AssetsManager";
-import GraphViewer from "./GraphViewer";
-import SettingsWindow from "./SettingsWindow";
+import GameWindow from "./game/GameWindow";
+import AssetsManager from "./topBar/AssetsManager";
+import GraphViewer from "./topBar/GraphViewer";
+import SettingsWindow from "./topBar/SettingsWindow";
 
 import { State } from "../utils/state";
 import { identity, loadState } from "../utils/utils";

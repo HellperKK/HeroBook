@@ -16,8 +16,8 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { State } from "../utils/state";
-import { identity, openFiles, readImage, noExt } from "../utils/utils";
+import { State } from "../../utils/state";
+import { identity, openFiles, readImage, noExt } from "../../utils/utils";
 
 const StyledImage = styled.img`
   max-width: 85vw;

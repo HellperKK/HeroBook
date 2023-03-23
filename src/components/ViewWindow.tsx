@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { lens } from "lens.ts";
 
 import ColorPicker from "./utils/ColorPicker";
-import GameViewerEditor from "./GameViewerEditor";
+import GameViewerEditor from "./game/GameViewerEditor";
 
 import { State } from "../utils/state";
 import { identity } from "../utils/utils";

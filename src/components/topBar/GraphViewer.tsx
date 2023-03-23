@@ -2,10 +2,10 @@
 import { useSelector } from "react-redux";
 import G6 from "@antv/g6";
 
-import { identity } from "../utils/utils";
-import { pageIsLinked } from "../utils/page";
-import { State } from "../utils/state";
-import { Choice, Page } from "../utils/initialStuff";
+import { identity } from "../../utils/utils";
+import { pageIsLinked } from "../../utils/page";
+import { State } from "../../utils/state";
+import { Choice, Page } from "../../utils/initialStuff";
 
 export default function GraphViewer() {
   const { game } = useSelector<State, State>(identity);

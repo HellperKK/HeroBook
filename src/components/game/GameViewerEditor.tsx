@@ -10,14 +10,19 @@ import EditSharpIcon from "@mui/icons-material/EditSharp";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Choice, Page } from "../utils/initialStuff";
-import { identity, openFiles, readImage, safeMarkdown } from "../utils/utils";
-import { State } from "../utils/state";
+import { Choice, Page } from "../../utils/initialStuff";
+import {
+  identity,
+  openFiles,
+  readImage,
+  safeMarkdown,
+} from "../../utils/utils";
+import { State } from "../../utils/state";
 import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Badge from "@mui/material/Badge";
-import EditableField from "./utils/EditableField";
+import EditableField from "../utils/EditableField";
 // import * as ejs from "../utils/ejs";
 
 const assetPath = (assetType: string, assetName: string) =>
