@@ -5,9 +5,9 @@ import { Box } from "@mui/system";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Choice, Page } from "../utils/initialStuff";
-import { identity, safeMarkdown } from "../utils/utils";
-import { State } from "../utils/state";
+import { Choice, Page } from "../../utils/initialStuff";
+import { identity, safeMarkdown } from "../../utils/utils";
+import { State } from "../../utils/state";
 // import * as ejs from "../utils/ejs";
 
 const StyledButton = styled.button`

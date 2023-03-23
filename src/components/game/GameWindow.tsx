@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
-import { identity } from "../utils/utils";
-import { findPage } from "../utils/page";
-import { State } from "../utils/state";
-import { Choice } from "../utils/initialStuff";
+import { identity } from "../../utils/utils";
+import { findPage } from "../../utils/page";
+import { State } from "../../utils/state";
+import { Choice } from "../../utils/initialStuff";
 
 import GameViewer from "./GameViewer";
 
