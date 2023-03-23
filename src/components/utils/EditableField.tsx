@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 
 import { useState } from "react";
-import { safeMarkdown } from "../utils/utils";
+import { safeMarkdown } from "../../utils/utils";
 
 interface CompProp {
   pagePosition: number;

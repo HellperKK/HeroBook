@@ -20,7 +20,7 @@ import { State } from "../utils/state";
 import { identity, noExt, readImage } from "../utils/utils";
 import { findPage } from "../utils/page";
 
-import Space from "./Space";
+import Space from "./utils/Space";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`

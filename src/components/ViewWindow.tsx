@@ -15,7 +15,7 @@ import styled from "@emotion/styled";
 import { useSelector, useDispatch } from "react-redux";
 import { lens } from "lens.ts";
 
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "./utils/ColorPicker";
 import GameViewerEditor from "./GameViewerEditor";
 
 import { State } from "../utils/state";

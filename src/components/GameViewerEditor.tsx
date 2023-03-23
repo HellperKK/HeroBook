@@ -3,6 +3,8 @@ import { Box } from "@mui/system";
 
 import PermMediaSharpIcon from "@mui/icons-material/PermMediaSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import ColorLensSharpIcon from "@mui/icons-material/ColorLensSharp";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
 // import { Button } from '@mui/material';
 
 import styled from "@emotion/styled";
@@ -15,7 +17,7 @@ import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Badge from "@mui/material/Badge";
-import EditableField from "./EditableField";
+import EditableField from "./utils/EditableField";
 // import * as ejs from "../utils/ejs";
 
 const assetPath = (assetType: string, assetName: string) =>

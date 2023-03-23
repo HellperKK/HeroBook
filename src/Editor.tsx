@@ -19,11 +19,11 @@ import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import TabPanel from "./components/TabPanel";
+import TabPanel from "./components/utils/TabPanel";
 import TopBar from "./components/TopBar";
 import PageEditor from "./components/PageEditor";
 import ViewWindow from "./components/ViewWindow";
-import Space from "./components/Space";
+import Space from "./components/utils/Space";
 import PageTitleEdition from "./components/PageTitleEdition";
 
 import { State } from "./utils/state";
