@@ -126,7 +126,12 @@ export default function TopBar() {
           <Container>
             <Button
               variant="contained"
-              onClick={() => setPlaying(false)}
+              onClick={() => {
+                setPlaying(false);
+                dispatch({
+                  type: "resetGameState",
+                });
+              }}
               sx={{ width: "100%" }}
             >
               <CloseSharpIcon />

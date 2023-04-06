@@ -76,19 +76,12 @@ export default function GameViewer(props: CompProp) {
       >
         <div className="story-image">
           <StyledImg src={assets.images.get(page.image)} alt="" />
-          {/*
-          page.image !== '' ? (
-            <img src={assets.images.get(page.image)} alt="" />
-          ) : (
-            <Button variant="outlined">hello</Button>
-          )
-          */}
         </div>
         <p
           className="story-text"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: safeMarkdown(page.text),
+            __html: safeMarkdown((window as any).ejs.render(page.text, defs)),
           }}
         />
         <Box

@@ -14,10 +14,13 @@ import Typography from "@mui/material/Typography";
 
 import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 import { useState } from "react";
 
 import { State } from "../../utils/state";
 import { identity, openFiles, readImage, noExt } from "../../utils/utils";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -53,11 +56,13 @@ interface CompProps {
 
 export default function AssetsManager(props: CompProps) {
   const { open, close } = props;
-  const { game, zip, assets } = useSelector<State, State>(identity);
+  const { zip, assets } = useSelector<State, State>(identity);
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [draging, setDraging] = useState(false);
+
   const { images } = assets;
 
   const addAsset = (assetType: string) => async () => {
@@ -104,119 +109,46 @@ export default function AssetsManager(props: CompProps) {
   return (
     <Modal open={open}>
       <Box sx={{ height: "100vh", backgroundColor: "white" }}>
-        <Grid container spacing={2} alignItems="stretch">
-          <Grid item xs={3} xl={2}>
-            {/* Image List */}
-            <List sx={{ overflow: "auto" }}>
-              {Array.from(images.keys()).map((fileName, index) => (
-                <ListItem
-                  onClick={() => setSelectedAsset(index)}
-                  key={`item${index + 42}`}
-                  sx={{
-                    bgcolor: index === selectedAsset ? "secondary.main" : "",
-                    cursor: "pointer",
-                  }}
-                >
-                  <StyledMiniature src={assets.images.get(fileName)} alt="" />
-                  <ListItemText
-                    primary={noExt(fileName)}
-                    sx={{
-                      color: index === selectedAsset ? "white" : "",
-                    }}
-                  />
-                  <Button
-                    variant="contained"
-                    disabled={game.pages.length === 1}
-                    onClick={removeAsset("images", fileName)}
-                  >
-                    <DeleteSharpIcon />
-                  </Button>
-                </ListItem>
-              ))}
-              <ListItem>
-                <Button
-                  variant="contained"
-                  sx={{ width: "100%" }}
-                  onClick={addAsset("images")}
-                >
-                  <AddSharpIcon />
-                </Button>
-              </ListItem>
-            </List>
-          </Grid>
-
-          {/* Image Display */}
-          <Grid item xs={9} xl={10}>
-            <Box
-              sx={{
-                height: "90vh",
-                padding: "12px",
-              }}
-            >
-              <Box
+        <Container>
+          <ImageList cols={4} rowHeight={300}>
+            <ImageListItem sx={{ height: 450 }}>
+              <Button
+                variant="contained"
+                sx={{ width: "100%", height: "100%" }}
+                onClick={addAsset("images")}
+              >
+                <AddSharpIcon />
+              </Button>
+            </ImageListItem>
+            {Array.from(images.entries()).map((pair, index) => (
+              <ImageListItem
+                key={index}
                 sx={{
-                  height: "100px",
-                  backgroundColor: "lightgray",
-                  textAlign: "center",
-                  border: draging ? "1px dashed black" : "",
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDraging(true);
-                }}
-                onDragLeave={() => {
-                  setDraging(false);
-                }}
-                onDrop={async (e) => {
-                  e.preventDefault();
-
-                  const newAssets = await Array.from(
-                    e.dataTransfer.files
-                  ).reduce<Promise<Map<string, string>>>(
-                    async (
-                      assetsMemoPromise: Promise<Map<string, string>>,
-                      fi: File,
-                      index: number
-                    ) => {
-                      const assetsMemo = await assetsMemoPromise;
-
-                      if (/^image/.test(fi.type)) {
-                        const pathName = assetPath("images", fi.name);
-                        zip.file(pathName, fi);
-
-                        const image = await readImage(fi);
-                        assetsMemo.set(fi.name, image);
-
-                        if (index === 0) {
-                          dispatch({
-                            type: "changePage",
-                            page: { image: fi.name },
-                          });
-                        }
-                      }
-
-                      return assetsMemo;
-                    },
-                    Promise.resolve(new Map<string, string>())
-                  );
-
-                  dispatch({
-                    type: "addAssets",
-                    files: newAssets,
-                    fileType: "images",
-                  });
-
-                  setDraging(false);
+                  border:
+                    selectedImageIndex == index ? "solid 3px blue" : "none",
+                  cursor: "pointer",
+                  overflow: "hidden",
                 }}
               >
-                <Typography>drag images here</Typography>
-              </Box>
-              <StyledImage
-                src={Array.from(assets.images.values())[selectedAsset]}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+                <img
+                  className={css`
+                    max-height: 265px;
+                  `}
+                  src={pair[1]}
+                  alt={pair[0]}
+                  loading="lazy"
+                  onClick={() => setSelectedImageIndex(index)}
+                />
+                <Button
+                  onClick={removeAsset("images", pair[0])}
+                  variant="contained"
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Container>
         <Container>
           <Button variant="contained" onClick={close} sx={{ width: "100%" }}>
             <CloseSharpIcon />
