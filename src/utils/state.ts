@@ -249,7 +249,7 @@ function reducer(state = initialState, action: Action) {
       return {
         ...state,
         game: gameL.pages[state.selectedPage].format.set((format) => ({
-          format,
+          ...format,
           ...action.format,
         }))(state.game),
       };
@@ -257,7 +257,7 @@ function reducer(state = initialState, action: Action) {
       return {
         ...state,
         game: gameL.format.set((format) => ({
-          format,
+          ...format,
           ...action.format,
         }))(state.game),
       };
@@ -289,7 +289,7 @@ function reducer(state = initialState, action: Action) {
       return {
         ...state,
         game: gameL.settings.set((settings) => ({
-          settings,
+          ...settings,
           ...action.settings,
         }))(state.game),
       };
