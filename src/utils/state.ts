@@ -248,18 +248,18 @@ function reducer(state = initialState, action: Action) {
     case "updateFormat":
       return {
         ...state,
-        game: gameL.pages[state.selectedPage].format.set({
-          ...state.game.pages[state.selectedPage].format,
+        game: gameL.pages[state.selectedPage].format.set((format) => ({
+          format,
           ...action.format,
-        })(state.game),
+        }))(state.game),
       };
     case "updateGlobalFormat":
       return {
         ...state,
-        game: gameL.format.set({
-          ...state.game.format,
+        game: gameL.format.set((format) => ({
+          format,
           ...action.format,
-        })(state.game),
+        }))(state.game),
       };
     case "addAssets":
       return {
@@ -288,10 +288,10 @@ function reducer(state = initialState, action: Action) {
     case "updateSettings":
       return {
         ...state,
-        game: gameL.settings.set({
-          ...state.game.settings,
+        game: gameL.settings.set((settings) => ({
+          settings,
           ...action.settings,
-        })(state.game),
+        }))(state.game),
       };
 
     case "changeGameState":
