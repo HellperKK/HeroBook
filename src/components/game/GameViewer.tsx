@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
+import ejs from "ejs";
 
 import { Choice, Page } from "../../utils/initialStuff";
 import { identity, safeMarkdown } from "../../utils/utils";
@@ -81,7 +82,7 @@ export default function GameViewer(props: CompProp) {
           className="story-text"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: safeMarkdown((window as any).ejs.render(page.text, defs)),
+            __html: safeMarkdown(ejs.render(page.text, gameState)),
           }}
         />
         <Box

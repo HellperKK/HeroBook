@@ -128,7 +128,7 @@ const initialState: State = {
   assets: {
     images: new Map<string, string>(),
   },
-  gameState: {},
+  gameState: { $state: {} },
 };
 
 const removeElem = <T>(pages: Array<T>, index: number): Array<T> => {
@@ -299,7 +299,7 @@ function reducer(state = initialState, action: Action) {
       return stateL.gameState.set(action.value)(state);
 
     case "resetGameState":
-      return stateL.gameState.set({})(state);
+      return stateL.gameState.set({ $state: {} })(state);
 
     case "newProject":
       return {

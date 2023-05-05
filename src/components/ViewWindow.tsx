@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { lens } from "lens.ts";
 
 import ColorPicker from "./utils/ColorPicker";
-import GameViewerEditor from "./game/GameViewerEditor";
+import GameViewer from "./game/GameViewer";
 
 import { State } from "../utils/state";
 import { identity } from "../utils/utils";
@@ -46,10 +46,7 @@ export default function ViewWindow() {
   return (
     <Grid container spacing={0.2} alignItems="stretch">
       <Grid item xs={editing ? 8 : 11}>
-        <GameViewerEditor
-          page={pageL.format.set(format)(page)}
-          onClick={null}
-        />
+        <GameViewer page={pageL.format.set(format)(page)} onClick={null} />
       </Grid>
       <Grid item xs={editing ? 4 : 1}>
         <Tooltip title="edit colors" arrow>

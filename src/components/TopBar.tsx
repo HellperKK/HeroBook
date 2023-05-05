@@ -95,7 +95,15 @@ export default function TopBar() {
             </Button>
           </Tooltip>
           <Tooltip title="test game" arrow>
-            <Button variant="contained" onClick={() => setPlaying(true)}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setPlaying(true);
+                dispatch({
+                  type: "resetGameState",
+                });
+              }}
+            >
               <PlayArrowSharpIcon />
             </Button>
           </Tooltip>
