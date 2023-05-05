@@ -54,7 +54,6 @@ export default function GameViewer(props: CompProp) {
         sx={{
           height: "100%",
           padding: "8px",
-          textAlign: "center",
           backgroundColor: page.format.page ?? game.format.page,
           color: page.format.textColor ?? game.format.textColor,
         }}
