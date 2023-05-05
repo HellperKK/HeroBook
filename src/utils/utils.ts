@@ -130,6 +130,24 @@ const safeMarkdown = (md: string): string => DOMPurify.sanitize(marked(md));
 
 const safeFileName = (fileName: string) => fileName.replaceAll(/\s+/g, "-");
 
+const assetPath = (assetType: string, assetName: string) =>
+  `assets/${assetType}/${assetName}`;
+
+const getExtensions = (assetType: string) => {
+  switch (assetType) {
+    case "image":
+      return [
+        "image/jpeg",
+        "image/gif",
+        "image/bmp",
+        "image/png",
+        "image/webp",
+      ];
+    default:
+      return [];
+  }
+};
+
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
 export {
@@ -144,4 +162,6 @@ export {
   safeMarkdown,
   safeFileName,
   loadState,
+  assetPath,
+  getExtensions,
 };

@@ -17,7 +17,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 
 import { State } from "../utils/state";
-import { identity, noExt, readImage } from "../utils/utils";
+import { assetPath, identity, noExt, readImage } from "../utils/utils";
 import { findPage } from "../utils/page";
 
 import Space from "./utils/Space";
@@ -28,17 +28,12 @@ const StyledImg = styled.img`
   max-height: 40px;
 `;
 
-const assetPath = (assetType: string, assetName: string) =>
-  `assets/${assetType}/${assetName}`;
-
 export default function PageEditor() {
   const { game, selectedPage, assets, zip } = useSelector<State, State>(
     identity
   );
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
-
-  // const page = game.pages[selectedPage];
 
   return (
     <Box

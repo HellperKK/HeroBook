@@ -17,7 +17,14 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 
 import { State } from "../../utils/state";
-import { identity, openFiles, readImage, noExt } from "../../utils/utils";
+import {
+  identity,
+  openFiles,
+  readImage,
+  noExt,
+  assetPath,
+  getExtensions,
+} from "../../utils/utils";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -27,24 +34,6 @@ const StyledMiniature = styled.img`
   max-width: 80px;
   max-height: 40px;
 `;
-
-const assetPath = (assetType: string, assetName: string) =>
-  `assets/${assetType}/${assetName}`;
-
-const getExtensions = (assetType: string) => {
-  switch (assetType) {
-    case "image":
-      return [
-        "image/jpeg",
-        "image/gif",
-        "image/bmp",
-        "image/png",
-        "image/webp",
-      ];
-    default:
-      return [];
-  }
-};
 
 interface CompProps {
   open: boolean;

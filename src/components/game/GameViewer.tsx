@@ -2,25 +2,15 @@
 import { Box } from "@mui/system";
 // import { Button } from '@mui/material';
 
-import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import ejs from "ejs";
 
 import { Choice, Page } from "../../utils/initialStuff";
 import { identity, safeMarkdown } from "../../utils/utils";
 import { State } from "../../utils/state";
-// import * as ejs from "../utils/ejs";
 
-const StyledButton = styled.button`
-  color: ${(props) => props.color};
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const StyledImg = styled.img`
-  max-width: 80%;
-`;
+import StyledButton from "./StyledButton";
+import StyledImg from "./StyledImg";
 
 interface CompProp {
   page: Page;
@@ -31,8 +21,6 @@ export default function GameViewer(props: CompProp) {
   const { game, assets, gameState } = useSelector<State, State>(identity);
 
   const { page, onClick } = props;
-
-  const dispatch = useDispatch();
 
   const choiceButton = (choice: Choice, index: number) => {
     return (
@@ -50,10 +38,6 @@ export default function GameViewer(props: CompProp) {
         }}
       />
     );
-  };
-
-  const defs: any = {
-    $state: gameState,
   };
 
   return (
@@ -80,7 +64,6 @@ export default function GameViewer(props: CompProp) {
         </div>
         <p
           className="story-text"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: safeMarkdown(ejs.render(page.text, gameState)),
           }}

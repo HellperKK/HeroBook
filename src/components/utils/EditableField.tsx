@@ -1,20 +1,22 @@
 import TextField from "@mui/material/TextField";
 
 import { useState } from "react";
+import ejs from "ejs";
+
 import { safeMarkdown } from "../../utils/utils";
 
 interface CompProp {
-  pagePosition: number;
   content: string;
   label: string;
   multiline?: boolean;
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
+  state: any;
 }
 
 export default function EditableField(props: CompProp) {
-  const { pagePosition, content, label, onChange } = props;
+  const { content, label, onChange, state } = props;
   const [editing, setEditing] = useState(false);
 
   const multiline = props.multiline ?? false;
@@ -43,7 +45,9 @@ export default function EditableField(props: CompProp) {
         setEditing(true);
         // }
       }}
-      dangerouslySetInnerHTML={{ __html: safeMarkdown(content) }}
+      dangerouslySetInnerHTML={{
+        __html: safeMarkdown(ejs.render(content, state)),
+      }}
     />
   );
 }

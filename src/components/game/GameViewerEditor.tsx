@@ -1,63 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box } from "@mui/system";
 
 import PermMediaSharpIcon from "@mui/icons-material/PermMediaSharp";
-import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-import ColorLensSharpIcon from "@mui/icons-material/ColorLensSharp";
-import EditSharpIcon from "@mui/icons-material/EditSharp";
-// import { Button } from '@mui/material';
-
-import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Choice, Page } from "../../utils/initialStuff";
 import {
+  assetPath,
+  getExtensions,
   identity,
   openFiles,
   readImage,
-  safeMarkdown,
 } from "../../utils/utils";
 import { State } from "../../utils/state";
 import { useState } from "react";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Badge from "@mui/material/Badge";
+
 import EditableField from "../utils/EditableField";
-// import * as ejs from "../utils/ejs";
-
-const assetPath = (assetType: string, assetName: string) =>
-  `assets/${assetType}/${assetName}`;
-
-const StyledButton = styled.button`
-  color: ${(props) => props.color};
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const StyledImg = styled.img`
-  max-width: 80%;
-`;
+import StyledButton from "./StyledButton";
+import StyledImg from "./StyledImg";
 
 interface CompProp {
   page: Page;
   onClick: ((choice: Choice) => void) | null;
 }
-
-const getExtensions = (assetType: string) => {
-  switch (assetType) {
-    case "image":
-      return [
-        "image/jpeg",
-        "image/gif",
-        "image/bmp",
-        "image/png",
-        "image/webp",
-      ];
-    default:
-      return [];
-  }
-};
 
 export default function GameViewerEditor(props: CompProp) {
   const { game, assets, gameState, zip, selectedPage } = useSelector<
@@ -122,7 +87,6 @@ export default function GameViewerEditor(props: CompProp) {
       >
         <EditableField
           content={`${choice.action}`}
-          pagePosition={selectedPage}
           label="Choice Text"
           multiline={false}
           onChange={(e) => {
@@ -132,13 +96,10 @@ export default function GameViewerEditor(props: CompProp) {
               index,
             });
           }}
+          state={gameState}
         />
       </StyledButton>
     );
-  };
-
-  const defs: any = {
-    $state: gameState,
   };
 
   return (
@@ -226,17 +187,9 @@ export default function GameViewerEditor(props: CompProp) {
               </Button>
             </Box>
           )}
-          {/*
-          page.image !== '' ? (
-            <img src={assets.images.get(page.image)} alt="" />
-          ) : (
-            <Button variant="outlined">hello</Button>
-          )
-          */}
         </div>
         <EditableField
           content={page.text}
-          pagePosition={selectedPage}
           label="Page Content"
           multiline={true}
           onChange={(e) => {
@@ -245,6 +198,7 @@ export default function GameViewerEditor(props: CompProp) {
               page: { text: e.target.value },
             });
           }}
+          state={gameState}
         />
         <Box
           className="story"
