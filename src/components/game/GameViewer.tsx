@@ -11,6 +11,7 @@ import { State } from "../../utils/state";
 
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
+import { css } from "@emotion/css";
 
 interface CompProp {
   page: Page;
@@ -58,7 +59,11 @@ export default function GameViewer(props: CompProp) {
           color: page.format.textColor ?? game.format.textColor,
         }}
       >
-        <div className="story-image">
+        <div
+          className={css`
+            text-align: center;
+          `}
+        >
           <StyledImg src={assets.images.get(page.image)} alt="" />
         </div>
         <p

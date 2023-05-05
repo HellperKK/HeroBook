@@ -18,6 +18,7 @@ import Button from "@mui/material/Button";
 import EditableField from "../utils/EditableField";
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
+import { css } from "@emotion/css";
 
 interface CompProp {
   page: Page;
@@ -120,7 +121,11 @@ export default function GameViewerEditor(props: CompProp) {
           color: page.format.textColor ?? game.format.textColor,
         }}
       >
-        <div className="story-image">
+        <div
+          className={css`
+            text-align: center;
+          `}
+        >
           {assets.images.get(page.image) !== undefined ? (
             <div>
               <StyledImg src={assets.images.get(page.image)} alt="" />
