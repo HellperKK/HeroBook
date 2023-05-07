@@ -1,3 +1,7 @@
-# Herobook editor react
+# Tauri + React + Typescript
 
-A editor project based en react and electron. Mainly based on the electron-react-boilerplate project [more details here](https://github.com/electron-react-boilerplate/electron-react-boilerplate).
+This template should help get you started developing with Tauri, React and Typescript in Vite.
+
+## Recommended IDE Setup
+
+- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)

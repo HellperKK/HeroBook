@@ -1,9 +1,9 @@
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
-import { lens } from 'lens.ts';
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { lens } from "lens.ts";
 
-import { safeFileName } from './utils';
-import { Game } from './initialStuff';
+import { safeFileName } from "./utils";
+import { Game } from "./initialStuff";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const format = (game: Game) => `
@@ -11,12 +11,8 @@ const format = (game: Game) => `
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>${game.settings.gameTitle ?? 'A herobook game'}</title>
+    <title>${game.settings.gameTitle ?? "A herobook game"}</title>
     <style>
-      body {
-        text-align: center;
-      }
-
       .story {
         margin:10%;
       }
@@ -43,7 +39,6 @@ const format = (game: Game) => `
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.1.0/marked.min.js"></script>
-    <script src="https://github.com/mde/ejs/releases/download/v3.1.8/ejs.min.js"></script>
     <script>
       const state = {$state: {}}
 
@@ -89,7 +84,7 @@ const format = (game: Game) => `
 
         for (nex of page.next) {
           let button = document.createElement("button")
-          button.innerHTML = safeMarkdown(ejs.render(nex.action, state))
+          button.innerHTML = safeMarkdown(nex.action)
           button.setAttribute("pageId", nex.pageId)
           button.addEventListener("click", function() {
             format(this.getAttribute("pageId"))
@@ -119,11 +114,11 @@ const compile = async (game: Game, zip: JSZip) => {
     }))
   )(game);
 
-  zip.file('data.json', JSON.stringify(cleanState));
-  zip.file('index.html', format(game));
+  zip.file("data.json", JSON.stringify(cleanState));
+  zip.file("index.html", format(game));
 
-  const blob = await zip.generateAsync({ type: 'blob' });
-  saveAs(blob, safeFileName(`${game.settings.gameTitle || 'game'}.zip`));
+  const blob = await zip.generateAsync({ type: "blob" });
+  saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
 };
 
 export { format, compile };

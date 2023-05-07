@@ -29,14 +29,14 @@ interface Settings {
 }
 
 interface Game {
-  version: '1.0.0';
+  version: "1.0.0";
   settings: Settings;
   format: Format;
   pages: Array<Page>;
 }
 
 const initialChoice = {
-  action: 'Go to the base page',
+  action: "Go to the base page",
   pageId: 1,
 };
 
@@ -44,68 +44,60 @@ function initialPage(id = 1): Page {
   return {
     id,
     isFirst: false,
-    name: 'EMPTY',
-    text: 'This is a new page',
+    name: "EMPTY",
+    text: "This is a new page",
     next: [initialChoice],
     format: {},
-    image: '',
+    image: "",
   };
 }
 
 const initialGame: Game = {
-  version: '1.0.0',
+  version: "1.0.0",
   settings: {
-    author: '',
-    gameTitle: '',
+    author: "",
+    gameTitle: "",
     pageCount: 2,
   },
   format: {
-    textColor: 'initial',
-    textFont: 'sans-serif',
-    btnColor: '492e10',
-    btnFont: 'sans-serif',
-    background: '#dbfffd',
-    page: '#a9e5e2',
+    textColor: "initial",
+    textFont: "sans-serif",
+    btnColor: "492e10",
+    btnFont: "sans-serif",
+    background: "#dbfffd",
+    page: "#a9e5e2",
   },
   pages: [
     {
       id: 1,
       isFirst: true,
-      name: 'main',
-      text: 'This is a first page',
+      name: "main",
+      text: "This is a first page",
       next: [
         {
-          action: 'Go to the second page',
+          action: "Go to the second page",
           pageId: 2,
         },
       ],
       format: {},
-      image: '',
+      image: "",
     },
     {
       id: 2,
-      name: 'page2',
+      name: "page2",
       isFirst: false,
-      text: 'This is a second page',
+      text: "This is a second page",
       next: [
         {
-          action: 'Go to the first page',
+          action: "Go to the first page",
           pageId: 1,
         },
       ],
       format: {},
-      image: '',
+      image: "",
     },
   ],
 };
 
-export {
-  initialChoice,
-  initialPage,
-  initialGame,
-  Page,
-  Game,
-  Choice,
-  Format,
-  Settings,
-};
+export { initialChoice, initialPage, initialGame };
+export type { Page, Game, Choice, Format, Settings };
