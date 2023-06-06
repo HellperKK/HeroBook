@@ -39,6 +39,7 @@ const format = (game: Game) => `
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.1.0/marked.min.js"></script>
+    <script src="https://github.com/mde/ejs/releases/download/v3.1.9/ejs.js"></script>
     <script>
       const state = {$state: {}}
 
