@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { lens } from "lens.ts";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import { safeFileName } from "./utils";
 import { Game } from "./initialStuff";
@@ -117,9 +118,11 @@ const compile = async (game: Game, zip: JSZip) => {
 
   zip.file("data.json", JSON.stringify(cleanState));
   zip.file("index.html", format(game));
+  const binary = await zip.generateAsync({ type: "base64" });
+  invoke("save", { content: binary });
 
-  const blob = await zip.generateAsync({ type: "blob" });
-  saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+  // const blob = await zip.generateAsync({ type: "blob" });
+  // saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
 };
 
 export { format, compile };

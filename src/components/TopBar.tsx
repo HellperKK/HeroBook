@@ -22,6 +22,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import { saveAs } from "file-saver";
 import { useSelector, useDispatch } from "react-redux";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import GameWindow from "./game/GameWindow";
 import AssetsManager from "./topBar/AssetsManager";
@@ -58,8 +59,10 @@ export default function TopBar() {
 
   const saveState = async () => {
     zip.file("data.json", JSON.stringify(game));
-    const blob = await zip.generateAsync({ type: "blob" });
-    saveAs(blob, "game.zip");
+    const binary = await zip.generateAsync({ type: "base64" });
+    invoke("save", { content: binary });
+
+    //saveAs(blob, "game.zip");
   };
 
   const compileState = () => {
