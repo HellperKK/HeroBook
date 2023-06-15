@@ -15,8 +15,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 
-import { State } from "../../utils/state";
-import { identity } from "../../utils/utils";
+import { updateSettings } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
 
 interface CompProps {
   open: boolean;
@@ -26,7 +26,7 @@ interface CompProps {
 export default function SettingsWindow(props: CompProps) {
   const { open, close } = props;
 
-  const { game } = useSelector<State, State>(identity);
+  const { game } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [settings, setSettings] = useState(game.settings);
@@ -76,10 +76,7 @@ export default function SettingsWindow(props: CompProps) {
           <Button
             variant="contained"
             onClick={() =>
-              dispatch({
-                type: "updateSettings",
-                settings,
-              })
+              dispatch(updateSettings(settings))
             }
           >
             <SaveSharpIcon />

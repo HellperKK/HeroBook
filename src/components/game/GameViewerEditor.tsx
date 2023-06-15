@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Choice, Page } from "../../utils/initialStuff";
 import {
   assetPath,
+  evalCondition,
   getExtensions,
-  identity,
   openFiles,
   readImage,
 } from "../../utils/utils";
-import { State } from "../../utils/state";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 
@@ -19,19 +18,19 @@ import EditableField from "../utils/EditableField";
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
+import { addAssets, changeChoice, changePage } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
 
 interface CompProp {
   page: Page;
   onClick: ((choice: Choice) => void) | null;
+  state: any;
 }
 
 export default function GameViewerEditor(props: CompProp) {
-  const { game, assets, gameState, zip, selectedPage } = useSelector<
-    State,
-    State
-  >(identity);
+  const { game, assets, zip, } = useSelector((state: RootState) => state.game);
 
-  const { page, onClick } = props;
+  const { page, onClick, state } = props;
 
   const [draging, setDraging] = useState(false);
 
@@ -54,10 +53,7 @@ export default function GameViewerEditor(props: CompProp) {
         zip.file(pathName, fi);
 
         if (index === 0 && /^image/.test(fi.type)) {
-          dispatch({
-            type: "changePage",
-            page: { image: fi.name },
-          });
+          dispatch(changePage({ image: fi.name }));
         }
 
         const image = await readImage(fi);
@@ -67,11 +63,10 @@ export default function GameViewerEditor(props: CompProp) {
       Promise.resolve(new Map<string, string>())
     );
 
-    dispatch({
-      type: "addAssets",
-      files: newAssets,
-      fileType: "images",
-    });
+    dispatch(addAssets({
+      assets: newAssets,
+      type: "images",
+    }));
   };
 
   const choiceButton = (choice: Choice, index: number) => {
@@ -91,13 +86,12 @@ export default function GameViewerEditor(props: CompProp) {
           label="Choice Text"
           multiline={false}
           onChange={(e) => {
-            dispatch({
-              type: "changeChoice",
+            dispatch(changeChoice({
               choice: { action: e.target.value },
-              index,
-            });
+              position: index,
+            }));
           }}
-          state={gameState}
+          state={state}
         />
       </StyledButton>
     );
@@ -165,10 +159,7 @@ export default function GameViewerEditor(props: CompProp) {
                       assetsMemo.set(fi.name, image);
 
                       if (index === 0) {
-                        dispatch({
-                          type: "changePage",
-                          page: { image: fi.name },
-                        });
+                        dispatch(changePage({ image: fi.name }));
                       }
                     }
 
@@ -177,11 +168,10 @@ export default function GameViewerEditor(props: CompProp) {
                   Promise.resolve(new Map<string, string>())
                 );
 
-                dispatch({
-                  type: "addAssets",
-                  files: newAssets,
-                  fileType: "images",
-                });
+                dispatch(addAssets({
+                  assets: newAssets,
+                  type: "images",
+                }));
 
                 setDraging(false);
               }}
@@ -197,12 +187,9 @@ export default function GameViewerEditor(props: CompProp) {
           label="Page Content"
           multiline={true}
           onChange={(e) => {
-            dispatch({
-              type: "changePage",
-              page: { text: e.target.value },
-            });
+            dispatch(changePage({ text: e.target.value }));
           }}
-          state={gameState}
+          state={state}
         />
         <Box
           className="story"
@@ -211,7 +198,10 @@ export default function GameViewerEditor(props: CompProp) {
             flexDirection: "column",
           }}
         >
-          {page.next.map(choiceButton)}
+          {page.next.filter(choice => {
+            const condition = choice.condition;
+            return condition === undefined || condition === "" || evalCondition(state.$state, condition)
+          }).map(choiceButton)}
         </Box>
       </Box>
     </Box>

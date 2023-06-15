@@ -1,6 +1,7 @@
 interface Choice {
   action: string;
   pageId: number;
+  condition?: string;
 }
 
 interface Format {
@@ -20,6 +21,7 @@ interface Page {
   next: Array<Choice>;
   format: Format;
   image: string;
+  category?: string;
 }
 
 interface Settings {

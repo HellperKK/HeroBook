@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/system/Box";
@@ -26,13 +25,13 @@ import ViewWindow from "./components/ViewWindow";
 import Space from "./components/utils/Space";
 import PageTitleEdition from "./components/PageTitleEdition";
 
-import { State } from "./utils/state";
-import { identity } from "./utils/utils";
+import { addPage, removePage, setFirst, setSelectedPage } from "./store/gameSlice";
+import { RootState } from "./store/store";
 
 export default function Editor() {
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const { game, selectedPage } = useSelector<State, State>(identity);
+  const { game, selectedPage } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const defineColor = (index: number) => {
@@ -52,7 +51,7 @@ export default function Editor() {
             {game.pages.map((page, index) => (
               <ListItem
                 onClick={() => {
-                  dispatch({ type: "setSelectedPage", index });
+                  dispatch(setSelectedPage(index));
                 }}
                 key={page.id}
                 sx={{
@@ -82,10 +81,7 @@ export default function Editor() {
                       disabled={page.isFirst}
                       onClick={(e) => {
                         e.stopPropagation();
-                        dispatch({
-                          type: "setFirst",
-                          index,
-                        });
+                        dispatch(setFirst(index));
                       }}
                     >
                       <FlagSharpIcon
@@ -105,10 +101,7 @@ export default function Editor() {
                     disabled={game.pages.length === 1}
                     onClick={(e) => {
                       e.stopPropagation();
-                      dispatch({
-                        type: "removePage",
-                        index,
-                      });
+                      dispatch(removePage(index));
                     }}
                   >
                     <DeleteSharpIcon />
@@ -122,9 +115,7 @@ export default function Editor() {
                   variant="contained"
                   sx={{ width: "100%" }}
                   onClick={() =>
-                    dispatch({
-                      type: "addPage",
-                    })
+                    dispatch(addPage())
                   }
                 >
                   <AddSharpIcon />

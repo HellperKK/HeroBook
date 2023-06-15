@@ -16,11 +16,12 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { State } from "../utils/state";
-import { assetPath, identity, noExt, readImage } from "../utils/utils";
+import { assetPath, noExt, readImage } from "../utils/utils";
 import { findPage } from "../utils/page";
 
 import Space from "./utils/Space";
+import { addAssets, addChoice, changeChoice, changePage, removeChoice } from "../store/gameSlice";
+import { RootState } from "../store/store";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
@@ -29,9 +30,7 @@ const StyledImg = styled.img`
 `;
 
 export default function PageEditor() {
-  const { game, selectedPage, assets, zip } = useSelector<State, State>(
-    identity
-  );
+  const { game, selectedPage, assets, zip } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
 
@@ -77,10 +76,7 @@ export default function PageEditor() {
                 assetsMemo.set(fi.name, image);
 
                 if (index === 0) {
-                  dispatch({
-                    type: "changePage",
-                    page: { image: fi.name },
-                  });
+                  dispatch(changePage({ image: fi.name }));
                 }
               }
 
@@ -89,11 +85,7 @@ export default function PageEditor() {
             Promise.resolve(new Map<string, string>())
           );
 
-          dispatch({
-            type: "addAssets",
-            files: newAssets,
-            fileType: "images",
-          });
+          dispatch(addAssets({ assets: newAssets, type: "images" }));
 
           setDraging(false);
         }}
@@ -106,10 +98,7 @@ export default function PageEditor() {
               key={`image${index + 42}`}
               value={image}
               onClick={() =>
-                dispatch({
-                  type: "changePage",
-                  page: { image },
-                })
+                dispatch(changePage({ image }))
               }
             >
               <StyledImg src={assets.images.get(image)} alt="" />
@@ -123,10 +112,7 @@ export default function PageEditor() {
           disabled={!game.pages[selectedPage].image}
           variant="contained"
           onClick={() =>
-            dispatch({
-              type: "changePage",
-              page: { image: undefined },
-            })
+            dispatch(changePage({ image: undefined }))
           }
         >
           <DeleteSharpIcon />
@@ -146,10 +132,7 @@ export default function PageEditor() {
           variant="outlined"
           value={game.pages[selectedPage].name}
           onChange={(e) =>
-            dispatch({
-              type: "changePage",
-              page: { name: e.target.value },
-            })
+            dispatch(changePage({ name: e.target.value }))
           }
         />
       </Box>
@@ -161,10 +144,7 @@ export default function PageEditor() {
           variant="outlined"
           value={game.pages[selectedPage].text}
           onChange={(e) =>
-            dispatch({
-              type: "changePage",
-              page: { text: e.target.value },
-            })
+            dispatch(changePage({ text: e.target.value }))
           }
           sx={{ height: "100%", width: "100%" }}
         />
@@ -186,11 +166,7 @@ export default function PageEditor() {
                   value={choice.action}
                   sx={{ width: "50%" }}
                   onChange={(e) =>
-                    dispatch({
-                      type: "changeChoice",
-                      choice: { action: e.target.value },
-                      index,
-                    })
+                    dispatch(changeChoice({ choice: { action: e.target.value }, position: index }))
                   }
                 />
                 <Space size={2} />
@@ -203,11 +179,7 @@ export default function PageEditor() {
                       key={pa.id}
                       value={pa.id}
                       onClick={() =>
-                        dispatch({
-                          type: "changeChoice",
-                          choice: { pageId: pa.id },
-                          index,
-                        })
+                        dispatch(changeChoice({ choice: { pageId: pa.id }, position: index }))
                       }
                     >
                       {pa.name}
@@ -215,13 +187,20 @@ export default function PageEditor() {
                   ))}
                 </Select>
                 <Space size={2} />
+                <TextField
+                  label="Choice Comdition"
+                  variant="outlined"
+                  value={choice.condition ?? ""}
+                  sx={{ width: "50%" }}
+                  onChange={(e) =>
+                    dispatch(changeChoice({ choice: { condition: e.target.value }, position: index }))
+                  }
+                />
+                <Space size={2} />
                 <Button
                   variant="contained"
                   onClick={() =>
-                    dispatch({
-                      type: "removeChoice",
-                      index,
-                    })
+                    dispatch(removeChoice(index))
                   }
                 >
                   <DeleteSharpIcon />
@@ -232,9 +211,7 @@ export default function PageEditor() {
               <Button
                 variant="contained"
                 onClick={() =>
-                  dispatch({
-                    type: "addChoice",
-                  })
+                  dispatch(addChoice())
                 }
                 sx={{ width: "85%" }}
               >

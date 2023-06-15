@@ -16,15 +16,15 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { State } from "../../utils/state";
 import {
-  identity,
   openFiles,
   readImage,
   noExt,
   assetPath,
   getExtensions,
 } from "../../utils/utils";
+import { addAssets, changePage, removeAsset } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -42,7 +42,7 @@ interface CompProps {
 
 export default function AssetsManager(props: CompProps) {
   const { open, close } = props;
-  const { game, zip, assets } = useSelector<State, State>(identity);
+  const { game, zip, assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
@@ -68,14 +68,13 @@ export default function AssetsManager(props: CompProps) {
       Promise.resolve(new Map<string, string>())
     );
 
-    dispatch({
-      type: "addAssets",
-      files: newAssets,
-      fileType: "images",
-    });
+    dispatch(addAssets({
+      assets: newAssets,
+      type: "images",
+    }));
   };
 
-  const removeAsset = (assetType: string, assetName: string) => () => {
+  const removeAssets = (assetType: string, assetName: string) => () => {
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
@@ -83,11 +82,10 @@ export default function AssetsManager(props: CompProps) {
       setSelectedAsset(assets.images.size - 2);
     }
 
-    dispatch({
-      type: "removeAsset",
-      fileName: assetName,
-      fileType: assetType,
-    });
+    dispatch(removeAsset({
+      name: assetName,
+      type: assetType,
+    }));
   };
 
   return (
@@ -116,7 +114,7 @@ export default function AssetsManager(props: CompProps) {
                   <Button
                     variant="contained"
                     disabled={game.pages.length === 1}
-                    onClick={removeAsset("images", fileName)}
+                    onClick={removeAssets("images", fileName)}
                   >
                     <DeleteSharpIcon />
                   </Button>
@@ -177,10 +175,7 @@ export default function AssetsManager(props: CompProps) {
                         assetsMemo.set(fi.name, image);
 
                         if (index === 0) {
-                          dispatch({
-                            type: "changePage",
-                            page: { image: fi.name },
-                          });
+                          dispatch(changePage({ image: fi.name }));
                         }
                       }
 
@@ -189,11 +184,10 @@ export default function AssetsManager(props: CompProps) {
                     Promise.resolve(new Map<string, string>())
                   );
 
-                  dispatch({
-                    type: "addAssets",
-                    files: newAssets,
-                    fileType: "images",
-                  });
+                  dispatch(addAssets({
+                    assets: newAssets,
+                    type: "images",
+                  }));
 
                   setDraging(false);
                 }}

@@ -45,6 +45,9 @@ const format = (game: Game) => `
       const state = {$state: {}}
 
       const safeMarkdown = (md) => DOMPurify.sanitize(marked.parse(md));
+      const evalCondition = ($state, condition) => {
+        return eval(condition);
+      };
 
       const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
@@ -85,6 +88,10 @@ const format = (game: Game) => `
         divChoices.innerHTML = ""
 
         for (nex of page.next) {
+          if (nex.condition !== undefined && nex.condition !== "" && !evalCondition(state.$state, nex.condition)) {
+            continue;
+          }
+
           let button = document.createElement("button")
           button.innerHTML = safeMarkdown(nex.action)
           button.setAttribute("pageId", nex.pageId)

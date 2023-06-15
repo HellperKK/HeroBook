@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+import { Jinter } from "jintr";
 
 import { Choice, initialGame, Page } from "./initialStuff";
 
@@ -148,9 +149,17 @@ const getExtensions = (assetType: string) => {
   }
 };
 
+const evalCondition = ($state: any, condition: string) => {
+  const jinter = new Jinter(condition);
+  jinter.scope.set("$state", $state);
+  console.log($state);
+  return jinter.interpret();
+};
+
 // const fileName = (file: string) => /(.+)\..+/.exec(file)[1];
 
 export {
+  evalCondition,
   download,
   formatStory,
   openFiles,

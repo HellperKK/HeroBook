@@ -20,7 +20,6 @@ import Tooltip from "@mui/material/Tooltip";
 // import DialogContentText from '@mui/material/DialogContentText';
 
 import { useState } from "react";
-import { saveAs } from "file-saver";
 import { useSelector, useDispatch } from "react-redux";
 import { invoke } from "@tauri-apps/api/tauri";
 
@@ -29,12 +28,13 @@ import AssetsManager from "./topBar/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
 import SettingsWindow from "./topBar/SettingsWindow";
 
-import { State } from "../utils/state";
-import { identity, loadState } from "../utils/utils";
+import { loadState } from "../utils/utils";
 import { compile } from "../utils/format";
+import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
+import { RootState } from "../store/store";
 
 export default function TopBar() {
-  const { game, zip } = useSelector<State, State>(identity);
+  const { game, zip } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [settings, setSettings] = useState(false);
@@ -45,16 +45,15 @@ export default function TopBar() {
 
   const loadAState = async () => {
     const state = await loadState();
-    dispatch({ type: "loadGame", game: state.game, zip: state.zip });
-    dispatch({
-      type: "addAssets",
-      files: state.assets,
-      fileType: "images",
-    });
+    dispatch(loadGame({ game: state.game, zip: state.zip }));
+    dispatch(addAssets({
+      assets: state.assets,
+      type: "images",
+    }));
   };
 
-  const newProject = () => {
-    dispatch({ type: "newProject" });
+  const makeNewProject = () => {
+    dispatch(newProject());
   };
 
   const saveState = async () => {
@@ -78,7 +77,7 @@ export default function TopBar() {
           aria-label="outlined primary button group"
         >
           <Tooltip title="new game" arrow>
-            <Button variant="contained" onClick={newProject}>
+            <Button variant="contained" onClick={makeNewProject}>
               <FeedSharpIcon />
             </Button>
           </Tooltip>
@@ -102,9 +101,7 @@ export default function TopBar() {
               variant="contained"
               onClick={() => {
                 setPlaying(true);
-                dispatch({
-                  type: "resetGameState",
-                });
+                dispatch(resetGameState());
               }}
             >
               <PlayArrowSharpIcon />
@@ -139,9 +136,7 @@ export default function TopBar() {
               variant="contained"
               onClick={() => {
                 setPlaying(false);
-                dispatch({
-                  type: "resetGameState",
-                });
+                dispatch(resetGameState());
               }}
               sx={{ width: "100%" }}
             >

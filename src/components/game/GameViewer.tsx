@@ -2,16 +2,16 @@
 import { Box } from "@mui/system";
 // import { Button } from '@mui/material';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ejs from "ejs";
 
 import { Choice, Page } from "../../utils/initialStuff";
-import { identity, safeMarkdown } from "../../utils/utils";
-import { State } from "../../utils/state";
+import { evalCondition, identity, safeMarkdown } from "../../utils/utils";
 
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
+import { RootState } from "../../store/store";
 
 interface CompProp {
   page: Page;
@@ -19,7 +19,7 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game, assets, gameState } = useSelector<State, State>(identity);
+  const { game, assets, gameState } = useSelector((state: RootState) => state.game);
 
   const { page, onClick } = props;
 
@@ -29,6 +29,7 @@ export default function GameViewer(props: CompProp) {
         type="button"
         key={`poll_${index + 42}`}
         onClick={() => {
+          console.log("clicked")
           if (onClick !== null) {
             onClick(choice);
           }
@@ -79,7 +80,10 @@ export default function GameViewer(props: CompProp) {
             flexDirection: "column",
           }}
         >
-          {page.next.map(choiceButton)}
+          {page.next.filter(choice => {
+            const condition = choice.condition;
+            return condition === undefined || condition === "" || evalCondition(gameState.$state, condition)
+          }).map(choiceButton)}
         </Box>
       </Box>
     </Box>
