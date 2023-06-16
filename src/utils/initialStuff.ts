@@ -24,10 +24,16 @@ interface Page {
   category?: string;
 }
 
+interface Category {
+  name: string;
+  visible: boolean;
+}
+
 interface Settings {
   author: string;
   gameTitle: string;
   pageCount: number;
+  categories?: Array<Category>;
 }
 
 interface Game {
@@ -40,6 +46,11 @@ interface Game {
 const initialChoice = {
   action: "Go to the base page",
   pageId: 1,
+};
+
+const initialCategory = {
+  name: "category name",
+  visible: true,
 };
 
 function initialPage(id = 1): Page {
@@ -101,5 +112,5 @@ const initialGame: Game = {
   ],
 };
 
-export { initialChoice, initialPage, initialGame };
-export type { Page, Game, Choice, Format, Settings };
+export { initialChoice, initialPage, initialGame, initialCategory };
+export type { Page, Game, Choice, Format, Settings, Category };

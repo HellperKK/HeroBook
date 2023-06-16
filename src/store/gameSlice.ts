@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import {
+  Category,
   Choice,
   Format,
   Game,
   Page,
   Settings,
+  initialCategory,
   initialChoice,
   initialGame,
   initialPage,
@@ -171,6 +173,32 @@ export const gameSlice = createSlice({
       };
       state.gameState = { $state: {} };
     },
+    addCategory: (state) => {
+      const settings = state.game.settings;
+      if (!settings.categories) {
+        settings.categories = [];
+      }
+      settings.categories.push(initialCategory);
+    },
+    removeCategory: (state, action: PayloadAction<number>) => {
+      const settings = state.game.settings;
+      if (settings.categories && settings.categories.length > 0) {
+        settings.categories.splice(action.payload, 1);
+      }
+    },
+    changeCategory: (
+      state,
+      action: PayloadAction<{ category: Partial<Category>; position: number }>
+    ) => {
+      const settings = state.game.settings;
+      if (settings.categories) {
+        const category = settings.categories[action.payload.position];
+        settings.categories[action.payload.position] = {
+          ...category,
+          ...action.payload.category,
+        };
+      }
+    },
   },
 });
 
@@ -194,6 +222,9 @@ export const {
   updateFormat,
   updateGlobalFormat,
   updateSettings,
+  addCategory,
+  changeCategory,
+  removeCategory,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

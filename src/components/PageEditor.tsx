@@ -33,16 +33,46 @@ export default function PageEditor() {
   const { game, selectedPage, assets, zip } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
+  const categories = game.settings.categories ?? [];
 
   return (
     <Box
       sx={{
         height: "calc(100vh - 120px)",
         display: "grid",
-        gridTemplateAreas: '"asset" "name" "content" "choices"',
-        gridTemplateRows: "100px 100px 1fr 200px",
+        gridTemplateAreas: '"categories" "asset" "name" "content" "choices"',
+        gridTemplateRows: "100px 100px 100px 1fr 200px",
       }}
     >
+      <Box
+        sx={{
+          gridArea: "categories",
+          border: draging ? "1px dashed black" : "",
+        }}>
+        Category
+        <Space size={2} />
+        <Select value={game.pages[selectedPage].category ?? ""}>
+          <MenuItem
+            value=""
+            onClick={() =>
+              dispatch(changePage({ category: "" }))
+            }
+          >
+            <Typography>No category</Typography>
+          </MenuItem>
+          {categories.map((category, index) => (
+            <MenuItem
+              key={`category${index + 42}`}
+              value={category.name}
+              onClick={() =>
+                dispatch(changePage({ category: category.name }))
+              }
+            >
+              <Typography>{category.name}</Typography>
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
       <Box
         sx={{
           gridArea: "asset",
