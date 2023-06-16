@@ -24,6 +24,7 @@ fn download() -> String {
 fn save(content: &str) -> String {
     let file = FileDialog::new()
         .add_filter("zip", &["zip"])
+        .set_file_name("game.zip")
         .set_directory("/")
         .save_file();
 
