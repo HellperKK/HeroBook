@@ -4,6 +4,7 @@ import Box from "@mui/system/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
 
 import BrushSharpIcon from "@mui/icons-material/BrushSharp";
 import SettingsBackupRestoreSharpIcon from "@mui/icons-material/SettingsBackupRestoreSharp";
@@ -19,7 +20,6 @@ import ColorPicker from "./utils/ColorPicker";
 import GameViewerEditor from "./game/GameViewerEditor";
 
 import { Format, Page } from "../utils/initialStuff";
-import { TextField } from "@mui/material";
 import { updateFormat, updateGlobalFormat } from "../store/gameSlice";
 import { RootState } from "../store/store";
 
