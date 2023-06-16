@@ -6,10 +6,10 @@
 
 # DOING
 
-- add categories and filters to pages
 
 # DONE
 
+- add categories and filters to pages
 - change game state in page vizualization
 - desktop: add a file dialog when saving
 - add conditionnal choices
