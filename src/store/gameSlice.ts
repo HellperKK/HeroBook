@@ -163,15 +163,13 @@ export const gameSlice = createSlice({
       state.gameState = { $state: {} };
     },
     newProject: (state) => {
-      state = {
-        game: initialGame,
-        selectedPage: 0,
-        zip: new JSZip(),
-        assets: {
-          images: new Map<string, string>(),
-        },
-        gameState: { $state: {} },
+      state.game = initialGame;
+      state.selectedPage = 0;
+      state.zip = new JSZip();
+      state.assets = {
+        images: new Map<string, string>(),
       };
+      state.gameState = { $state: {} };
     },
   },
 });
