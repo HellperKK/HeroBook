@@ -21,6 +21,13 @@ export default function EditableField(props: CompProp) {
 
   const multiline = props.multiline ?? false;
 
+  let body = safeMarkdown(content);
+  try {
+    body = safeMarkdown(ejs.render(content, state));
+  } catch (error) {
+
+  }
+
   return editing ? (
     <TextField
       onBlur={() => {
@@ -32,6 +39,7 @@ export default function EditableField(props: CompProp) {
       value={content}
       onChange={onChange}
       multiline={multiline}
+      sx={{ width: multiline ? "100%" : "initial" }}
       onKeyDown={(e) => {
         if (e.key === "Enter" && e.shiftKey) {
           setEditing(false);
@@ -46,7 +54,7 @@ export default function EditableField(props: CompProp) {
         // }
       }}
       dangerouslySetInnerHTML={{
-        __html: safeMarkdown(ejs.render(content, state)),
+        __html: safeMarkdown(body),
       }}
     />
   );

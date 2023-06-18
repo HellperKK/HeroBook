@@ -182,8 +182,17 @@ export const gameSlice = createSlice({
     },
     removeCategory: (state, action: PayloadAction<number>) => {
       const settings = state.game.settings;
-      if (settings.categories && settings.categories.length > 0) {
-        settings.categories.splice(action.payload, 1);
+      if (!settings.categories || !(settings.categories.length > 0)) {
+        return;
+      }
+      const categoryName = settings.categories[action.payload].name;
+
+      settings.categories.splice(action.payload, 1);
+
+      for (const pages of state.game.pages) {
+        if (pages.category == categoryName) {
+          pages.category = "";
+        }
       }
     },
     changeCategory: (

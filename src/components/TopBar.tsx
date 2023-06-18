@@ -52,14 +52,16 @@ export default function TopBar() {
     }));
   };
 
-  const makeNewProject = () => {
+  const makeNewProject = async () => {
+    const res = await invoke("new", {});
+    console.log(res);
     dispatch(newProject());
   };
 
   const saveState = async () => {
     zip.file("data.json", JSON.stringify(game));
     const binary = await zip.generateAsync({ type: "base64" });
-    invoke("save", { content: binary });
+    invoke("save", { content: binary, fileType: "project" });
 
     //saveAs(blob, "game.zip");
   };

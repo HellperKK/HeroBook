@@ -195,8 +195,10 @@ export default function PageEditor() {
                   variant="outlined"
                   value={choice.action}
                   sx={{ width: "50%" }}
-                  onChange={(e) =>
-                    dispatch(changeChoice({ choice: { action: e.target.value }, position: index }))
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    dispatch(changeChoice({ choice: { action: e.target.value }, position: index }));
+                  }
                   }
                 />
                 <Space size={2} />
