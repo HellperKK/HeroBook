@@ -86,7 +86,7 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{ choice: Partial<Choice>; position: number }>
     ) => {
-      const next = state.game.pages[action.payload.position].next;
+      const next = state.game.pages[state.selectedPage].next;
       next[action.payload.position] = {
         ...next[action.payload.position],
         ...action.payload.choice,
