@@ -209,7 +209,7 @@ export default function Editor() {
                     dispatch(changeCategory({ category: { name: e.target.value }, position: index }))
                   }
                 />
-                <Tooltip title="change caregoty visibility" arrow>
+                <Tooltip title="change category visibility" arrow>
                   <Button
                     variant="contained"
                     onClick={() =>

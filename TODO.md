@@ -15,7 +15,7 @@
 - add conditionnal choices in desktop player
 - chage page content width in page visualization
 - fix page category when category is deleted
-- capture errors vrom ejs when template is not valid
+- capture error from ejs when template is not valid
 - add categories and filters to pages
 - change game state in page vizualization
 - add conditionnal choices
