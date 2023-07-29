@@ -11,9 +11,9 @@
 
 # DONE
 
-- make save automatic when path already chosen
+- make save automatic when file path already chosen
 - add conditionnal choices in desktop player
-- chage page content width in page visualization
+- change page content width in page visualization
 - fix page category when category is deleted
 - capture error from ejs when template is not valid
 - add categories and filters to pages
