@@ -220,7 +220,7 @@ export default function PageEditor() {
                 </Select>
                 <Space size={2} />
                 <TextField
-                  label="Choice Comdition"
+                  label="Choice Condition"
                   variant="outlined"
                   value={choice.condition ?? ""}
                   sx={{ width: "50%" }}
