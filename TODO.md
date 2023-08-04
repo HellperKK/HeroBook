@@ -5,11 +5,19 @@
 - add possibility to translate game texts
 - make visulalization state persistent
 - generalize EditableField
+- stop code editor from removing newlines
+
 
 # DOING
 
 
 # DONE
+
+- fix inconsistency between page render and page test with template
+- add code coloration
+
+
+# ARCHIEVED
 
 - make save automatic when file path already chosen
 - add conditionnal choices in desktop player

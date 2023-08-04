@@ -103,7 +103,6 @@ export default function TopBar() {
               variant="contained"
               onClick={() => {
                 setPlaying(true);
-                dispatch(resetGameState());
               }}
             >
               <PlayArrowSharpIcon />
@@ -138,7 +137,7 @@ export default function TopBar() {
               variant="contained"
               onClick={() => {
                 setPlaying(false);
-                dispatch(resetGameState());
+                // dispatch(resetGameState());
               }}
               sx={{ width: "100%" }}
             >

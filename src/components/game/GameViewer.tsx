@@ -12,6 +12,7 @@ import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
 import { RootState } from "../../store/store";
+import { useEffect, useMemo } from "react";
 
 interface CompProp {
   page: Page;
@@ -19,9 +20,11 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game, assets, gameState } = useSelector((state: RootState) => state.game);
+  const { game, assets, /*gameState,*/ selectedPage } = useSelector((state: RootState) => state.game);
 
   const { page, onClick } = props;
+
+  const gameState = useMemo(() => ({ $state: {} }), []);
 
   const choiceButton = (choice: Choice, index: number) => {
     return (
@@ -30,6 +33,7 @@ export default function GameViewer(props: CompProp) {
         key={`poll_${index + 42}`}
         onClick={() => {
           console.log("clicked")
+          console.log(gameState)
           if (onClick !== null) {
             onClick(choice);
           }
@@ -71,6 +75,7 @@ export default function GameViewer(props: CompProp) {
           className="story-text"
           dangerouslySetInnerHTML={{
             __html: safeMarkdown(ejs.render(page.text, gameState)),
+            // __html: safeMarkdown(ejs.render(page.text, { $state: {} })),
           }}
         />
         <Box

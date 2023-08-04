@@ -22,6 +22,7 @@ import { findPage } from "../utils/page";
 import Space from "./utils/Space";
 import { addAssets, addChoice, changeChoice, changePage, removeChoice } from "../store/gameSlice";
 import { RootState } from "../store/store";
+import CodeEditor from "./codeEditor/CodeEditor";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
@@ -167,7 +168,13 @@ export default function PageEditor() {
         />
       </Box>
       <Box sx={{ paddingTop: "20px", gridArea: "content" }}>
-        <TextField
+        <CodeEditor content={game.pages[selectedPage].text} onUpdate={(content) => {
+          if (content !== game.pages[selectedPage].text) {
+            console.log(content);
+            dispatch(changePage({ text: content }));
+          }
+        }} />
+        {/*<TextField
           multiline
           fullWidth
           label="Page Content"
@@ -177,7 +184,7 @@ export default function PageEditor() {
             dispatch(changePage({ text: e.target.value }))
           }
           sx={{ height: "100%", width: "100%" }}
-        />
+        />*/}
         {/* <MarkdownEditor page={game.pages[selectedPage]} /> */}
       </Box>
       {/* Choice List */}
