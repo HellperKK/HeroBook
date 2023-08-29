@@ -5,7 +5,9 @@
 - add possibility to translate game texts
 - make visulalization state persistent
 - generalize EditableField
-- stop code editor from removing newlines
+- stop code editor from removing newlines in change
+- remake graph generation
+- remake interface
 
 
 # DOING
@@ -15,6 +17,7 @@
 
 - fix inconsistency between page render and page test with template
 - add code coloration
+- removed action label from graph edges
 
 
 # ARCHIEVED
