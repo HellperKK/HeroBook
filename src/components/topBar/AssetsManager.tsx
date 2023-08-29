@@ -12,12 +12,9 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/css";
 import { useState } from "react";
 
-import { State } from "../../utils/state";
 import {
-  identity,
   openFiles,
   readImage,
-  noExt,
   assetPath,
   getExtensions,
 } from "../../utils/utils";
