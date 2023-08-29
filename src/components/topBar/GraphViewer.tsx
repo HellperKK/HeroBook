@@ -36,7 +36,7 @@ export default function GraphViewer() {
       edges.push({
         source: nodeName(page),
         target: nodeName(pagesDict.get(nex.pageId) as Page),
-        label: nex.action,
+        label: "", /*nex.action,*/
       });
     });
   });
