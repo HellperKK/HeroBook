@@ -26,7 +26,7 @@ export interface GameState {
   assets: {
     images: Array<Asset>;
   };
-  gameState: any;
+  gameState: { $state: any };
 }
 
 const initialState: GameState = {
