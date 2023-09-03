@@ -4,14 +4,16 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import { Editor, EditorContent, ReactNodeViewRenderer, useEditor } from '@tiptap/react'
 import { lowlight } from 'lowlight'
+import markdown from 'highlight.js/lib/languages/markdown'
 
 import './codeColor.css'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
-lowlight.registerLanguage('ejs', () => ({
-    case_insensitive: true, // language is case-insensitive
-    contains: [
+
+lowlight.registerLanguage('ejs', (api) => {
+    const md = markdown(api);
+    const newTokens = [
         {
             className: 'code-expression',
             begin: '<%=',
@@ -27,13 +29,12 @@ lowlight.registerLanguage('ejs', () => ({
             begin: '<%',
             end: '%>'
         },
-        {
-            className: 'text',
-            begin: /[^>]/,
-            end: /[^<]*/
-        },
     ]
-}))
+
+    md.contains.splice(7, 0, ...newTokens);
+    console.log("md est ", md);
+    return md;
+})
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (!editor) {

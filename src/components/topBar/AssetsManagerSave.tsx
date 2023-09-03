@@ -23,8 +23,9 @@ import {
   assetPath,
   getExtensions,
 } from "../../utils/utils";
-import { addAssets, changePage, removeAsset } from "../../store/gameSlice";
+import { Asset, addAssets, changePage, removeAsset } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -54,19 +55,8 @@ export default function AssetsManager(props: CompProps) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
-
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (assetsMemoPromise: Promise<Map<string, string>>, fi: File) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
+    addFilesToZip(arrFiles, zip);
+    const newAssets = await loadAssets(arrFiles);
 
     dispatch(addAssets({
       assets: newAssets,
@@ -78,8 +68,8 @@ export default function AssetsManager(props: CompProps) {
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
-    if (assets.images.size === 1 || assets.images.size === selectedAsset + 1) {
-      setSelectedAsset(assets.images.size - 2);
+    if (assets.images.length === 1 || assets.images.length === selectedAsset + 1) {
+      setSelectedAsset(assets.images.length - 2);
     }
 
     dispatch(removeAsset({
@@ -95,16 +85,16 @@ export default function AssetsManager(props: CompProps) {
           <Grid item xs={3} xl={2}>
             {/* Image List */}
             <List sx={{ overflow: "auto" }}>
-              {Array.from(images.keys()).map((fileName, index) => (
+              {images.map(({ name: fileName, content }, index) => (
                 <ListItem
                   onClick={() => setSelectedAsset(index)}
-                  key={`item${index + 42}`}
+                  key={fileName}
                   sx={{
                     bgcolor: index === selectedAsset ? "secondary.main" : "",
                     cursor: "pointer",
                   }}
                 >
-                  <StyledMiniature src={assets.images.get(fileName)} alt="" />
+                  <StyledMiniature src={content} alt="" />
                   <ListItemText
                     primary={noExt(fileName)}
                     sx={{
@@ -157,32 +147,9 @@ export default function AssetsManager(props: CompProps) {
                 onDrop={async (e) => {
                   e.preventDefault();
 
-                  const newAssets = await Array.from(
-                    e.dataTransfer.files
-                  ).reduce<Promise<Map<string, string>>>(
-                    async (
-                      assetsMemoPromise: Promise<Map<string, string>>,
-                      fi: File,
-                      index: number
-                    ) => {
-                      const assetsMemo = await assetsMemoPromise;
-
-                      if (/^image/.test(fi.type)) {
-                        const pathName = assetPath("images", fi.name);
-                        zip.file(pathName, fi);
-
-                        const image = await readImage(fi);
-                        assetsMemo.set(fi.name, image);
-
-                        if (index === 0) {
-                          dispatch(changePage({ image: fi.name }));
-                        }
-                      }
-
-                      return assetsMemo;
-                    },
-                    Promise.resolve(new Map<string, string>())
-                  );
+                  const arrFiles = Array.from(e.dataTransfer.files);
+                  addFilesToZip(arrFiles, zip);
+                  const newAssets = await loadAssets(arrFiles);
 
                   dispatch(addAssets({
                     assets: newAssets,
@@ -195,7 +162,7 @@ export default function AssetsManager(props: CompProps) {
                 <Typography>drag images here</Typography>
               </Box>
               <StyledImage
-                src={Array.from(assets.images.values())[selectedAsset]}
+                src={assets.images[selectedAsset].content}
               />
             </Box>
           </Grid>

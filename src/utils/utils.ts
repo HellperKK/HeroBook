@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { Jinter } from "jintr";
 
 import { Choice, initialGame, Page } from "./initialStuff";
+import { Asset } from "../store/gameSlice";
 
 const readImage = (file: Blob): Promise<string> => {
   return new Promise((resolve) => {
@@ -96,14 +97,12 @@ const loadState = async () => {
 
   const images = zip.folder("assets/images");
 
-  let assets = new Map<string, string>();
+  let assets = new Array<Asset>();
 
   if (images !== null) {
-    assets = await Object.entries(images.files).reduce<
-      Promise<Map<string, string>>
-    >(
+    assets = await Object.entries(images.files).reduce<Promise<Array<Asset>>>(
       async (
-        assetsMemoPromise: Promise<Map<string, string>>,
+        assetsMemoPromise: Promise<Array<Asset>>,
         pair: [string, JSZip.JSZipObject]
       ) => {
         const assetsMemo = await assetsMemoPromise;
@@ -112,11 +111,11 @@ const loadState = async () => {
           const blob = await pair[1].async("blob");
           const img = await readImage(blob);
 
-          assetsMemo.set(matches[1], img);
+          assetsMemo.push({ name: matches[1], content: img });
         }
         return assetsMemo;
       },
-      Promise.resolve(new Map<string, string>())
+      Promise.resolve(new Array<Asset>())
     );
   }
 

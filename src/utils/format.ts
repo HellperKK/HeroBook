@@ -84,7 +84,13 @@ const format = (game: Game) => `
         divStory.style.backgroundColor = pageFormat.page || globalFormat.page
         divText.style.color = pageFormat.textColor || globalFormat.textColor
 
-        divText.innerHTML = safeMarkdown(ejs.render(page.text, state))
+        let body = safeMarkdown(page.text);
+
+        try {
+          body = ejs.render(page.text, state)
+        } catch (error) { }
+
+        divText.innerHTML = safeMarkdown(body)
         divChoices.innerHTML = ""
 
         for (nex of page.next) {

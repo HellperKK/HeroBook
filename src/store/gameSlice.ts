@@ -14,12 +14,17 @@ import {
 } from "../utils/initialStuff";
 import JSZip from "jszip";
 
+export interface Asset {
+  name: string;
+  content: string;
+}
+
 export interface GameState {
   game: Game;
   selectedPage: number;
   zip: JSZip;
   assets: {
-    images: Map<string, string>;
+    images: Array<Asset>;
   };
   gameState: any;
 }
@@ -29,7 +34,7 @@ const initialState: GameState = {
   selectedPage: 0,
   zip: new JSZip(),
   assets: {
-    images: new Map<string, string>(),
+    images: [],
   },
   gameState: { $state: {} },
 };
@@ -107,7 +112,7 @@ export const gameSlice = createSlice({
         ...action.payload,
       };
     },
-    updateGlobalFormat: (state, action: PayloadAction<Partial<Format>>) => {
+    updateGlobalFormat: (state, action: PayloadAction<Format>) => {
       state.game.format = {
         ...state.game.format,
         ...action.payload,
@@ -115,20 +120,12 @@ export const gameSlice = createSlice({
     },
     addAssets: (
       state,
-      action: PayloadAction<{ assets: Map<string, string>; type: string }>
+      action: PayloadAction<{ assets: Array<Asset>; type: string }>
     ) => {
       switch (action.payload.type) {
         case "images":
-          const assets = state.assets.images;
+          state.assets.images.push(...action.payload.assets);
 
-          for (const [
-            assetName,
-            assetContent,
-          ] of action.payload.assets.entries()) {
-            assets.set(assetName, assetContent);
-          }
-
-          state.assets.images = assets;
           break;
 
         default:
@@ -143,7 +140,15 @@ export const gameSlice = createSlice({
         case "images":
           const assets = state.assets.images;
 
-          assets.delete(action.payload.name);
+          const assetIndex = assets.findIndex(
+            (a) => a.name === action.payload.name
+          );
+
+          if (assetIndex === -1) {
+            return;
+          }
+
+          assets.splice(assetIndex, 1);
 
           state.assets.images = assets;
           break;
@@ -169,7 +174,7 @@ export const gameSlice = createSlice({
       state.selectedPage = 0;
       state.zip = new JSZip();
       state.assets = {
-        images: new Map<string, string>(),
+        images: [],
       };
       state.gameState = { $state: {} };
     },

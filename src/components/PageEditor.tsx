@@ -20,9 +20,10 @@ import { assetPath, noExt, readImage } from "../utils/utils";
 import { findPage } from "../utils/page";
 
 import Space from "./utils/Space";
-import { addAssets, addChoice, changeChoice, changePage, removeChoice } from "../store/gameSlice";
+import { Asset, addAssets, addChoice, changeChoice, changePage, removeChoice } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import CodeEditor from "./codeEditor/CodeEditor";
+import { addFilesToZip, loadAssets } from "../utils/assets";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
@@ -89,32 +90,9 @@ export default function PageEditor() {
         onDrop={async (e) => {
           e.preventDefault();
 
-          const newAssets = await Array.from(e.dataTransfer.files).reduce<
-            Promise<Map<string, string>>
-          >(
-            async (
-              assetsMemoPromise: Promise<Map<string, string>>,
-              fi: File,
-              index: number
-            ) => {
-              const assetsMemo = await assetsMemoPromise;
-
-              if (/^image/.test(fi.type)) {
-                const pathName = assetPath("images", fi.name);
-                zip.file(pathName, fi);
-
-                const image = await readImage(fi);
-                assetsMemo.set(fi.name, image);
-
-                if (index === 0) {
-                  dispatch(changePage({ image: fi.name }));
-                }
-              }
-
-              return assetsMemo;
-            },
-            Promise.resolve(new Map<string, string>())
-          );
+          const arrFiles = Array.from(e.dataTransfer.files);
+          addFilesToZip(arrFiles, zip);
+          const newAssets = await loadAssets(arrFiles);
 
           dispatch(addAssets({ assets: newAssets, type: "images" }));
 
@@ -124,17 +102,17 @@ export default function PageEditor() {
         <PermMediaSharpIcon />
         <Space size={2} />
         <Select value={game.pages[selectedPage].image}>
-          {Array.from(assets.images.keys()).map((image, index) => (
+          {assets.images.map((image, index) => (
             <MenuItem
-              key={`image${index + 42}`}
-              value={image}
+              key={image.name}
+              value={image.name}
               onClick={() =>
-                dispatch(changePage({ image }))
+                dispatch(changePage({ image: image.name }))
               }
             >
-              <StyledImg src={assets.images.get(image)} alt="" />
+              <StyledImg src={image.content} alt="" />
               <Space size={2} />
-              <Typography>{noExt(image)}</Typography>
+              <Typography>{noExt(image.name)}</Typography>
             </MenuItem>
           ))}
         </Select>

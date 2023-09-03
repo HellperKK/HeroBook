@@ -39,7 +39,7 @@ interface Settings {
 interface Game {
   version: "1.0.0";
   settings: Settings;
-  format: Format;
+  format: Required<Format>;
   pages: Array<Page>;
 }
 

@@ -46,6 +46,12 @@ export default function GameViewer(props: CompProp) {
     );
   };
 
+  let body = safeMarkdown(page.text);
+
+  try {
+    body = safeMarkdown(ejs.render(page.text, gameState));
+  } catch (error) { }
+
   return (
     <Box
       sx={{
@@ -74,7 +80,7 @@ export default function GameViewer(props: CompProp) {
         <p
           className="story-text"
           dangerouslySetInnerHTML={{
-            __html: safeMarkdown(ejs.render(page.text, gameState)),
+            __html: safeMarkdown(body),
             // __html: safeMarkdown(ejs.render(page.text, { $state: {} })),
           }}
         />

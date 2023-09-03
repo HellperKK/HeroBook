@@ -22,6 +22,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { addAssets, removeAsset } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -53,19 +54,8 @@ export default function AssetsManager(props: CompProps) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
-
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (assetsMemoPromise: Promise<Map<string, string>>, fi: File) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
+    addFilesToZip(arrFiles, zip);
+    const newAssets = await loadAssets(arrFiles);
 
     dispatch(addAssets({
       assets: newAssets,
@@ -77,8 +67,8 @@ export default function AssetsManager(props: CompProps) {
     const pathName = assetPath(assetType, assetName);
     zip.remove(pathName);
 
-    if (assets.images.size === 1 || assets.images.size === selectedAsset + 1) {
-      setSelectedAsset(assets.images.size - 2);
+    if (assets.images.length === 1 || assets.images.length === selectedAsset + 1) {
+      setSelectedAsset(assets.images.length - 2);
     }
 
     dispatch(removeAsset({
@@ -101,9 +91,9 @@ export default function AssetsManager(props: CompProps) {
                 <AddSharpIcon />
               </Button>
             </ImageListItem>
-            {Array.from(images.entries()).map((pair, index) => (
+            {images.map(({ name, content }, index) => (
               <ImageListItem
-                key={index}
+                key={name}
                 sx={{
                   border:
                     selectedImageIndex == index ? "solid 3px blue" : "none",
@@ -115,13 +105,13 @@ export default function AssetsManager(props: CompProps) {
                   className={css`
                     max-height: 265px;
                   `}
-                  src={pair[1]}
-                  alt={pair[0]}
+                  src={content}
+                  alt={name}
                   loading="lazy"
                   onClick={() => setSelectedImageIndex(index)}
                 />
                 <Button
-                  onClick={removeAssets("images", pair[0])}
+                  onClick={removeAssets("images", name)}
                   variant="contained"
                 >
                   <DeleteSharpIcon />

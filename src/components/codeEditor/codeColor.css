@@ -13,3 +13,11 @@
 .hljs-text {
   color: black;
 }
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}

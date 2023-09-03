@@ -72,28 +72,28 @@ export default function ViewWindow() {
             <Stack direction="row" spacing={1}>
               <FixedTypo>Text</FixedTypo>
               <ColorPicker
-                value={format.textColor ?? "black"}
+                value={format.textColor ?? game.format.textColor}
                 onChange={(color) => updateNewFormat({ textColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Choice</FixedTypo>
               <ColorPicker
-                value={format.btnColor ?? "black"}
+                value={format.btnColor ?? game.format.btnColor}
                 onChange={(color) => updateNewFormat({ btnColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Page</FixedTypo>
               <ColorPicker
-                value={format.page ?? "black"}
+                value={format.page ?? game.format.page}
                 onChange={(color) => updateNewFormat({ page: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Background</FixedTypo>
               <ColorPicker
-                value={format.background ?? "black"}
+                value={format.background ?? game.format.background}
                 onChange={(color) => updateNewFormat({ background: color })}
               />
             </Stack>
@@ -120,7 +120,7 @@ export default function ViewWindow() {
                 <Button
                   variant="contained"
                   onClick={() =>
-                    (updateGlobalFormat(format))
+                    (dispatch(updateGlobalFormat(format)))
                   }
                 >
                   <ApprovalSharpIcon />

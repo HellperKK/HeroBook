@@ -20,6 +20,7 @@ import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
 import { addAssets, changeChoice, changePage } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 interface CompProp {
   page: Page;
@@ -41,27 +42,8 @@ export default function GameViewerEditor(props: CompProp) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
-
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (
-        assetsMemoPromise: Promise<Map<string, string>>,
-        fi: File,
-        index: number
-      ) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        if (index === 0 && /^image/.test(fi.type)) {
-          dispatch(changePage({ image: fi.name }));
-        }
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
+    addFilesToZip(arrFiles, zip);
+    const newAssets = await loadAssets(arrFiles);
 
     dispatch(addAssets({
       assets: newAssets,
@@ -97,6 +79,8 @@ export default function GameViewerEditor(props: CompProp) {
     );
   };
 
+  const image = assets.images.find(image => image.name === page.image)
+
   return (
     <Box
       sx={{
@@ -120,9 +104,9 @@ export default function GameViewerEditor(props: CompProp) {
             text-align: center;
           `}
         >
-          {assets.images.get(page.image) !== undefined ? (
+          {image !== undefined ? (
             <div>
-              <StyledImg src={assets.images.get(page.image)} alt="" />
+              <StyledImg src={image.content} alt="" />
             </div>
           ) : (
             <Box
@@ -141,32 +125,10 @@ export default function GameViewerEditor(props: CompProp) {
               onDrop={async (e) => {
                 e.preventDefault();
 
-                const newAssets = await Array.from(e.dataTransfer.files).reduce<
-                  Promise<Map<string, string>>
-                >(
-                  async (
-                    assetsMemoPromise: Promise<Map<string, string>>,
-                    fi: File,
-                    index: number
-                  ) => {
-                    const assetsMemo = await assetsMemoPromise;
+                const arrFiles = Array.from(e.dataTransfer.files);
+                addFilesToZip(arrFiles, zip);
+                const newAssets = await loadAssets(arrFiles);
 
-                    if (/^image/.test(fi.type)) {
-                      const pathName = assetPath("images", fi.name);
-                      zip.file(pathName, fi);
-
-                      const image = await readImage(fi);
-                      assetsMemo.set(fi.name, image);
-
-                      if (index === 0) {
-                        dispatch(changePage({ image: fi.name }));
-                      }
-                    }
-
-                    return assetsMemo;
-                  },
-                  Promise.resolve(new Map<string, string>())
-                );
 
                 dispatch(addAssets({
                   assets: newAssets,
