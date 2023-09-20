@@ -31,7 +31,7 @@ lowlight.registerLanguage('ejs', (api) => {
         },
     ]
 
-    md.contains.splice(7, 0, ...newTokens);
+    md.contains.unshift(...newTokens);
     console.log("md est ", md);
     return md;
 })
@@ -64,9 +64,9 @@ export default function CodeEditor({ content, onUpdate }: Props) {
             CodeBlockLowlight
                 .configure({ defaultLanguage: 'ejs', lowlight, }),
         ],
-        content: content,
-        onTransaction: ({ editor, transaction }) => {
-            onUpdate(editor.getText({ blockSeparator: "\n\n" }));
+        content: `<pre>${content}</pre>`,
+        onTransaction: ({ editor }) => {
+            onUpdate(editor.getText());
         }
     }, [selectedPage]);
 
