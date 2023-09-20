@@ -58,7 +58,7 @@ export const gameSlice = createSlice({
         state.game.pages[0].isFirst = true;
       }
 
-      if (state.selectedPage === state.game.pages.length - 1) {
+      if (state.selectedPage === state.game.pages.length) {
         state.selectedPage--;
       }
     },
