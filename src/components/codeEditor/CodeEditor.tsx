@@ -25,7 +25,7 @@ lowlight.registerLanguage('ejs', (api) => {
             end: '%>'
         },
         {
-            className: 'code',
+            className: 'code-ejs',
             begin: '<%',
             end: '%>'
         },
