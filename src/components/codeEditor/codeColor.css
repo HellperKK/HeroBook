@@ -28,4 +28,6 @@
 
 .ProseMirror {
   background-color: #ccc;
+  height: 35vh;
+  overflow-y: scroll;
 }
