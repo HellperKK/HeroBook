@@ -70,7 +70,7 @@ const initialGame: Game = {
   settings: {
     author: "",
     gameTitle: "",
-    pageCount: 2,
+    pageCount: 4,
   },
   format: {
     textColor: "initial",
@@ -85,11 +85,19 @@ const initialGame: Game = {
       id: 1,
       isFirst: true,
       name: "main",
-      text: "This is a first page",
+      text: "What do you want for dessert ?",
       next: [
         {
-          action: "Go to the second page",
+          action: "Cheesecake",
           pageId: 2,
+        },
+        {
+          action: "Vanilla ice cream",
+          pageId: 3,
+        },
+        {
+          action: "Brownie",
+          pageId: 4,
         },
       ],
       format: {},
@@ -97,12 +105,40 @@ const initialGame: Game = {
     },
     {
       id: 2,
-      name: "page2",
+      name: "cheesecake",
       isFirst: false,
-      text: "This is a second page",
+      text: "You chose the best dessert ever and deserve to be my friend!",
       next: [
         {
-          action: "Go to the first page",
+          action: "Choose another dessert",
+          pageId: 1,
+        },
+      ],
+      format: {},
+      image: "",
+    },
+    {
+      id: 3,
+      name: "vanilla",
+      isFirst: false,
+      text: "You are quite classical I must say. But I'm not judging you, not yet.",
+      next: [
+        {
+          action: "Choose another dessert",
+          pageId: 1,
+        },
+      ],
+      format: {},
+      image: "",
+    },
+    {
+      id: 4,
+      name: "brownie",
+      isFirst: false,
+      text: "I would also take that if it wasn't for the calories...",
+      next: [
+        {
+          action: "Choose another dessert",
           pageId: 1,
         },
       ],
