@@ -40,7 +40,7 @@ interface CompProps {
 
 export default function AssetsManager(props: CompProps) {
   const { open, close } = props;
-  const { zip, assets } = useSelector((state: RootState) => state.game);
+  const { assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
@@ -54,7 +54,6 @@ export default function AssetsManager(props: CompProps) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
-    addFilesToZip(arrFiles, zip);
     const newAssets = await loadAssets(arrFiles);
 
     dispatch(addAssets({
@@ -65,7 +64,6 @@ export default function AssetsManager(props: CompProps) {
 
   const removeAssets = (assetType: string, assetName: string) => () => {
     const pathName = assetPath(assetType, assetName);
-    zip.remove(pathName);
 
     if (assets.images.length === 1 || assets.images.length === selectedAsset + 1) {
       setSelectedAsset(assets.images.length - 2);

@@ -12,27 +12,26 @@ import {
   initialGame,
   initialPage,
 } from "../utils/initialStuff";
-import JSZip from "jszip";
 
 export interface Asset {
   name: string;
   content: string;
 }
 
+export interface AssetGroup {
+  images: Array<Asset>;
+}
+
 export interface GameState {
   game: Game;
   selectedPage: number;
-  zip: JSZip;
-  assets: {
-    images: Array<Asset>;
-  };
+  assets: AssetGroup;
   gameState: { $state: any };
 }
 
 const initialState: GameState = {
   game: initialGame,
   selectedPage: 0,
-  zip: new JSZip(),
   assets: {
     images: [],
   },
@@ -68,9 +67,8 @@ export const gameSlice = createSlice({
     removeChoice: (state, action: PayloadAction<number>) => {
       state.game.pages[state.selectedPage].next.splice(action.payload, 1);
     },
-    loadGame: (state, action: PayloadAction<{ game: Game; zip: JSZip }>) => {
+    loadGame: (state, action: PayloadAction<{ game: Game }>) => {
       state.game = action.payload.game;
-      state.zip = action.payload.zip;
     },
     changePage: (state, action: PayloadAction<Partial<Page>>) => {
       state.game.pages[state.selectedPage] = {
@@ -172,7 +170,6 @@ export const gameSlice = createSlice({
     newProject: (state) => {
       state.game = initialGame;
       state.selectedPage = 0;
-      state.zip = new JSZip();
       state.assets = {
         images: [],
       };

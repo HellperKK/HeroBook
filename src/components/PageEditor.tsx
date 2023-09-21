@@ -32,7 +32,7 @@ const StyledImg = styled.img`
 `;
 
 export default function PageEditor() {
-  const { game, selectedPage, assets, zip } = useSelector((state: RootState) => state.game);
+  const { game, selectedPage, assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
   const categories = game.settings.categories ?? [];
@@ -91,7 +91,6 @@ export default function PageEditor() {
           e.preventDefault();
 
           const arrFiles = Array.from(e.dataTransfer.files);
-          addFilesToZip(arrFiles, zip);
           const newAssets = await loadAssets(arrFiles);
 
           dispatch(addAssets({ assets: newAssets, type: "images" }));

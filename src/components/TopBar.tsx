@@ -32,9 +32,11 @@ import { loadState } from "../utils/utils";
 import { compile } from "../utils/format";
 import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
 import { RootState } from "../store/store";
+import { addAssetsToZip } from "../utils/assets";
+import JSZip from "jszip";
 
 export default function TopBar() {
-  const { game, zip } = useSelector((state: RootState) => state.game);
+  const { game, assets: globalAssets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [settings, setSettings] = useState(false);
@@ -45,7 +47,7 @@ export default function TopBar() {
 
   const loadAState = async () => {
     const state = await loadState();
-    dispatch(loadGame({ game: state.game, zip: state.zip }));
+    dispatch(loadGame({ game: state.game }));
     dispatch(addAssets({
       assets: state.assets,
       type: "images",
@@ -59,6 +61,8 @@ export default function TopBar() {
   };
 
   const saveState = async () => {
+    const zip = new JSZip();
+    addAssetsToZip(globalAssets, zip);
     zip.file("data.json", JSON.stringify(game));
     const binary = await zip.generateAsync({ type: "base64" });
     invoke("save", { content: binary, fileType: "project" });
@@ -68,6 +72,8 @@ export default function TopBar() {
 
   const compileState = () => {
     // download('game.html', format(JSON.stringify(state), false, state.settings));
+    const zip = new JSZip();
+    addAssetsToZip(globalAssets, zip);
     compile(game, zip);
   };
 

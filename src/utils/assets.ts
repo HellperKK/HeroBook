@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { Asset } from "../store/gameSlice";
+import { Asset, AssetGroup } from "../store/gameSlice";
 import { assetPath, readImage } from "./utils";
 
 const loadAssets = async (files: Array<File>) => {
@@ -31,4 +31,15 @@ const addFilesToZip = (files: Array<File>, zip: JSZip) => {
   });
 };
 
-export { loadAssets, addFilesToZip };
+const addAssetsToZip = (assets: AssetGroup, zip: JSZip) => {
+  Object.entries(assets).forEach((pair: [string, Array<Asset>]) => {
+    const [assetType, assetList]: [string, Array<Asset>] = pair;
+    assetList.forEach((asset) => {
+      const path = `assets/${assetType}/${asset.name}`;
+      const content = asset.content.replace(/data:.*?;base64,/, "");
+      zip.file(path, content, { base64: true });
+    });
+  });
+};
+
+export { loadAssets, addFilesToZip, addAssetsToZip };

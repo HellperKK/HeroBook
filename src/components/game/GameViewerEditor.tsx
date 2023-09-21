@@ -29,7 +29,7 @@ interface CompProp {
 }
 
 export default function GameViewerEditor(props: CompProp) {
-  const { game, assets, zip, } = useSelector((state: RootState) => state.game);
+  const { game, assets } = useSelector((state: RootState) => state.game);
 
   const { page, onClick, state } = props;
 
@@ -42,7 +42,6 @@ export default function GameViewerEditor(props: CompProp) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
-    addFilesToZip(arrFiles, zip);
     const newAssets = await loadAssets(arrFiles);
 
     dispatch(addAssets({
@@ -126,7 +125,6 @@ export default function GameViewerEditor(props: CompProp) {
                 e.preventDefault();
 
                 const arrFiles = Array.from(e.dataTransfer.files);
-                addFilesToZip(arrFiles, zip);
                 const newAssets = await loadAssets(arrFiles);
 
 
