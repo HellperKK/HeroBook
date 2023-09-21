@@ -148,7 +148,6 @@ export default function PageEditor() {
       <Box sx={{ paddingTop: "20px", gridArea: "content" }}>
         <CodeEditor content={game.pages[selectedPage].text} onUpdate={(content) => {
           if (content !== game.pages[selectedPage].text) {
-            console.log(content);
             dispatch(changePage({ text: content }));
           }
         }} />
