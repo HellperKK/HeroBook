@@ -47,6 +47,7 @@ export default function GameViewer(props: CompProp) {
   };
 
   let body = safeMarkdown(page.text);
+  const image = assets.images.find(image => image.name === page.image)
 
   try {
     body = safeMarkdown(ejs.render(page.text, gameState));
@@ -75,7 +76,7 @@ export default function GameViewer(props: CompProp) {
             text-align: center;
           `}
         >
-          <StyledImg src={assets.images.get(page.image)} alt="" />
+          <StyledImg src={image?.content} alt="" />
         </div>
         <p
           className="story-text"
