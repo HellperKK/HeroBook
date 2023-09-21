@@ -7,6 +7,7 @@ import ListItem from "@mui/material/ListItem/ListItem";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
@@ -42,15 +43,43 @@ export default function PageEditor() {
       sx={{
         height: "calc(100vh - 120px)",
         display: "grid",
-        gridTemplateAreas: '"categories" "asset" "name" "content" "choices"',
-        gridTemplateRows: "100px 100px 100px 1fr 200px",
+        gridTemplateAreas: '"name" "content" "choices"',
+        gridTemplateRows: "100px 1fr 200px",
       }}
     >
       <Box
         sx={{
-          gridArea: "categories",
-          border: draging ? "1px dashed black" : "",
-        }}>
+          height: "calc(10vh-20px)",
+          paddingTop: "20px",
+          gridArea: "name",
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDraging(true);
+        }}
+        onDragLeave={() => {
+          setDraging(false);
+        }}
+        onDrop={async (e) => {
+          e.preventDefault();
+
+          const arrFiles = Array.from(e.dataTransfer.files);
+          const newAssets = await loadAssets(arrFiles);
+
+          dispatch(addAssets({ assets: newAssets, type: "images" }));
+
+          setDraging(false);
+        }}
+      >
+        <TextField
+          label="Page Title"
+          variant="outlined"
+          value={game.pages[selectedPage].name}
+          onChange={(e) =>
+            dispatch(changePage({ name: e.target.value }))
+          }
+        />
+        <Space size={2} />
         Category
         <Space size={2} />
         <Select value={game.pages[selectedPage].category ?? ""}>
@@ -74,31 +103,8 @@ export default function PageEditor() {
             </MenuItem>
           ))}
         </Select>
-      </Box>
-      <Box
-        sx={{
-          gridArea: "asset",
-          border: draging ? "1px dashed black" : "",
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDraging(true);
-        }}
-        onDragLeave={() => {
-          setDraging(false);
-        }}
-        onDrop={async (e) => {
-          e.preventDefault();
-
-          const arrFiles = Array.from(e.dataTransfer.files);
-          const newAssets = await loadAssets(arrFiles);
-
-          dispatch(addAssets({ assets: newAssets, type: "images" }));
-
-          setDraging(false);
-        }}
-      >
-        <PermMediaSharpIcon />
+        <Space size={2} />
+        <Tooltip title="page illustration" arrow><PermMediaSharpIcon /></Tooltip>
         <Space size={2} />
         <Select value={game.pages[selectedPage].image}>
           {assets.images.map((image, index) => (
@@ -127,22 +133,6 @@ export default function PageEditor() {
         </Button>
         <Space size={2} />
         <Typography>{draging ? "drag images here" : ""}</Typography>
-      </Box>
-      <Box
-        sx={{
-          height: "calc(10vh-20px)",
-          paddingTop: "20px",
-          gridArea: "name",
-        }}
-      >
-        <TextField
-          label="Page Title"
-          variant="outlined"
-          value={game.pages[selectedPage].name}
-          onChange={(e) =>
-            dispatch(changePage({ name: e.target.value }))
-          }
-        />
       </Box>
       <Box sx={{ paddingTop: "20px", gridArea: "content" }}>
         <CodeEditor content={game.pages[selectedPage].text} onUpdate={(content) => {

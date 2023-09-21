@@ -18,6 +18,11 @@ export default function PageTitleEdition(props: CompProp) {
 
   return editing ? (
     <TextField
+      sx={
+        {
+          width: "200px",
+        }
+      }
       onBlur={() => {
         setEditing(false);
       }}
@@ -36,6 +41,13 @@ export default function PageTitleEdition(props: CompProp) {
     />
   ) : (
     <Typography
+      sx={
+        {
+          width: "200px",
+          height: "24px",
+          overflow: "hidden"
+        }
+      }
       onClick={(e) => {
         if (e.detail == 2) {
           setEditing(true);
