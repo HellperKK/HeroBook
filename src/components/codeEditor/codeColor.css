@@ -30,4 +30,5 @@
   background-color: #ccc;
   height: 35vh;
   overflow-y: scroll;
+  padding: 0 8px;
 }
