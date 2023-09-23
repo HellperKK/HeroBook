@@ -22,13 +22,14 @@ import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { invoke } from "@tauri-apps/api/tauri";
+import { saveAs } from "file-saver";
 
 import GameWindow from "./game/GameWindow";
 import AssetsManager from "./topBar/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
 import SettingsWindow from "./topBar/SettingsWindow";
 
-import { loadState } from "../utils/utils";
+import { loadState, safeFileName, safeInvokeSave } from "../utils/utils";
 import { compile } from "../utils/format";
 import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
 import { RootState } from "../store/store";
@@ -55,8 +56,9 @@ export default function TopBar() {
   };
 
   const makeNewProject = async () => {
-    const res = await invoke("new", {});
-    console.log(res);
+    try {
+      const res = await invoke("new", {});
+    } catch (error) { }
     dispatch(newProject());
   };
 
@@ -64,8 +66,15 @@ export default function TopBar() {
     const zip = new JSZip();
     addAssetsToZip(globalAssets, zip);
     zip.file("data.json", JSON.stringify(game));
-    const binary = await zip.generateAsync({ type: "base64" });
-    invoke("save", { content: binary, fileType: "project" });
+
+    try {
+      const binary = await zip.generateAsync({ type: "base64" });
+      await invoke("save", { content: binary, fileType: "project" });
+      return;
+    } catch (e) {
+      const blob = await zip.generateAsync({ type: "blob" });
+      saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+    }
 
     //saveAs(blob, "game.zip");
   };

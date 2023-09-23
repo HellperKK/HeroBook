@@ -2,9 +2,11 @@ import JSZip from "jszip";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { Jinter } from "jintr";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import { Choice, initialGame, Page } from "./initialStuff";
 import { Asset } from "../store/gameSlice";
+import { saveAs } from "file-saver";
 
 const readImage = (file: Blob): Promise<string> => {
   return new Promise((resolve) => {

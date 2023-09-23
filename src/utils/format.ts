@@ -132,11 +132,15 @@ const compile = async (game: Game, zip: JSZip) => {
   zip.file("data.json", JSON.stringify(cleanState));
   zip.file("index.html", format(game));
   zip.folder("saves");
-  const binary = await zip.generateAsync({ type: "base64" });
-  invoke("save", { content: binary, fileType: "compile" });
 
-  // const blob = await zip.generateAsync({ type: "blob" });
-  // saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+  try {
+    const binary = await zip.generateAsync({ type: "base64" });
+    await invoke("save", { content: binary, fileType: "compile" });
+    return;
+  } catch (e) {
+    const blob = await zip.generateAsync({ type: "blob" });
+    saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+  }
 };
 
 export { format, compile };
