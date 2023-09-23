@@ -32,7 +32,6 @@ lowlight.registerLanguage('ejs', (api) => {
     ]
 
     md.contains.unshift(...newTokens);
-    console.log("md est ", md);
     return md;
 })
 
