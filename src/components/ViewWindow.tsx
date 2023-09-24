@@ -20,7 +20,7 @@ import ColorPicker from "./utils/ColorPicker";
 import GameViewerEditor from "./game/GameViewerEditor";
 
 import { Format, Page } from "../utils/initialStuff";
-import { updateFormat, updateGlobalFormat } from "../store/gameSlice";
+import { changeVisualState, updateFormat, updateGlobalFormat } from "../store/gameSlice";
 import { RootState } from "../store/store";
 
 const pageL = lens<Page>();
@@ -30,10 +30,10 @@ const FixedTypo = styled(Typography)`
 `;
 
 export default function ViewWindow() {
-  const { game, selectedPage } = useSelector((state: RootState) => state.game);
+  const { game, selectedPage, visulaizingStates } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const page = game.pages[selectedPage];
-  const [state, setState] = useState("{\n\n}");
+  const state: string = visulaizingStates[selectedPage] ?? "{}";
 
   const trueState = { $state: {} };
   try {
@@ -134,7 +134,7 @@ export default function ViewWindow() {
                 label="Page state"
                 variant="outlined"
                 value={state}
-                onChange={(e) => setState(e.target.value)}
+                onChange={(e) => dispatch(changeVisualState({ id: selectedPage, content: e.target.value }))}
                 sx={{ marginTop: "20px" }}
               />
             </Stack>

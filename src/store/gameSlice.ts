@@ -27,6 +27,8 @@ export interface GameState {
   selectedPage: number;
   assets: AssetGroup;
   gameState: { $state: any };
+  resetBool: boolean;
+  visulaizingStates: Array<string>;
 }
 
 const initialState: GameState = {
@@ -36,6 +38,8 @@ const initialState: GameState = {
     images: [],
   },
   gameState: { $state: {} },
+  resetBool: false,
+  visulaizingStates: [],
 };
 
 export const gameSlice = createSlice({
@@ -174,6 +178,7 @@ export const gameSlice = createSlice({
         images: [],
       };
       state.gameState = { $state: {} };
+      state.resetBool = !state.resetBool;
     },
     addCategory: (state) => {
       const settings = state.game.settings;
@@ -210,6 +215,12 @@ export const gameSlice = createSlice({
         };
       }
     },
+    changeVisualState: (
+      state,
+      action: PayloadAction<{ id: number; content: string }>
+    ) => {
+      state.visulaizingStates[action.payload.id] = action.payload.content;
+    },
   },
 });
 
@@ -236,6 +247,7 @@ export const {
   addCategory,
   changeCategory,
   removeCategory,
+  changeVisualState,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

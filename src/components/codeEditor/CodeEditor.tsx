@@ -53,7 +53,7 @@ interface Props {
 }
 
 export default function CodeEditor({ content, onUpdate }: Props) {
-    const { selectedPage } = useSelector((state: RootState) => state.game);
+    const { selectedPage, resetBool } = useSelector((state: RootState) => state.game);
 
     const editor = useEditor({
         extensions: [
@@ -67,7 +67,7 @@ export default function CodeEditor({ content, onUpdate }: Props) {
         onTransaction: ({ editor }) => {
             onUpdate(editor.getText());
         }
-    }, [selectedPage]);
+    }, [selectedPage, resetBool]);
 
     editor?.commands.setCodeBlock({ language: "ejs" });
 
