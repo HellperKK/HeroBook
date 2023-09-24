@@ -29,7 +29,7 @@ import AssetsManager from "./topBar/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
 import SettingsWindow from "./topBar/SettingsWindow";
 
-import { loadState, safeFileName, safeInvokeSave } from "../utils/utils";
+import { loadState, safeFileName } from "../utils/utils";
 import { compile } from "../utils/format";
 import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
 import { RootState } from "../store/store";
