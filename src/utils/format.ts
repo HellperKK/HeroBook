@@ -135,7 +135,11 @@ const compile = async (game: Game, zip: JSZip) => {
 
   try {
     const binary = await zip.generateAsync({ type: "base64" });
-    await invoke("save", { content: binary, fileType: "compile" });
+    await invoke("save", {
+      content: binary,
+      fileType: "compile",
+      openModal: true,
+    });
     return;
   } catch (e) {
     const blob = await zip.generateAsync({ type: "blob" });

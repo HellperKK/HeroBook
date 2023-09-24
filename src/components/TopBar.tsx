@@ -16,6 +16,9 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/system/Box";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // import Card from '@mui/material/Card';
 // import DialogContentText from '@mui/material/DialogContentText';
 
@@ -23,6 +26,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { invoke } from "@tauri-apps/api/tauri";
 import { saveAs } from "file-saver";
+import { Fragment } from "react";
 
 import GameWindow from "./game/GameWindow";
 import AssetsManager from "./topBar/AssetsManager";
@@ -69,14 +73,30 @@ export default function TopBar() {
 
     try {
       const binary = await zip.generateAsync({ type: "base64" });
-      await invoke("save", { content: binary, fileType: "project" });
+      await invoke("save", { content: binary, fileType: "project", openModal: false });
       return;
     } catch (e) {
+      console.log(e)
       const blob = await zip.generateAsync({ type: "blob" });
-      saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+      //saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }
 
     //saveAs(blob, "game.zip");
+  };
+
+  const saveStateAs = async () => {
+    const zip = new JSZip();
+    addAssetsToZip(globalAssets, zip);
+    zip.file("data.json", JSON.stringify(game));
+
+    try {
+      const binary = await zip.generateAsync({ type: "base64" });
+      await invoke("save", { content: binary, fileType: "project", openModal: true });
+    } catch (e) {
+      console.log(e);
+      const blob = await zip.generateAsync({ type: "blob" });
+      saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+    }
   };
 
   const compileState = () => {
@@ -88,31 +108,11 @@ export default function TopBar() {
 
   return (
     <Grid container spacing={0.2} justifyContent="center" alignItems="stretch">
-      <Grid item xs={1}>
+      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <ButtonGroup
           variant="contained"
           aria-label="outlined primary button group"
         >
-          <Tooltip title="new game" arrow>
-            <Button variant="contained" onClick={makeNewProject}>
-              <FeedSharpIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="load a game" arrow>
-            <Button variant="contained" onClick={loadAState}>
-              <FolderOpenSharpIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="save a game" arrow>
-            <Button variant="contained" onClick={saveState}>
-              <SaveSharpIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="game settings" arrow>
-            <Button variant="contained" onClick={() => setSettings(true)}>
-              <SettingsSharpIcon />
-            </Button>
-          </Tooltip>
           <Tooltip title="test game" arrow>
             <Button
               variant="contained"
@@ -128,16 +128,39 @@ export default function TopBar() {
               <FileDownloadSharpIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="manage assets" arrow>
-            <Button variant="contained" onClick={() => setAssets(true)}>
-              <PermMediaSharpIcon />
+          <Tooltip title="game settings" arrow>
+            <Button variant="contained" onClick={() => setSettings(true)}>
+              <SettingsSharpIcon />
             </Button>
           </Tooltip>
-          <Tooltip title="visualize graph" arrow>
-            <Button variant="contained" onClick={() => setGraph(true)}>
-              <AccountTreeIcon />
-            </Button>
-          </Tooltip>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState: any) => (
+              <Fragment>
+                <Button variant="contained" {...bindTrigger(popupState)}>
+                  File
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={makeNewProject}>New project</MenuItem>
+                  <MenuItem onClick={loadAState}>Open project</MenuItem>
+                  <MenuItem onClick={saveState}>Save</MenuItem>
+                  <MenuItem onClick={saveStateAs}>Save as</MenuItem>
+                </Menu>
+              </Fragment>
+            )}
+          </PopupState>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState: any) => (
+              <Fragment>
+                <Button variant="contained" {...bindTrigger(popupState)}>
+                  Tools
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={() => setAssets(true)}>Assets</MenuItem>
+                  <MenuItem onClick={() => setGraph(true)}>Pages graph</MenuItem>
+                </Menu>
+              </Fragment>
+            )}
+          </PopupState>
         </ButtonGroup>
       </Grid>
       <SettingsWindow open={settings} close={() => setSettings(false)} />

@@ -13,6 +13,20 @@ struct Storage {
     store: Mutex<HashMap<String, String>>,
 }
 
+fn get_file_name() -> Result<String, ()> {
+    let file = FileDialog::new()
+        .add_filter("zip", &["zip"])
+        .set_file_name("game.zip")
+        .set_directory("/")
+        .save_file();
+
+    if let Some(file_name) = file {
+        Ok(file_name.to_str().expect("should work").to_string())
+    } else {
+        Err(())
+    }
+}
+
 #[tauri::command]
 fn new(storage: State<Storage>) -> () {
     let mut store = storage.store.lock().unwrap();
@@ -28,25 +42,17 @@ fn download() -> String {
 }
 
 #[tauri::command]
-fn save(content: &str, file_type: &str, storage: State<Storage>) -> String {
+fn save(content: &str, file_type: &str, open_modal: bool, storage: State<Storage>) -> String {
     let mut store = storage.store.lock().unwrap();
-    let file_name = if store.contains_key(&String::from(file_type)) {
+    let file_name = if open_modal {
+        get_file_name()
+    } else if store.contains_key(&String::from(file_type)) {
         Ok(store
             .get(file_type)
             .expect("file_name should exist")
             .to_owned())
     } else {
-        let file = FileDialog::new()
-            .add_filter("zip", &["zip"])
-            .set_file_name("game.zip")
-            .set_directory("/")
-            .save_file();
-
-        if let Some(file_name) = file {
-            Ok(file_name.to_str().expect("should work").to_string())
-        } else {
-            Err(())
-        }
+        get_file_name()
     };
 
     match file_name {
