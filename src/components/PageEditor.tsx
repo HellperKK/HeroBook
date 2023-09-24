@@ -67,6 +67,7 @@ export default function PageEditor() {
           const newAssets = await loadAssets(arrFiles);
 
           dispatch(addAssets({ assets: newAssets, type: "images" }));
+          dispatch(changePage({ image: newAssets[0].name }))
 
           setDraging(false);
         }}
@@ -107,7 +108,7 @@ export default function PageEditor() {
         <Tooltip title="page illustration" arrow><PermMediaSharpIcon /></Tooltip>
         <Space size={2} />
         <Select value={game.pages[selectedPage].image}>
-          {assets.images.map((image, index) => (
+          {assets.images.map((image) => (
             <MenuItem
               key={image.name}
               value={image.name}
@@ -117,7 +118,7 @@ export default function PageEditor() {
             >
               <StyledImg src={image.content} alt="" />
               <Space size={2} />
-              <Typography>{noExt(image.name)}</Typography>
+              <Typography sx={{ display: "inline-block" }}>{noExt(image.name)}</Typography>
             </MenuItem>
           ))}
         </Select>
