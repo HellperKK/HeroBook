@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
+import AllInboxSharpIcon from '@mui/icons-material/AllInboxSharp';
 
 import FlagSharpIcon from "@mui/icons-material/FlagSharp";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -58,7 +59,7 @@ export default function Editor() {
           {/* Page List */}
           <List sx={{ overflow: "auto" }}>
             <ListItem>
-              <Tooltip title="page filters" arrow>
+              <Tooltip title="categories" arrow>
                 <Button
                   variant="contained"
                   sx={{ width: "100%" }}
@@ -66,7 +67,7 @@ export default function Editor() {
                     setEditCategories(true)
                   }
                 >
-                  <SettingsSharpIcon />
+                  <AllInboxSharpIcon />
                 </Button>
               </Tooltip>
             </ListItem>
@@ -162,10 +163,10 @@ export default function Editor() {
                 aria-label="basic tabs example"
               >
                 <Tooltip title="content edition" arrow>
-                  <Tab icon={<EditSharpIcon />} />
+                  <Tab icon={"Edit"} />
                 </Tooltip>
                 <Tooltip title="content visualization" arrow>
-                  <Tab icon={<PlayArrowSharpIcon />} />
+                  <Tab icon={"Visualize"} />
                 </Tooltip>
               </Tabs>
             </Box>
@@ -231,14 +232,16 @@ export default function Editor() {
                 </Tooltip>
               </ListItem>)}
             <ListItem>
-              <Button
-                variant="contained"
-                onClick={() =>
-                  dispatch(addCategory())
-                }
-              >
-                <AddSharpIcon />
-              </Button>
+              <Tooltip title="add category" arrow>
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    dispatch(addCategory())
+                  }
+                >
+                  <AddSharpIcon />
+                </Button>
+              </Tooltip>
             </ListItem>
           </List>
           <Button
