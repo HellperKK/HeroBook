@@ -107,7 +107,7 @@ export default function TopBar() {
 
   return (
     <Grid container direction="column" spacing={0.2} justifyContent="center" alignItems="stretch">
-      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "primary" }}>
+      <Grid item xs={1} sx={{ display: "flex", justifyContent: "start", alignItems: "center", backgroundColor: "primary" }}>
         <ButtonGroup
           variant="contained"
           aria-label="outlined primary button group"
@@ -156,10 +156,11 @@ export default function TopBar() {
           </PopupState>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Grid item xs={1} sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
         <ButtonGroup
           variant="contained"
           aria-label="outlined primary button group"
+          sx={{ backgroundColor: "#1976d2", width: "100%", marginTop: "16px" }}
         >
           <Tooltip title="new project" arrow>
             <Button
