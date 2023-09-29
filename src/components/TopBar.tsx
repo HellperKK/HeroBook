@@ -1,7 +1,6 @@
 import FolderOpenSharpIcon from "@mui/icons-material/FolderOpenSharp";
 import SaveSharpIcon from "@mui/icons-material/SaveSharp";
 import SettingsSharpIcon from "@mui/icons-material/SettingsSharp";
-import PermMediaSharpIcon from "@mui/icons-material/PermMediaSharp";
 import FileDownloadSharpIcon from "@mui/icons-material/FileDownloadSharp";
 import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
@@ -107,32 +106,12 @@ export default function TopBar() {
   };
 
   return (
-    <Grid container spacing={0.2} justifyContent="center" alignItems="stretch">
-      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Grid container direction="column" spacing={0.2} justifyContent="center" alignItems="stretch">
+      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "primary" }}>
         <ButtonGroup
           variant="contained"
           aria-label="outlined primary button group"
         >
-          <Tooltip title="test game" arrow>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setPlaying(true);
-              }}
-            >
-              <PlayArrowSharpIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="compile game" arrow>
-            <Button variant="contained" onClick={compileState}>
-              <FileDownloadSharpIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="game settings" arrow>
-            <Button variant="contained" onClick={() => setSettings(true)}>
-              <SettingsSharpIcon />
-            </Button>
-          </Tooltip>
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState: any) => (
               <Fragment>
@@ -161,6 +140,71 @@ export default function TopBar() {
               </Fragment>
             )}
           </PopupState>
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState: any) => (
+              <Fragment>
+                <Button variant="contained" {...bindTrigger(popupState)}>
+                  Game
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={() => setPlaying(true)}>Play</MenuItem>
+                  <MenuItem onClick={compileState}>Compile</MenuItem>
+                  <MenuItem onClick={() => setSettings(true)}>Settings</MenuItem>
+                </Menu>
+              </Fragment>
+            )}
+          </PopupState>
+        </ButtonGroup>
+      </Grid>
+      <Grid item xs={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined primary button group"
+        >
+          <Tooltip title="new project" arrow>
+            <Button
+              variant="contained"
+              onClick={makeNewProject}
+            >
+              <FeedSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="save project" arrow>
+            <Button
+              variant="contained"
+              onClick={saveState}
+            >
+              <SaveSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="open project" arrow>
+            <Button
+              variant="contained"
+              onClick={loadState}
+            >
+              <FolderOpenSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="test game" arrow>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setPlaying(true);
+              }}
+            >
+              <PlayArrowSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="compile game" arrow>
+            <Button variant="contained" onClick={compileState}>
+              <FileDownloadSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="game settings" arrow>
+            <Button variant="contained" onClick={() => setSettings(true)}>
+              <SettingsSharpIcon />
+            </Button>
+          </Tooltip>
         </ButtonGroup>
       </Grid>
       <SettingsWindow open={settings} close={() => setSettings(false)} />
