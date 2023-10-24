@@ -3,31 +3,26 @@ import AddSharpIcon from "@mui/icons-material/AddSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/system/Box";
 import Container from "@mui/material/Container";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
 
 import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
 import { useState } from "react";
 
-import { State } from "../../utils/state";
 import {
-  identity,
   openFiles,
   readImage,
-  noExt,
   assetPath,
   getExtensions,
 } from "../../utils/utils";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { addAssets, removeAsset } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -45,7 +40,7 @@ interface CompProps {
 
 export default function AssetsManager(props: CompProps) {
   const { open, close } = props;
-  const { zip, assets } = useSelector<State, State>(identity);
+  const { assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
@@ -59,40 +54,25 @@ export default function AssetsManager(props: CompProps) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
+    const newAssets = await loadAssets(arrFiles);
 
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (assetsMemoPromise: Promise<Map<string, string>>, fi: File) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
-
-    dispatch({
-      type: "addAssets",
-      files: newAssets,
-      fileType: "images",
-    });
+    dispatch(addAssets({
+      assets: newAssets,
+      type: "images",
+    }));
   };
 
-  const removeAsset = (assetType: string, assetName: string) => () => {
+  const removeAssets = (assetType: string, assetName: string) => () => {
     const pathName = assetPath(assetType, assetName);
-    zip.remove(pathName);
 
-    if (assets.images.size === 1 || assets.images.size === selectedAsset + 1) {
-      setSelectedAsset(assets.images.size - 2);
+    if (assets.images.length === 1 || assets.images.length === selectedAsset + 1) {
+      setSelectedAsset(assets.images.length - 2);
     }
 
-    dispatch({
-      type: "removeAsset",
-      fileName: assetName,
-      fileType: assetType,
-    });
+    dispatch(removeAsset({
+      name: assetName,
+      type: assetType,
+    }));
   };
 
   return (
@@ -109,9 +89,9 @@ export default function AssetsManager(props: CompProps) {
                 <AddSharpIcon />
               </Button>
             </ImageListItem>
-            {Array.from(images.entries()).map((pair, index) => (
+            {images.map(({ name, content }, index) => (
               <ImageListItem
-                key={index}
+                key={name}
                 sx={{
                   border:
                     selectedImageIndex == index ? "solid 3px blue" : "none",
@@ -123,13 +103,13 @@ export default function AssetsManager(props: CompProps) {
                   className={css`
                     max-height: 265px;
                   `}
-                  src={pair[1]}
-                  alt={pair[0]}
+                  src={content}
+                  alt={name}
                   loading="lazy"
                   onClick={() => setSelectedImageIndex(index)}
                 />
                 <Button
-                  onClick={removeAsset("images", pair[0])}
+                  onClick={removeAssets("images", name)}
                   variant="contained"
                 >
                   <DeleteSharpIcon />

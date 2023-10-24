@@ -16,15 +16,16 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { State } from "../../utils/state";
 import {
-  identity,
   openFiles,
   readImage,
   noExt,
   assetPath,
   getExtensions,
 } from "../../utils/utils";
+import { Asset, addAssets, changePage, removeAsset } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 const StyledImage = styled.img`
   max-width: 85vw;
@@ -42,7 +43,7 @@ interface CompProps {
 
 export default function AssetsManager(props: CompProps) {
   const { open, close } = props;
-  const { game, zip, assets } = useSelector<State, State>(identity);
+  const { game, assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
@@ -54,40 +55,25 @@ export default function AssetsManager(props: CompProps) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
+    const newAssets = await loadAssets(arrFiles);
 
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (assetsMemoPromise: Promise<Map<string, string>>, fi: File) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
-
-    dispatch({
-      type: "addAssets",
-      files: newAssets,
-      fileType: "images",
-    });
+    dispatch(addAssets({
+      assets: newAssets,
+      type: "images",
+    }));
   };
 
-  const removeAsset = (assetType: string, assetName: string) => () => {
+  const removeAssets = (assetType: string, assetName: string) => () => {
     const pathName = assetPath(assetType, assetName);
-    zip.remove(pathName);
 
-    if (assets.images.size === 1 || assets.images.size === selectedAsset + 1) {
-      setSelectedAsset(assets.images.size - 2);
+    if (assets.images.length === 1 || assets.images.length === selectedAsset + 1) {
+      setSelectedAsset(assets.images.length - 2);
     }
 
-    dispatch({
-      type: "removeAsset",
-      fileName: assetName,
-      fileType: assetType,
-    });
+    dispatch(removeAsset({
+      name: assetName,
+      type: assetType,
+    }));
   };
 
   return (
@@ -97,16 +83,16 @@ export default function AssetsManager(props: CompProps) {
           <Grid item xs={3} xl={2}>
             {/* Image List */}
             <List sx={{ overflow: "auto" }}>
-              {Array.from(images.keys()).map((fileName, index) => (
+              {images.map(({ name: fileName, content }, index) => (
                 <ListItem
                   onClick={() => setSelectedAsset(index)}
-                  key={`item${index + 42}`}
+                  key={fileName}
                   sx={{
                     bgcolor: index === selectedAsset ? "secondary.main" : "",
                     cursor: "pointer",
                   }}
                 >
-                  <StyledMiniature src={assets.images.get(fileName)} alt="" />
+                  <StyledMiniature src={content} alt="" />
                   <ListItemText
                     primary={noExt(fileName)}
                     sx={{
@@ -116,7 +102,7 @@ export default function AssetsManager(props: CompProps) {
                   <Button
                     variant="contained"
                     disabled={game.pages.length === 1}
-                    onClick={removeAsset("images", fileName)}
+                    onClick={removeAssets("images", fileName)}
                   >
                     <DeleteSharpIcon />
                   </Button>
@@ -159,41 +145,13 @@ export default function AssetsManager(props: CompProps) {
                 onDrop={async (e) => {
                   e.preventDefault();
 
-                  const newAssets = await Array.from(
-                    e.dataTransfer.files
-                  ).reduce<Promise<Map<string, string>>>(
-                    async (
-                      assetsMemoPromise: Promise<Map<string, string>>,
-                      fi: File,
-                      index: number
-                    ) => {
-                      const assetsMemo = await assetsMemoPromise;
+                  const arrFiles = Array.from(e.dataTransfer.files);
+                  const newAssets = await loadAssets(arrFiles);
 
-                      if (/^image/.test(fi.type)) {
-                        const pathName = assetPath("images", fi.name);
-                        zip.file(pathName, fi);
-
-                        const image = await readImage(fi);
-                        assetsMemo.set(fi.name, image);
-
-                        if (index === 0) {
-                          dispatch({
-                            type: "changePage",
-                            page: { image: fi.name },
-                          });
-                        }
-                      }
-
-                      return assetsMemo;
-                    },
-                    Promise.resolve(new Map<string, string>())
-                  );
-
-                  dispatch({
-                    type: "addAssets",
-                    files: newAssets,
-                    fileType: "images",
-                  });
+                  dispatch(addAssets({
+                    assets: newAssets,
+                    type: "images",
+                  }));
 
                   setDraging(false);
                 }}
@@ -201,7 +159,7 @@ export default function AssetsManager(props: CompProps) {
                 <Typography>drag images here</Typography>
               </Box>
               <StyledImage
-                src={Array.from(assets.images.values())[selectedAsset]}
+                src={assets.images[selectedAsset].content}
               />
             </Box>
           </Grid>

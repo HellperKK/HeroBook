@@ -2,16 +2,17 @@
 import { Box } from "@mui/system";
 // import { Button } from '@mui/material';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ejs from "ejs";
 
 import { Choice, Page } from "../../utils/initialStuff";
-import { identity, safeMarkdown } from "../../utils/utils";
-import { State } from "../../utils/state";
+import { evalCondition, identity, safeMarkdown } from "../../utils/utils";
 
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
+import { RootState } from "../../store/store";
+import { useEffect, useMemo } from "react";
 
 interface CompProp {
   page: Page;
@@ -19,9 +20,11 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game, assets, gameState } = useSelector<State, State>(identity);
+  const { game, assets, /*gameState,*/ selectedPage } = useSelector((state: RootState) => state.game);
 
   const { page, onClick } = props;
+
+  const gameState = useMemo(() => ({ $state: {} }), []);
 
   const choiceButton = (choice: Choice, index: number) => {
     return (
@@ -29,6 +32,8 @@ export default function GameViewer(props: CompProp) {
         type="button"
         key={`poll_${index + 42}`}
         onClick={() => {
+          console.log("clicked")
+          console.log(gameState)
           if (onClick !== null) {
             onClick(choice);
           }
@@ -40,6 +45,13 @@ export default function GameViewer(props: CompProp) {
       />
     );
   };
+
+  let body = safeMarkdown(page.text);
+  const image = assets.images.find(image => image.name === page.image)
+
+  try {
+    body = safeMarkdown(ejs.render(page.text, gameState));
+  } catch (error) { }
 
   return (
     <Box
@@ -64,12 +76,13 @@ export default function GameViewer(props: CompProp) {
             text-align: center;
           `}
         >
-          <StyledImg src={assets.images.get(page.image)} alt="" />
+          <StyledImg src={image?.content} alt="" />
         </div>
         <p
           className="story-text"
           dangerouslySetInnerHTML={{
-            __html: safeMarkdown(ejs.render(page.text, gameState)),
+            __html: safeMarkdown(body),
+            // __html: safeMarkdown(ejs.render(page.text, { $state: {} })),
           }}
         />
         <Box
@@ -79,7 +92,10 @@ export default function GameViewer(props: CompProp) {
             flexDirection: "column",
           }}
         >
-          {page.next.map(choiceButton)}
+          {page.next.filter(choice => {
+            const condition = choice.condition;
+            return condition === undefined || condition === "" || evalCondition(gameState.$state, condition)
+          }).map(choiceButton)}
         </Box>
       </Box>
     </Box>

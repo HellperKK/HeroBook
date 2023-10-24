@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { changePageAt } from "../store/gameSlice";
 
 interface CompProp {
   pagePosition: number;
@@ -17,6 +18,11 @@ export default function PageTitleEdition(props: CompProp) {
 
   return editing ? (
     <TextField
+      sx={
+        {
+          width: "200px",
+        }
+      }
       onBlur={() => {
         setEditing(false);
       }}
@@ -25,11 +31,7 @@ export default function PageTitleEdition(props: CompProp) {
       variant="outlined"
       value={pageTitle}
       onChange={(e) =>
-        dispatch({
-          type: "changePageAt",
-          page: { name: e.target.value },
-          position: pagePosition,
-        })
+        dispatch(changePageAt({ page: { name: e.target.value }, position: pagePosition }))
       }
       onKeyDown={(e) => {
         if (e.key === "Enter" && e.shiftKey) {
@@ -39,6 +41,13 @@ export default function PageTitleEdition(props: CompProp) {
     />
   ) : (
     <Typography
+      sx={
+        {
+          width: "200px",
+          height: "24px",
+          overflow: "hidden"
+        }
+      }
       onClick={(e) => {
         if (e.detail == 2) {
           setEditing(true);

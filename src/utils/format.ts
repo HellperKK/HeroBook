@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { lens } from "lens.ts";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import { safeFileName } from "./utils";
 import { Game } from "./initialStuff";
@@ -44,6 +45,9 @@ const format = (game: Game) => `
       const state = {$state: {}}
 
       const safeMarkdown = (md) => DOMPurify.sanitize(marked.parse(md));
+      const evalCondition = ($state, condition) => {
+        return eval(condition);
+      };
 
       const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
@@ -80,10 +84,20 @@ const format = (game: Game) => `
         divStory.style.backgroundColor = pageFormat.page || globalFormat.page
         divText.style.color = pageFormat.textColor || globalFormat.textColor
 
-        divText.innerHTML = safeMarkdown(ejs.render(page.text, state))
+        let body = safeMarkdown(page.text);
+
+        try {
+          body = ejs.render(page.text, state)
+        } catch (error) { }
+
+        divText.innerHTML = safeMarkdown(body)
         divChoices.innerHTML = ""
 
         for (nex of page.next) {
+          if (nex.condition !== undefined && nex.condition !== "" && !evalCondition(state.$state, nex.condition)) {
+            continue;
+          }
+
           let button = document.createElement("button")
           button.innerHTML = safeMarkdown(nex.action)
           button.setAttribute("pageId", nex.pageId)
@@ -117,9 +131,20 @@ const compile = async (game: Game, zip: JSZip) => {
 
   zip.file("data.json", JSON.stringify(cleanState));
   zip.file("index.html", format(game));
+  zip.folder("saves");
 
-  const blob = await zip.generateAsync({ type: "blob" });
-  saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+  try {
+    const binary = await zip.generateAsync({ type: "base64" });
+    await invoke("save", {
+      content: binary,
+      fileType: "compile",
+      openModal: true,
+    });
+    return;
+  } catch (e) {
+    const blob = await zip.generateAsync({ type: "blob" });
+    saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+  }
 };
 
 export { format, compile };

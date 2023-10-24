@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Choice, Page } from "../../utils/initialStuff";
 import {
   assetPath,
+  evalCondition,
   getExtensions,
-  identity,
   openFiles,
   readImage,
 } from "../../utils/utils";
-import { State } from "../../utils/state";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 
@@ -19,19 +18,20 @@ import EditableField from "../utils/EditableField";
 import StyledButton from "./StyledButton";
 import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
+import { addAssets, changeChoice, changePage } from "../../store/gameSlice";
+import { RootState } from "../../store/store";
+import { addFilesToZip, loadAssets } from "../../utils/assets";
 
 interface CompProp {
   page: Page;
   onClick: ((choice: Choice) => void) | null;
+  state: any;
 }
 
 export default function GameViewerEditor(props: CompProp) {
-  const { game, assets, gameState, zip, selectedPage } = useSelector<
-    State,
-    State
-  >(identity);
+  const { game, assets } = useSelector((state: RootState) => state.game);
 
-  const { page, onClick } = props;
+  const { page, onClick, state } = props;
 
   const [draging, setDraging] = useState(false);
 
@@ -42,36 +42,12 @@ export default function GameViewerEditor(props: CompProp) {
     // const newAssets = new Map<string, string>();
 
     const arrFiles = Array.from(files);
+    const newAssets = await loadAssets(arrFiles);
 
-    const newAssets = await arrFiles.reduce<Promise<Map<string, string>>>(
-      async (
-        assetsMemoPromise: Promise<Map<string, string>>,
-        fi: File,
-        index: number
-      ) => {
-        const assetsMemo = await assetsMemoPromise;
-        const pathName = assetPath(assetType, fi.name);
-        zip.file(pathName, fi);
-
-        if (index === 0 && /^image/.test(fi.type)) {
-          dispatch({
-            type: "changePage",
-            page: { image: fi.name },
-          });
-        }
-
-        const image = await readImage(fi);
-        assetsMemo.set(fi.name, image);
-        return assetsMemo;
-      },
-      Promise.resolve(new Map<string, string>())
-    );
-
-    dispatch({
-      type: "addAssets",
-      files: newAssets,
-      fileType: "images",
-    });
+    dispatch(addAssets({
+      assets: newAssets,
+      type: "images",
+    }));
   };
 
   const choiceButton = (choice: Choice, index: number) => {
@@ -91,17 +67,18 @@ export default function GameViewerEditor(props: CompProp) {
           label="Choice Text"
           multiline={false}
           onChange={(e) => {
-            dispatch({
-              type: "changeChoice",
+            dispatch(changeChoice({
               choice: { action: e.target.value },
-              index,
-            });
+              position: index,
+            }));
           }}
-          state={gameState}
+          state={state}
         />
       </StyledButton>
     );
   };
+
+  const image = assets.images.find(image => image.name === page.image)
 
   return (
     <Box
@@ -126,9 +103,9 @@ export default function GameViewerEditor(props: CompProp) {
             text-align: center;
           `}
         >
-          {assets.images.get(page.image) !== undefined ? (
+          {image !== undefined ? (
             <div>
-              <StyledImg src={assets.images.get(page.image)} alt="" />
+              <StyledImg src={image.content} alt="" />
             </div>
           ) : (
             <Box
@@ -147,41 +124,14 @@ export default function GameViewerEditor(props: CompProp) {
               onDrop={async (e) => {
                 e.preventDefault();
 
-                const newAssets = await Array.from(e.dataTransfer.files).reduce<
-                  Promise<Map<string, string>>
-                >(
-                  async (
-                    assetsMemoPromise: Promise<Map<string, string>>,
-                    fi: File,
-                    index: number
-                  ) => {
-                    const assetsMemo = await assetsMemoPromise;
+                const arrFiles = Array.from(e.dataTransfer.files);
+                const newAssets = await loadAssets(arrFiles);
 
-                    if (/^image/.test(fi.type)) {
-                      const pathName = assetPath("images", fi.name);
-                      zip.file(pathName, fi);
 
-                      const image = await readImage(fi);
-                      assetsMemo.set(fi.name, image);
-
-                      if (index === 0) {
-                        dispatch({
-                          type: "changePage",
-                          page: { image: fi.name },
-                        });
-                      }
-                    }
-
-                    return assetsMemo;
-                  },
-                  Promise.resolve(new Map<string, string>())
-                );
-
-                dispatch({
-                  type: "addAssets",
-                  files: newAssets,
-                  fileType: "images",
-                });
+                dispatch(addAssets({
+                  assets: newAssets,
+                  type: "images",
+                }));
 
                 setDraging(false);
               }}
@@ -197,12 +147,9 @@ export default function GameViewerEditor(props: CompProp) {
           label="Page Content"
           multiline={true}
           onChange={(e) => {
-            dispatch({
-              type: "changePage",
-              page: { text: e.target.value },
-            });
+            dispatch(changePage({ text: e.target.value }));
           }}
-          state={gameState}
+          state={state}
         />
         <Box
           className="story"
@@ -211,7 +158,10 @@ export default function GameViewerEditor(props: CompProp) {
             flexDirection: "column",
           }}
         >
-          {page.next.map(choiceButton)}
+          {page.next.filter(choice => {
+            const condition = choice.condition;
+            return condition === undefined || condition === "" || evalCondition(state.$state, condition)
+          }).map(choiceButton)}
         </Box>
       </Box>
     </Box>

@@ -7,6 +7,7 @@ import ListItem from "@mui/material/ListItem/ListItem";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
@@ -16,11 +17,14 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import { State } from "../utils/state";
-import { assetPath, identity, noExt, readImage } from "../utils/utils";
+import { assetPath, noExt, readImage } from "../utils/utils";
 import { findPage } from "../utils/page";
 
 import Space from "./utils/Space";
+import { Asset, addAssets, addChoice, changeChoice, changePage, removeChoice } from "../store/gameSlice";
+import { RootState } from "../store/store";
+import CodeEditor from "./codeEditor/CodeEditor";
+import { addFilesToZip, loadAssets } from "../utils/assets";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
@@ -29,25 +33,25 @@ const StyledImg = styled.img`
 `;
 
 export default function PageEditor() {
-  const { game, selectedPage, assets, zip } = useSelector<State, State>(
-    identity
-  );
+  const { game, selectedPage, assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
+  const categories = game.settings.categories ?? [];
 
   return (
     <Box
       sx={{
         height: "calc(100vh - 120px)",
         display: "grid",
-        gridTemplateAreas: '"asset" "name" "content" "choices"',
-        gridTemplateRows: "100px 100px 1fr 200px",
+        gridTemplateAreas: '"name" "content" "choices"',
+        gridTemplateRows: "100px 1fr 200px",
       }}
     >
       <Box
         sx={{
-          gridArea: "asset",
-          border: draging ? "1px dashed black" : "",
+          height: "calc(10vh-20px)",
+          paddingTop: "20px",
+          gridArea: "name",
         }}
         onDragOver={(e) => {
           e.preventDefault();
@@ -59,62 +63,62 @@ export default function PageEditor() {
         onDrop={async (e) => {
           e.preventDefault();
 
-          const newAssets = await Array.from(e.dataTransfer.files).reduce<
-            Promise<Map<string, string>>
-          >(
-            async (
-              assetsMemoPromise: Promise<Map<string, string>>,
-              fi: File,
-              index: number
-            ) => {
-              const assetsMemo = await assetsMemoPromise;
+          const arrFiles = Array.from(e.dataTransfer.files);
+          const newAssets = await loadAssets(arrFiles);
 
-              if (/^image/.test(fi.type)) {
-                const pathName = assetPath("images", fi.name);
-                zip.file(pathName, fi);
-
-                const image = await readImage(fi);
-                assetsMemo.set(fi.name, image);
-
-                if (index === 0) {
-                  dispatch({
-                    type: "changePage",
-                    page: { image: fi.name },
-                  });
-                }
-              }
-
-              return assetsMemo;
-            },
-            Promise.resolve(new Map<string, string>())
-          );
-
-          dispatch({
-            type: "addAssets",
-            files: newAssets,
-            fileType: "images",
-          });
+          dispatch(addAssets({ assets: newAssets, type: "images" }));
+          dispatch(changePage({ image: newAssets[0].name }))
 
           setDraging(false);
         }}
       >
-        <PermMediaSharpIcon />
+        <TextField
+          label="Page Title"
+          variant="outlined"
+          value={game.pages[selectedPage].name}
+          onChange={(e) =>
+            dispatch(changePage({ name: e.target.value }))
+          }
+        />
         <Space size={2} />
-        <Select value={game.pages[selectedPage].image}>
-          {Array.from(assets.images.keys()).map((image, index) => (
+        Category
+        <Space size={2} />
+        <Select value={game.pages[selectedPage].category ?? ""}>
+          <MenuItem
+            value=""
+            onClick={() =>
+              dispatch(changePage({ category: "" }))
+            }
+          >
+            <Typography>No category</Typography>
+          </MenuItem>
+          {categories.map((category, index) => (
             <MenuItem
-              key={`image${index + 42}`}
-              value={image}
+              key={`category${index + 42}`}
+              value={category.name}
               onClick={() =>
-                dispatch({
-                  type: "changePage",
-                  page: { image },
-                })
+                dispatch(changePage({ category: category.name }))
               }
             >
-              <StyledImg src={assets.images.get(image)} alt="" />
+              <Typography>{category.name}</Typography>
+            </MenuItem>
+          ))}
+        </Select>
+        <Space size={2} />
+        <Tooltip title="page illustration" arrow><PermMediaSharpIcon /></Tooltip>
+        <Space size={2} />
+        <Select value={game.pages[selectedPage].image}>
+          {assets.images.map((image) => (
+            <MenuItem
+              key={image.name}
+              value={image.name}
+              onClick={() =>
+                dispatch(changePage({ image: image.name }))
+              }
+            >
+              <StyledImg src={image.content} alt="" />
               <Space size={2} />
-              <Typography>{noExt(image)}</Typography>
+              <Typography sx={{ display: "inline-block" }}>{noExt(image.name)}</Typography>
             </MenuItem>
           ))}
         </Select>
@@ -123,10 +127,7 @@ export default function PageEditor() {
           disabled={!game.pages[selectedPage].image}
           variant="contained"
           onClick={() =>
-            dispatch({
-              type: "changePage",
-              page: { image: undefined },
-            })
+            dispatch(changePage({ image: undefined }))
           }
         >
           <DeleteSharpIcon />
@@ -134,40 +135,23 @@ export default function PageEditor() {
         <Space size={2} />
         <Typography>{draging ? "drag images here" : ""}</Typography>
       </Box>
-      <Box
-        sx={{
-          height: "calc(10vh-20px)",
-          paddingTop: "20px",
-          gridArea: "name",
-        }}
-      >
-        <TextField
-          label="Page Title"
-          variant="outlined"
-          value={game.pages[selectedPage].name}
-          onChange={(e) =>
-            dispatch({
-              type: "changePage",
-              page: { name: e.target.value },
-            })
-          }
-        />
-      </Box>
       <Box sx={{ paddingTop: "20px", gridArea: "content" }}>
-        <TextField
+        <CodeEditor content={game.pages[selectedPage].text} onUpdate={(content) => {
+          if (content !== game.pages[selectedPage].text) {
+            dispatch(changePage({ text: content }));
+          }
+        }} />
+        {/*<TextField
           multiline
           fullWidth
           label="Page Content"
           variant="outlined"
           value={game.pages[selectedPage].text}
           onChange={(e) =>
-            dispatch({
-              type: "changePage",
-              page: { text: e.target.value },
-            })
+            dispatch(changePage({ text: e.target.value }))
           }
           sx={{ height: "100%", width: "100%" }}
-        />
+        />*/}
         {/* <MarkdownEditor page={game.pages[selectedPage]} /> */}
       </Box>
       {/* Choice List */}
@@ -185,12 +169,10 @@ export default function PageEditor() {
                   variant="outlined"
                   value={choice.action}
                   sx={{ width: "50%" }}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "changeChoice",
-                      choice: { action: e.target.value },
-                      index,
-                    })
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    dispatch(changeChoice({ choice: { action: e.target.value }, position: index }));
+                  }
                   }
                 />
                 <Space size={2} />
@@ -203,11 +185,7 @@ export default function PageEditor() {
                       key={pa.id}
                       value={pa.id}
                       onClick={() =>
-                        dispatch({
-                          type: "changeChoice",
-                          choice: { pageId: pa.id },
-                          index,
-                        })
+                        dispatch(changeChoice({ choice: { pageId: pa.id }, position: index }))
                       }
                     >
                       {pa.name}
@@ -215,13 +193,20 @@ export default function PageEditor() {
                   ))}
                 </Select>
                 <Space size={2} />
+                <TextField
+                  label="Choice Condition"
+                  variant="outlined"
+                  value={choice.condition ?? ""}
+                  sx={{ width: "50%" }}
+                  onChange={(e) =>
+                    dispatch(changeChoice({ choice: { condition: e.target.value }, position: index }))
+                  }
+                />
+                <Space size={2} />
                 <Button
                   variant="contained"
                   onClick={() =>
-                    dispatch({
-                      type: "removeChoice",
-                      index,
-                    })
+                    dispatch(removeChoice(index))
                   }
                 >
                   <DeleteSharpIcon />
@@ -232,9 +217,7 @@ export default function PageEditor() {
               <Button
                 variant="contained"
                 onClick={() =>
-                  dispatch({
-                    type: "addChoice",
-                  })
+                  dispatch(addChoice())
                 }
                 sx={{ width: "85%" }}
               >

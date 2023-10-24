@@ -4,6 +4,7 @@ import Box from "@mui/system/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
 
 import BrushSharpIcon from "@mui/icons-material/BrushSharp";
 import SettingsBackupRestoreSharpIcon from "@mui/icons-material/SettingsBackupRestoreSharp";
@@ -18,9 +19,9 @@ import { lens } from "lens.ts";
 import ColorPicker from "./utils/ColorPicker";
 import GameViewerEditor from "./game/GameViewerEditor";
 
-import { State } from "../utils/state";
-import { identity } from "../utils/utils";
 import { Format, Page } from "../utils/initialStuff";
+import { changeVisualState, updateFormat, updateGlobalFormat } from "../store/gameSlice";
+import { RootState } from "../store/store";
 
 const pageL = lens<Page>();
 
@@ -29,9 +30,17 @@ const FixedTypo = styled(Typography)`
 `;
 
 export default function ViewWindow() {
-  const { game, selectedPage } = useSelector<State, State>(identity);
+  const { game, selectedPage, visulaizingStates } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const page = game.pages[selectedPage];
+  const state: string = visulaizingStates[selectedPage] ?? "{}";
+
+  const trueState = { $state: {} };
+  try {
+    trueState.$state = JSON.parse(state);
+  } catch (error) {
+
+  }
 
   const [editing, setEditing] = useState(false);
   const [format, setFormat] = useState(page.format);
@@ -40,7 +49,7 @@ export default function ViewWindow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page.id]);
 
-  const updateFormat = (newFormat: Partial<Format>) =>
+  const updateNewFormat = (newFormat: Partial<Format>) =>
     setFormat({ ...format, ...newFormat });
 
   return (
@@ -49,6 +58,7 @@ export default function ViewWindow() {
         <GameViewerEditor
           page={pageL.format.set(format)(page)}
           onClick={null}
+          state={trueState}
         />
       </Grid>
       <Grid item xs={editing ? 4 : 1}>
@@ -62,29 +72,29 @@ export default function ViewWindow() {
             <Stack direction="row" spacing={1}>
               <FixedTypo>Text</FixedTypo>
               <ColorPicker
-                value={format.textColor ?? "black"}
-                onChange={(color) => updateFormat({ textColor: color })}
+                value={format.textColor ?? game.format.textColor}
+                onChange={(color) => updateNewFormat({ textColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Choice</FixedTypo>
               <ColorPicker
-                value={format.btnColor ?? "black"}
-                onChange={(color) => updateFormat({ btnColor: color })}
+                value={format.btnColor ?? game.format.btnColor}
+                onChange={(color) => updateNewFormat({ btnColor: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Page</FixedTypo>
               <ColorPicker
-                value={format.page ?? "black"}
-                onChange={(color) => updateFormat({ page: color })}
+                value={format.page ?? game.format.page}
+                onChange={(color) => updateNewFormat({ page: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Background</FixedTypo>
               <ColorPicker
-                value={format.background ?? "black"}
-                onChange={(color) => updateFormat({ background: color })}
+                value={format.background ?? game.format.background}
+                onChange={(color) => updateNewFormat({ background: color })}
               />
             </Stack>
             <Stack direction="row" spacing={1}>
@@ -100,10 +110,7 @@ export default function ViewWindow() {
                 <Button
                   variant="contained"
                   onClick={() =>
-                    dispatch({
-                      type: "updateFormat",
-                      format,
-                    })
+                    dispatch(updateFormat(format))
                   }
                 >
                   <SaveSharpIcon />
@@ -113,15 +120,23 @@ export default function ViewWindow() {
                 <Button
                   variant="contained"
                   onClick={() =>
-                    dispatch({
-                      type: "updateGlobalFormat",
-                      format,
-                    })
+                    (dispatch(updateGlobalFormat(format)))
                   }
                 >
                   <ApprovalSharpIcon />
                 </Button>
               </Tooltip>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <TextField
+                multiline
+                fullWidth
+                label="Page state"
+                variant="outlined"
+                value={state}
+                onChange={(e) => dispatch(changeVisualState({ id: selectedPage, content: e.target.value }))}
+                sx={{ marginTop: "20px" }}
+              />
             </Stack>
           </Box>
         ) : (

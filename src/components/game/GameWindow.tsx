@@ -1,19 +1,18 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
-import { identity } from "../../utils/utils";
 import { findPage } from "../../utils/page";
-import { State } from "../../utils/state";
 import { Choice } from "../../utils/initialStuff";
 
 import GameViewer from "./GameViewer";
+import { RootState } from "../../store/store";
 
 interface CompProp {
   start: number;
 }
 
 export default function GameWindow(props: CompProp) {
-  const { game } = useSelector<State, State>(identity);
+  const { game } = useSelector((state: RootState) => state.game);
 
   const { start } = props;
   const [currentPage, setCurrentPage] = useState(start);
