@@ -18,24 +18,19 @@ export default function GraphViewer() {
     return "#8fddff";
   };
 
-  const pagesDict = new Map<number, Page>();
   const nodes: any[] = [];
   const edges: any[] = [];
 
   game.pages.forEach((page) => {
-    pagesDict.set(page.id, page);
-  });
-
-  game.pages.forEach((page) => {
     nodes.push({
-      id: nodeName(page),
+      id: page.id.toString(),
       label: nodeName(page),
       style: { fill: nodeColor(page) },
     });
     page.next.forEach((nex: Choice) => {
       edges.push({
-        source: nodeName(page),
-        target: nodeName(pagesDict.get(nex.pageId) as Page),
+        source: page.id.toString(),
+        target: nex.pageId.toString(),
         label: "", /*nex.action,*/
       });
     });

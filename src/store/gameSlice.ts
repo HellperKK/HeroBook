@@ -126,7 +126,17 @@ export const gameSlice = createSlice({
     ) => {
       switch (action.payload.type) {
         case "images":
-          state.assets.images.push(...action.payload.assets);
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.images.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.images.push(asset);
+            }
+          }
 
           break;
 

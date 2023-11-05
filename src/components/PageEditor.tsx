@@ -43,15 +43,13 @@ export default function PageEditor() {
       sx={{
         height: "calc(100vh - 120px)",
         display: "grid",
-        gridTemplateAreas: '"name" "content" "choices"',
-        gridTemplateRows: "100px 1fr 200px",
+        gridTemplateRows: "100px 1fr 400px",
       }}
     >
       <Box
         sx={{
           height: "calc(10vh-20px)",
           paddingTop: "20px",
-          gridArea: "name",
         }}
         onDragOver={(e) => {
           e.preventDefault();
@@ -135,7 +133,8 @@ export default function PageEditor() {
         <Space size={2} />
         <Typography>{draging ? "drag images here" : ""}</Typography>
       </Box>
-      <Box sx={{ paddingTop: "20px", gridArea: "content" }}>
+      <Box sx={{ paddingTop: "20px" }}>
+        <Typography>Page content:</Typography>
         <CodeEditor content={game.pages[selectedPage].text} onUpdate={(content) => {
           if (content !== game.pages[selectedPage].text) {
             dispatch(changePage({ text: content }));
@@ -156,11 +155,8 @@ export default function PageEditor() {
       </Box>
       {/* Choice List */}
       <Box
-        sx={{
-          gridArea: "choices",
-        }}
       >
-        <Container sx={{ overflow: "auto" }}>
+        <Container sx={{ overflowY: "scroll", height: "35vh" }}>
           <List>
             {game.pages[selectedPage].next.map((choice, index) => (
               <ListItem key={`choice-${index + 42}`}>

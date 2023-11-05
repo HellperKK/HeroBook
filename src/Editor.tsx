@@ -51,11 +51,11 @@ export default function Editor() {
   };
 
   return (
-    <Box sx={{ padding: "8px", backgroundColor: "white" }}>
+    <Box sx={{ padding: "8px", backgroundColor: "white", overflowY: "scroll" }}>
       <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={3} xl={2}>
+        <Grid item xs={3} xl={2} sx={{ overflowY: "scroll", height: "80vh", paddingTop: "4px" }}>
           {/* Page List */}
           <List sx={{ overflow: "auto" }}>
             <ListItem>

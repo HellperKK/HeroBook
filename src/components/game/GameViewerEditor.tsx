@@ -20,7 +20,7 @@ import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
 import { addAssets, changeChoice, changePage } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
-import { addFilesToZip, loadAssets } from "../../utils/assets";
+import { loadAssets } from "../../utils/assets";
 
 interface CompProp {
   page: Page;
@@ -48,6 +48,12 @@ export default function GameViewerEditor(props: CompProp) {
       assets: newAssets,
       type: "images",
     }));
+
+
+    if (newAssets.length !== 0) {
+      const firstImage = newAssets[0];
+      dispatch(changePage({ image: firstImage.name }))
+    }
   };
 
   const choiceButton = (choice: Choice, index: number) => {
@@ -132,6 +138,11 @@ export default function GameViewerEditor(props: CompProp) {
                   assets: newAssets,
                   type: "images",
                 }));
+
+                if (newAssets.length !== 0) {
+                  const firstImage = newAssets[0];
+                  dispatch(changePage({ image: firstImage.name }))
+                }
 
                 setDraging(false);
               }}
