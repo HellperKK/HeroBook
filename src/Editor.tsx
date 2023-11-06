@@ -55,7 +55,7 @@ export default function Editor() {
       <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={3} xl={2} sx={{ overflowY: "scroll", height: "80vh", paddingTop: "4px" }}>
+        <Grid item xs={3} xl={2} sx={{ overflowY: "scroll", height: "80vh", marginTop: "20px" }}>
           {/* Page List */}
           <List sx={{ overflow: "auto" }}>
             <ListItem>
