@@ -73,6 +73,7 @@ export const gameSlice = createSlice({
     },
     loadGame: (state, action: PayloadAction<{ game: Game }>) => {
       state.game = action.payload.game;
+      state.resetBool = !state.resetBool;
     },
     changePage: (state, action: PayloadAction<Partial<Page>>) => {
       state.game.pages[state.selectedPage] = {

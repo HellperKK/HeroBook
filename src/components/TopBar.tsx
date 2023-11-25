@@ -120,7 +120,7 @@ export default function TopBar() {
                 </Button>
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={makeNewProject}>New project</MenuItem>
-                  <MenuItem onClick={loadAState}>Open project</MenuItem>
+                  <MenuItem onClick={() => loadAState()}>Open project</MenuItem>
                   <MenuItem onClick={saveState}>Save</MenuItem>
                   <MenuItem onClick={saveStateAs}>Save as</MenuItem>
                 </Menu>
@@ -181,7 +181,7 @@ export default function TopBar() {
           <Tooltip title="open project" arrow>
             <Button
               variant="contained"
-              onClick={loadState}
+              onClick={() => loadAState()}
             >
               <FolderOpenSharpIcon />
             </Button>
