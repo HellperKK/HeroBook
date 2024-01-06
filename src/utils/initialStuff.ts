@@ -22,6 +22,7 @@ interface Page {
   format: Format;
   image: string;
   category?: string;
+  script?: string;
 }
 
 interface Category {

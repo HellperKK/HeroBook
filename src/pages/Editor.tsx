@@ -25,27 +25,40 @@ import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import TabPanel from "./components/utils/TabPanel";
-import TopBar from "./components/TopBar";
-import PageEditor from "./components/PageEditor";
-import ViewWindow from "./components/ViewWindow";
-import Space from "./components/utils/Space";
-import PageTitleEdition from "./components/PageTitleEdition";
+import TabPanel from "../components/utils/TabPanel";
+import TopBar from "../components/TopBar";
+import PageEditor from "../components/PageEditor";
+import ViewWindow from "../components/ViewWindow";
+import Space from "../components/utils/Space";
+import PageTitleEdition from "../components/PageTitleEdition";
 
-import { addCategory, addPage, changeCategory, removeCategory, removePage, setFirst, setSelectedPage } from "./store/gameSlice";
-import { RootState } from "./store/store";
+import { addCategory, addPage, changeCategory, removeCategory, removePage, setFirst } from "../store/gameSlice";
+import { RootState } from "../store/store";
+import { useNavigate, useParams } from "react-router-dom";
+import { Page } from "../utils/initialStuff";
+import ScriptEditor from "../components/ScriptEditor";
 
 export default function Editor() {
+  const navigate = useNavigate();
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [editCategories, setEditCategories] = useState(false);
 
-  const { game, selectedPage } = useSelector((state: RootState) => state.game);
+  const { game } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const categories = game.settings.categories ?? [];
   const visibleCategories = categories.filter(category => category.visible);
 
-  const defineColor = (index: number) => {
-    if (index === selectedPage) return "secondary.light";
+  const { id } = useParams();
+  const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10));
+
+  if (!selectedPage) {
+    return <p>No page</p>
+  }
+
+  console.log(selectedPage);
+  const defineColor = (page: Page) => {
+    if (page.id === selectedPage.id) return "secondary.light";
 
     return "";
   };
@@ -78,25 +91,14 @@ export default function Editor() {
               ).map((page, index) => (
                 <ListItem
                   onClick={() => {
-                    dispatch(setSelectedPage(index));
+                    navigate(`/editor/${page.id}`)
                   }}
                   key={page.id}
                   sx={{
-                    bgcolor: defineColor(index),
+                    bgcolor: defineColor(page),
                     cursor: "pointer",
                   }}
                 >
-                  {/* !pageIsLinked(game.pages, page) ? (
-                  <Tooltip title="no link to this page" arrow>
-                    <ListItemIcon
-                      sx={{
-                        color: index === selectedPage ? 'yellow' : 'black',
-                      }}
-                    >
-                      <PriorityHighSharpIcon />
-                    </ListItemIcon>
-                  </Tooltip>
-                    ) : null */}
                   <ListItemIcon
                     sx={{
                       color: "text.primary",
@@ -128,7 +130,12 @@ export default function Editor() {
                       disabled={game.pages.length === 1}
                       onClick={(e) => {
                         e.stopPropagation();
-                        dispatch(removePage(index));
+                        dispatch(removePage({removeId: page.id}));
+
+                        /*if (page === selectedPage) {
+                          const id = game.pages[0].id
+                          navigate(`/editor/${id}`)
+                        }*/
                       }}
                     >
                       <DeleteSharpIcon />
@@ -168,6 +175,9 @@ export default function Editor() {
                 <Tooltip title="content visualization" arrow>
                   <Tab icon={"Visualize"} />
                 </Tooltip>
+                <Tooltip title="content edition" arrow>
+                  <Tab icon={"Script"} />
+                </Tooltip>
               </Tabs>
             </Box>
 
@@ -181,9 +191,9 @@ export default function Editor() {
               <ViewWindow />
             </TabPanel>
 
-            {/* <TabPanel value={selectedTab} index={2}>
-              <CodeEditor />
-                </TabPanel> */}
+            <TabPanel value={selectedTab} index={2}>
+              <ScriptEditor />
+            </TabPanel>
           </Box>
           {/* <Divider textAlign="left">Page Data</Divider> */}
         </Grid>

@@ -4,34 +4,15 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import { lowlight } from 'lowlight'
-import markdown from 'highlight.js/lib/languages/markdown'
+import javascript from 'highlight.js/lib/languages/javascript'
 
 import './codeColor.css'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
-lowlight.registerLanguage('ejs', (api) => {
-    const md = markdown(api);
-    const newTokens = [
-        {
-            className: 'code-expression',
-            begin: '<%=',
-            end: '%>'
-        },
-        {
-            className: 'code-comment',
-            begin: '<%#',
-            end: '%>'
-        },
-        {
-            className: 'code-ejs',
-            begin: '<%',
-            end: '%>'
-        },
-    ]
-
-    md.contains.unshift(...newTokens);
+lowlight.registerLanguage('js', (api) => {
+    const md = javascript(api);
     return md;
 })
 
@@ -52,7 +33,7 @@ interface Props {
     onUpdate: (content: string) => void
 }
 
-export default function CodeEditor({ content, onUpdate }: Props) {
+export default function JsCodeEditor({ content, onUpdate }: Props) {
     const {  resetBool } = useSelector((state: RootState) => state.game);
     const { id } = useParams();
     const editor = useEditor({
@@ -61,7 +42,7 @@ export default function CodeEditor({ content, onUpdate }: Props) {
             Paragraph,
             Text,
             CodeBlockLowlight
-                .configure({ defaultLanguage: 'ejs', lowlight, }),
+                .configure({ defaultLanguage: 'js', lowlight }),
         ],
         content: `<pre>${content}</pre>`,
         onUpdate: ({ editor }) => {

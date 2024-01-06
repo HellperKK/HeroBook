@@ -153,7 +153,6 @@ const getExtensions = (assetType: string) => {
 const evalCondition = ($state: any, condition: string) => {
   const jinter = new Jinter(condition);
   jinter.scope.set("$state", $state);
-  console.log($state);
   return jinter.interpret();
 };
 

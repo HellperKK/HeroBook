@@ -24,61 +24,76 @@ export interface AssetGroup {
 
 export interface GameState {
   game: Game;
-  selectedPage: number;
   assets: AssetGroup;
   gameState: { $state: any };
   resetBool: boolean;
-  visulaizingStates: Array<string>;
+  visualizingStates: Array<string>;
 }
 
 const initialState: GameState = {
   game: initialGame,
-  selectedPage: 0,
   assets: {
     images: [],
   },
   gameState: { $state: {} },
   resetBool: false,
-  visulaizingStates: [],
+  visualizingStates: [],
 };
 
 export const gameSlice = createSlice({
   name: "money",
   initialState,
   reducers: {
-    changeSelectedPage: (state, action: PayloadAction<number>) => {
-      state.selectedPage = action.payload;
-    },
     addPage: (state) => {
       state.game.pages.push(initialPage(state.game.settings.pageCount + 1));
       state.game.settings.pageCount++;
     },
-    removePage: (state, action: PayloadAction<number>) => {
-      const removeFirst = state.game.pages[action.payload].isFirst;
-      state.game.pages.splice(action.payload, 1);
+    removePage: (state, action: PayloadAction<{removeId: number}>) => {
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.removeId)
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const removeFirst = state.game.pages[pageIndex].isFirst;
+      state.game.pages.splice(pageIndex, 1);
 
       if (removeFirst) {
         state.game.pages[0].isFirst = true;
       }
+    },
+    addChoice: (state, action: PayloadAction<{pageId: number}>) => {
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
 
-      if (state.selectedPage === state.game.pages.length) {
-        state.selectedPage--;
+      if (pageIndex === -1) {
+        return;
       }
+
+      state.game.pages[pageIndex].next.push(initialChoice);
     },
-    addChoice: (state) => {
-      state.game.pages[state.selectedPage].next.push(initialChoice);
-    },
-    removeChoice: (state, action: PayloadAction<number>) => {
-      state.game.pages[state.selectedPage].next.splice(action.payload, 1);
+    removeChoice: (state, action: PayloadAction<{pageId: number, choiceIndex: number}>) => {
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      state.game.pages[pageIndex].next.splice(action.payload.choiceIndex, 1);
     },
     loadGame: (state, action: PayloadAction<{ game: Game }>) => {
       state.game = action.payload.game;
       state.resetBool = !state.resetBool;
     },
-    changePage: (state, action: PayloadAction<Partial<Page>>) => {
-      state.game.pages[state.selectedPage] = {
-        ...state.game.pages[state.selectedPage],
-        ...action.payload,
+    changePage: (state, action: PayloadAction<{pageId: number, page:Partial<Page>}>) => {
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      state.game.pages[pageIndex] = {
+        ...state.game.pages[pageIndex],
+        ...action.payload.page,
       };
     },
     changePageAt: (
@@ -92,9 +107,15 @@ export const gameSlice = createSlice({
     },
     changeChoice: (
       state,
-      action: PayloadAction<{ choice: Partial<Choice>; position: number }>
+      action: PayloadAction<{ choice: Partial<Choice>; position: number; pageId: number }>
     ) => {
-      const next = state.game.pages[state.selectedPage].next;
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const next = state.game.pages[pageIndex].next;
       next[action.payload.position] = {
         ...next[action.payload.position],
         ...action.payload.choice,
@@ -105,14 +126,17 @@ export const gameSlice = createSlice({
         page.isFirst = index === action.payload;
       });
     },
-    setSelectedPage: (state, action: PayloadAction<number>) => {
-      state.selectedPage = action.payload;
-    },
-    updateFormat: (state, action: PayloadAction<Partial<Format>>) => {
-      const page = state.game.pages[state.selectedPage];
+    updateFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {
+      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const page = state.game.pages[pageIndex];
       page.format = {
         ...page.format,
-        ...action.payload,
+        ...action.payload.format,
       };
     },
     updateGlobalFormat: (state, action: PayloadAction<Format>) => {
@@ -184,7 +208,6 @@ export const gameSlice = createSlice({
     },
     newProject: (state) => {
       state.game = initialGame;
-      state.selectedPage = 0;
       state.assets = {
         images: [],
       };
@@ -230,13 +253,12 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{ id: number; content: string }>
     ) => {
-      state.visulaizingStates[action.payload.id] = action.payload.content;
+      state.visualizingStates[action.payload.id] = action.payload.content;
     },
   },
 });
 
 export const {
-  changeSelectedPage,
   addPage,
   addAssets,
   addChoice,
@@ -251,7 +273,6 @@ export const {
   removePage,
   resetGameState,
   setFirst,
-  setSelectedPage,
   updateFormat,
   updateGlobalFormat,
   updateSettings,
