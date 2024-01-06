@@ -77,7 +77,7 @@ export default function TopBar() {
     } catch (e) {
       console.log(e)
       const blob = await zip.generateAsync({ type: "blob" });
-      //saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+      saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }
 
     //saveAs(blob, "game.zip");
