@@ -11,22 +11,7 @@ import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
-lowlight.registerLanguage('js', (api) => {
-    const md = javascript(api);
-    return md;
-})
-
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
-    if (!editor) {
-        return null
-    }
-
-    return (
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}>
-            code block
-        </button>
-    )
-}
+lowlight.registerLanguage('javascript', javascript)
 
 interface Props {
     content: string;
@@ -36,13 +21,14 @@ interface Props {
 export default function JsCodeEditor({ content, onUpdate }: Props) {
     const {  resetBool } = useSelector((state: RootState) => state.game);
     const { id } = useParams();
+
     const editor = useEditor({
         extensions: [
             Document,
             Paragraph,
             Text,
             CodeBlockLowlight
-                .configure({ defaultLanguage: 'js', lowlight }),
+                .configure({ defaultLanguage: 'javascript', lowlight }),
         ],
         content: `<pre>${content}</pre>`,
         onUpdate: ({ editor }) => {
