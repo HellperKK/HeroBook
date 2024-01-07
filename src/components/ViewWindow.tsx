@@ -11,7 +11,6 @@ import BrushSharpIcon from "@mui/icons-material/BrushSharp";
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { useSelector, useDispatch } from "react-redux";
-import { lens } from "lens.ts";
 
 import ColorPicker from "./utils/ColorPicker";
 import GameViewerEditor from "./game/GameViewerEditor";
@@ -20,8 +19,6 @@ import { Format, Page } from "../utils/initialStuff";
 import { changeVisualState, updateFormat, updateGlobalFormat } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { useParams } from "react-router-dom";
-
-const pageL = lens<Page>();
 
 const FixedTypo = styled(Typography)`
   width: 100px;
