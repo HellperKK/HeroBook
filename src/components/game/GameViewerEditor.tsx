@@ -21,6 +21,8 @@ import { css } from "@emotion/css";
 import { addAssets, changeChoice, changePage } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
 import { loadAssets } from "../../utils/assets";
+import { useParams } from "react-router-dom";
+import { Jinter } from "jintr";
 
 interface CompProp {
   page: Page;
@@ -33,7 +35,16 @@ export default function GameViewerEditor(props: CompProp) {
 
   const { page, onClick, state } = props;
 
+  /*
+  const jinter = new Jinter(page.script ?? "")
+  jinter.scope.set("$state", state.$state);
+  jinter.interpret();
+  */
+
   const [draging, setDraging] = useState(false);
+
+  const { id } = useParams();
+  const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
 
   const dispatch = useDispatch();
 
@@ -52,7 +63,7 @@ export default function GameViewerEditor(props: CompProp) {
 
     if (newAssets.length !== 0) {
       const firstImage = newAssets[0];
-      dispatch(changePage({ image: firstImage.name }))
+      dispatch(changePage({ pageId: selectedPage.id, page: { image: firstImage.name } }))
     }
   };
 
@@ -74,6 +85,7 @@ export default function GameViewerEditor(props: CompProp) {
           multiline={false}
           onChange={(e) => {
             dispatch(changeChoice({
+              pageId: selectedPage.id,
               choice: { action: e.target.value },
               position: index,
             }));
@@ -141,7 +153,10 @@ export default function GameViewerEditor(props: CompProp) {
 
                 if (newAssets.length !== 0) {
                   const firstImage = newAssets[0];
-                  dispatch(changePage({ image: firstImage.name }))
+                  dispatch(changePage({
+                    pageId: selectedPage.id,
+                    page: { image: firstImage.name }
+                  }))
                 }
 
                 setDraging(false);
@@ -158,7 +173,10 @@ export default function GameViewerEditor(props: CompProp) {
           label="Page Content"
           multiline={true}
           onChange={(e) => {
-            dispatch(changePage({ text: e.target.value }));
+            dispatch(changePage({
+              pageId: selectedPage.id,
+              page: { text: e.target.value }
+            }));
           }}
           state={state}
         />

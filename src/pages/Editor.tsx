@@ -99,30 +99,12 @@ export default function Editor() {
                     cursor: "pointer",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color: "text.primary",
-                    }}
-                  >
-                    <Tooltip title="set this page to start the game on" arrow>
-                      <Button
-                        variant={page.isFirst ? "contained" : "outlined"}
-                        disabled={page.isFirst}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(setFirst(index));
-                        }}
-                      >
-                        <FlagSharpIcon
-                          sx={{
-                            color: page.isFirst ? "yellow" : "black",
-                          }}
-                        />
-                      </Button>
-                    </Tooltip>
-                  </ListItemIcon>
-                  <Space size={2} />
                   <PageTitleEdition pagePosition={index} pageTitle={page.name} />
+                  { page.isFirst && <FlagSharpIcon
+                          sx={{
+                            color: "black",
+                          }}
+                        />}
                   <Space size={2} />
                   <Tooltip title="delete page" arrow>
                     <Button

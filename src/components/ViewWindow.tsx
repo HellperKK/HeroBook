@@ -20,6 +20,8 @@ import { changeVisualState, updateFormat, updateGlobalFormat } from "../store/ga
 import { RootState } from "../store/store";
 import { useParams } from "react-router-dom";
 
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+
 const FixedTypo = styled(Typography)`
   width: 100px;
 `;
@@ -69,6 +71,18 @@ export default function ViewWindow() {
                 value={selectedPage.format.textColor ?? game.format.textColor}
                 onChange={(color) => dispatch(updateFormat({ format: { textColor: color }, pageId: selectedPage.id }))}
               />
+              <Tooltip title="delete setting" arrow>
+                <Button
+                  variant="contained"
+                  disabled={game.pages.length === 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(updateFormat({ format: { textColor: undefined }, pageId: selectedPage.id }));
+                  }}
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </Tooltip>
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Choice</FixedTypo>
@@ -76,6 +90,18 @@ export default function ViewWindow() {
                 value={selectedPage.format.btnColor ?? game.format.btnColor}
                 onChange={(color) => updateNewFormat({ btnColor: color })}
               />
+              <Tooltip title="delete setting" arrow>
+                <Button
+                  variant="contained"
+                  disabled={game.pages.length === 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(updateFormat({ format: { btnColor: undefined }, pageId: selectedPage.id }));
+                  }}
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </Tooltip>
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Page</FixedTypo>
@@ -83,6 +109,18 @@ export default function ViewWindow() {
                 value={selectedPage.format.page ?? game.format.page}
                 onChange={(color) => updateNewFormat({ page: color })}
               />
+              <Tooltip title="delete setting" arrow>
+                <Button
+                  variant="contained"
+                  disabled={game.pages.length === 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(updateFormat({ format: { page: undefined }, pageId: selectedPage.id }));
+                  }}
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </Tooltip>
             </Stack>
             <Stack direction="row" spacing={1}>
               <FixedTypo>Background</FixedTypo>
@@ -90,6 +128,18 @@ export default function ViewWindow() {
                 value={selectedPage.format.background ?? game.format.background}
                 onChange={(color) => updateNewFormat({ background: color })}
               />
+              <Tooltip title="delete setting" arrow>
+                <Button
+                  variant="contained"
+                  disabled={game.pages.length === 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(updateFormat({ format: { background: undefined }, pageId: selectedPage.id }));
+                  }}
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </Tooltip>
             </Stack>
             <Stack direction="row" spacing={1}>
               <TextField

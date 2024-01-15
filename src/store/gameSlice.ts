@@ -122,8 +122,8 @@ export const gameSlice = createSlice({
       };
     },
     setFirst: (state, action: PayloadAction<number>) => {
-      state.game.pages.forEach((page, index) => {
-        page.isFirst = index === action.payload;
+      state.game.pages.forEach((page) => {
+        page.isFirst = page.id === action.payload;
       });
     },
     updateFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {

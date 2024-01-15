@@ -38,10 +38,12 @@ import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSl
 import { RootState } from "../store/store";
 import { addAssetsToZip } from "../utils/assets";
 import JSZip from "jszip";
+import { useNavigate } from "react-router-dom";
 
 export default function TopBar() {
   const { game, assets: globalAssets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [settings, setSettings] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -149,7 +151,7 @@ export default function TopBar() {
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={() => setPlaying(true)}>Play</MenuItem>
                   <MenuItem onClick={compileState}>Compile</MenuItem>
-                  <MenuItem onClick={() => setSettings(true)}>Settings</MenuItem>
+                  <MenuItem onClick={() => navigate("/settings")}>Settings</MenuItem>
                 </Menu>
               </Fragment>
             )}
@@ -202,7 +204,7 @@ export default function TopBar() {
             </Button>
           </Tooltip>
           <Tooltip title="game settings" arrow>
-            <Button variant="contained" onClick={() => setSettings(true)}>
+            <Button variant="contained" onClick={() => navigate("/settings")}>
               <SettingsSharpIcon />
             </Button>
           </Tooltip>
