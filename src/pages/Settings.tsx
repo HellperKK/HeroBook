@@ -4,10 +4,10 @@ import TextField from "@mui/material/TextField";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { setFirst, updateGlobalFormat, updateSettings } from "../store/gameSlice";
+import { setFirst, updateGlobalFormat, updateSettings, updateTexts } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Page } from "../utils/initialStuff";
+import { Page, initialTexts } from "../utils/initialStuff";
 import ScriptEditor from "../components/ScriptEditor";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -51,6 +51,37 @@ export default function Settings() {
             value={game.settings.gameTitle}
             onChange={(e) =>
               dispatch(updateSettings({ gameTitle: e.target.value }))
+            }
+          />
+        </Box>
+        <Typography variant="h3">Game texts</Typography>
+        <Box sx={{ height: "60px", paddingTop: "20px" }}>
+          <TextField
+            label="Play"
+            variant="outlined"
+            value={game.settings.texts?.play ?? initialTexts.play}
+            onChange={(e) =>
+              dispatch(updateTexts({ play: e.target.value }))
+            }
+          />
+        </Box>
+        <Box sx={{ height: "60px", paddingTop: "20px" }}>
+          <TextField
+            label="Continue"
+            variant="outlined"
+            value={game.settings.texts?.continue ?? initialTexts.continue}
+            onChange={(e) =>
+              dispatch(updateTexts({ continue: e.target.value }))
+            }
+          />
+        </Box>
+        <Box sx={{ height: "60px", paddingTop: "20px" }}>
+          <TextField
+            label="Quit"
+            variant="outlined"
+            value={game.settings.texts?.quit ?? initialTexts.quit}
+            onChange={(e) =>
+              dispatch(updateTexts({ quit: e.target.value }))
             }
           />
         </Box>

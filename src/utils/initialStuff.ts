@@ -30,11 +30,18 @@ interface Category {
   visible: boolean;
 }
 
+interface Texts {
+  play: string;
+  continue: string;
+  quit: string
+}
+
 interface Settings {
   author: string;
   gameTitle: string;
   pageCount: number;
   categories?: Array<Category>;
+  texts?: Texts;
 }
 
 interface Game {
@@ -42,6 +49,12 @@ interface Game {
   settings: Settings;
   format: Required<Format>;
   pages: Array<Page>;
+}
+
+const initialTexts = {
+  play: "Play",
+  continue: "Continue",
+  quit: "Quit",
 }
 
 const initialChoice = {
@@ -72,6 +85,7 @@ const initialGame: Game = {
     author: "",
     gameTitle: "",
     pageCount: 4,
+    texts: initialTexts,
   },
   format: {
     textColor: "initial",
@@ -81,6 +95,7 @@ const initialGame: Game = {
     background: "#dbfffd",
     page: "#a9e5e2",
   },
+
   pages: [
     {
       id: 1,
@@ -149,5 +164,5 @@ const initialGame: Game = {
   ],
 };
 
-export { initialChoice, initialPage, initialGame, initialCategory };
-export type { Page, Game, Choice, Format, Settings, Category };
+export { initialChoice, initialPage, initialGame, initialCategory, initialTexts };
+export type { Page, Game, Choice, Format, Settings, Category, Texts };

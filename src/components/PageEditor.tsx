@@ -164,16 +164,22 @@ export default function PageEditor() {
                 />
                 <Space size={2} />
                 <Select
-                  value={findPage(game.pages, choice.pageId).id}
+                  value={selectedPage.next[index].pageId}
                   sx={{ width: "30%" }}
+                  onChange={(e) => {
+                    dispatch(changeChoice({ choice: { pageId: +e.target.value }, position: index, pageId: selectedPage.id }))
+                  }}
                 >
+                  <MenuItem
+                      key={0}
+                      value={0}
+                    >
+                      game menu
+                    </MenuItem>
                   {game.pages.map((pa) => (
                     <MenuItem
                       key={pa.id}
                       value={pa.id}
-                      onClick={() =>
-                        dispatch(changeChoice({ choice: { pageId: pa.id }, position: index, pageId: selectedPage.id }))
-                      }
                     >
                       {pa.name}
                     </MenuItem>

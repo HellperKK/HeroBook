@@ -49,6 +49,10 @@ const format = (game: Game) => `
         return eval(condition);
       };
 
+      const evalScript = ($state, script) => {
+        eval(script);
+      };
+
       const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
@@ -84,6 +88,7 @@ const format = (game: Game) => `
         divStory.style.backgroundColor = pageFormat.page || globalFormat.page
         divText.style.color = pageFormat.textColor || globalFormat.textColor
 
+        evalScript(state.$state, page.script ?? "")
         let body = safeMarkdown(page.text);
 
         try {

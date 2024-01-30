@@ -45,8 +45,6 @@ export default function TopBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [settings, setSettings] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [assets, setAssets] = useState(false);
   const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
@@ -149,7 +147,13 @@ export default function TopBar() {
                   Game
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={() => setPlaying(true)}>Play</MenuItem>
+                  <MenuItem onClick={
+                    () => {
+                      navigate(`/player/0`)
+                    }}
+                  >
+                    Play
+                  </MenuItem>
                   <MenuItem onClick={compileState}>Compile</MenuItem>
                   <MenuItem onClick={() => navigate("/settings")}>Settings</MenuItem>
                 </Menu>
@@ -192,7 +196,7 @@ export default function TopBar() {
             <Button
               variant="contained"
               onClick={() => {
-                setPlaying(true);
+                navigate(`/player/0`)
               }}
             >
               <PlayArrowSharpIcon />
@@ -210,27 +214,6 @@ export default function TopBar() {
           </Tooltip>
         </ButtonGroup>
       </Grid>
-      <SettingsWindow open={settings} close={() => setSettings(false)} />
-      <Modal open={playing}>
-        <Box
-          sx={{ height: "100vh", backgroundColor: "white", overflowX: "auto" }}
-        >
-          <GameWindow start={game.pages[0].id} />
-
-          <Container>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setPlaying(false);
-                // dispatch(resetGameState());
-              }}
-              sx={{ width: "100%" }}
-            >
-              <CloseSharpIcon />
-            </Button>
-          </Container>
-        </Box>
-      </Modal>
       <Modal open={graph}>
         <Box
           sx={{ height: "100vh", backgroundColor: "white", overflowX: "auto" }}

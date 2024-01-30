@@ -7,11 +7,14 @@ import {
   Game,
   Page,
   Settings,
+  Texts,
   initialCategory,
   initialChoice,
   initialGame,
   initialPage,
+  initialTexts,
 } from "../utils/initialStuff";
+import { text } from "stream/consumers";
 
 export interface Asset {
   name: string;
@@ -200,6 +203,12 @@ export const gameSlice = createSlice({
         ...action.payload,
       };
     },
+    updateTexts: (state, action: PayloadAction<Partial<Texts>>) => {
+      state.game.settings.texts = {
+        ...(state.game.settings.texts ?? initialTexts),
+        ...action.payload
+      };
+    },
     changeGameState: (state, action: PayloadAction<any>) => {
       state.gameState = action.payload;
     },
@@ -276,6 +285,7 @@ export const {
   updateFormat,
   updateGlobalFormat,
   updateSettings,
+  updateTexts,
   addCategory,
   changeCategory,
   removeCategory,
