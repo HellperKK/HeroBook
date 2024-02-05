@@ -74,7 +74,7 @@ export default function ViewWindow() {
               <Tooltip title="delete setting" arrow>
                 <Button
                   variant="contained"
-                  disabled={game.pages.length === 1}
+                  disabled={selectedPage.format.textColor === undefined}
                   onClick={(e) => {
                     e.stopPropagation();
                     dispatch(updateFormat({ format: { textColor: undefined }, pageId: selectedPage.id }));
@@ -93,7 +93,7 @@ export default function ViewWindow() {
               <Tooltip title="delete setting" arrow>
                 <Button
                   variant="contained"
-                  disabled={game.pages.length === 1}
+                  disabled={selectedPage.format.btnColor === undefined}
                   onClick={(e) => {
                     e.stopPropagation();
                     dispatch(updateFormat({ format: { btnColor: undefined }, pageId: selectedPage.id }));
@@ -112,7 +112,7 @@ export default function ViewWindow() {
               <Tooltip title="delete setting" arrow>
                 <Button
                   variant="contained"
-                  disabled={game.pages.length === 1}
+                  disabled={selectedPage.format.page === undefined}
                   onClick={(e) => {
                     e.stopPropagation();
                     dispatch(updateFormat({ format: { page: undefined }, pageId: selectedPage.id }));
@@ -131,7 +131,7 @@ export default function ViewWindow() {
               <Tooltip title="delete setting" arrow>
                 <Button
                   variant="contained"
-                  disabled={game.pages.length === 1}
+                  disabled={selectedPage.format.background === undefined}
                   onClick={(e) => {
                     e.stopPropagation();
                     dispatch(updateFormat({ format: { background: undefined }, pageId: selectedPage.id }));

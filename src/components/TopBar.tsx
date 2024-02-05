@@ -27,14 +27,12 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { saveAs } from "file-saver";
 import { Fragment } from "react";
 
-import GameWindow from "./game/GameWindow";
 import AssetsManager from "./topBar/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
-import SettingsWindow from "./topBar/SettingsWindow";
 
 import { loadState, safeFileName } from "../utils/utils";
 import { compile } from "../utils/format";
-import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
+import { addAssets, loadGame, newProject } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { addAssetsToZip } from "../utils/assets";
 import JSZip from "jszip";
@@ -48,6 +46,10 @@ export default function TopBar() {
   const [assets, setAssets] = useState(false);
   const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
+
+  const play = () => {
+    navigate("/player/menu");
+  }
 
   const loadAState = async () => {
     const state = await loadState();
@@ -148,9 +150,7 @@ export default function TopBar() {
                 </Button>
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={
-                    () => {
-                      navigate(`/player/0`)
-                    }}
+                    play}
                   >
                     Play
                   </MenuItem>
@@ -195,9 +195,7 @@ export default function TopBar() {
           <Tooltip title="test game" arrow>
             <Button
               variant="contained"
-              onClick={() => {
-                navigate(`/player/0`)
-              }}
+              onClick={play}
             >
               <PlayArrowSharpIcon />
             </Button>

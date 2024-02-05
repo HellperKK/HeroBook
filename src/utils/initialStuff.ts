@@ -1,3 +1,8 @@
+interface SaveState {
+  state: any,
+  pageId: number
+}
+
 interface Choice {
   action: string;
   pageId: number;
@@ -165,4 +170,4 @@ const initialGame: Game = {
 };
 
 export { initialChoice, initialPage, initialGame, initialCategory, initialTexts };
-export type { Page, Game, Choice, Format, Settings, Category, Texts };
+export type { Page, Game, Choice, Format, Settings, Category, Texts, SaveState };

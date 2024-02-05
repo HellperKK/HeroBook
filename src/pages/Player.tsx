@@ -1,86 +1,63 @@
 import Box from "@mui/system/Box";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import ejs from "ejs";
 
-import { addCategory, addPage, changeCategory, removeCategory, removePage, setFirst } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Choice, Page, initialTexts } from "../utils/initialStuff";
-import ScriptEditor from "../components/ScriptEditor";
+import { Choice, SaveState, } from "../utils/initialStuff";
 import { evalCondition, safeMarkdown } from "../utils/utils";
 import StyledImg from "../components/game/StyledImg";
 import { css } from "@emotion/css";
 import { Jinter } from "jintr";
 import StyledButton from "../components/game/StyledButton";
-import Button from "@mui/material/Button";
-import { Container } from "@mui/material";
+import { Button, Container, Dialog, Modal, Typography } from "@mui/material";
 
-export default function Player() {
+interface Props {
+  loaded: boolean
+}
+
+export default function Player(props: Props) {
   const navigate = useNavigate();
   const { game, assets } = useSelector((state: RootState) => state.game);
+  const state = useSelector((state: RootState) => state.playerState);
+  const { loaded } = props
 
   const { id } = useParams();
 
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10));
-  const gameState = useMemo(() => ({ $state: {} }), []);
+  const gameState = useMemo(() => ({ $state: state ?? {} }), []);
+  const [saving, setSaving] = useState(false);
 
-  if (parseInt(id!, 10) === 0) {
-    return (
-      <div>
-        <Container>
-          <Link to={`/editor/${game.pages[0].id}`}>Back to editor</Link>
-        </Container>
-        <div
-          className={css`
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          `}
-        >
-          <Button
-            onClick={() => {
-              const firstPage = game.pages.find(page => page.isFirst)
+  const saves = Array.from({ length: 4 }, (_item, index) => {
+    const save = localStorage.getItem(`save_${index}`)
 
-              if (firstPage) {
-                navigate(`/player/${firstPage.id}`)
-              }
-            }}
-          >
-            {game.settings.texts?.play ?? initialTexts.play}
-          </Button>
-          <Button
-            onClick={() => { }}
-            disabled={false}
-          >
-          {game.settings.texts?.continue ?? initialTexts.continue}
-          </Button>
-          <Button
-            onClick={() => {
-              const firstPage = game.pages[0]
+    if (save !== null) {
+      return JSON.parse(save) as SaveState;
+    }
 
-              if (firstPage) {
-                navigate(`/editor/${firstPage.id}`)
-              }
-            }}
-          >
-            {game.settings.texts?.quit ?? initialTexts.quit}
-          </Button>
-        </div>
-      </div>)
-  }
+    return save;
+  })
 
   if (!selectedPage) {
     return <p>No page</p>
   }
 
-  const jinter = new Jinter(selectedPage.script ?? "")
-  jinter.scope.set("$state", gameState.$state);
-  jinter.interpret();
+  if (!loaded) {
+    const jinter = new Jinter(selectedPage.script ?? "")
+    jinter.scope.set("$state", gameState.$state);
+    jinter.interpret();
+  }
 
+  const nextPage = (id: number) => {
+    if (id === 0) {
+      navigate("/player/menu")
+    }
+    else {
+      navigate(`/player/${id}`);
+    }
+  }
 
   const choiceButton = (choice: Choice, index: number) => {
     return (
@@ -88,8 +65,7 @@ export default function Player() {
         type="button"
         key={`poll_${index + 42}`}
         onClick={() => {
-          console.log(choice.pageId);
-          navigate(`/player/${choice.pageId}`);
+          nextPage(choice.pageId);
         }}
         color={selectedPage.format.btnColor ?? game.format.btnColor}
         dangerouslySetInnerHTML={{
@@ -128,6 +104,24 @@ export default function Player() {
             color: selectedPage.format.textColor ?? game.format.textColor,
           }}
         >
+          <StyledButton
+            type="button"
+            onClick={() => {
+              navigate("/player/menu")
+            }}
+            color={selectedPage.format.btnColor ?? game.format.btnColor}
+          >
+            Menu
+          </StyledButton>
+          {/*<StyledButton
+            type="button"
+            onClick={() => {
+              setSaving(true);
+            }}
+            color={selectedPage.format.btnColor ?? game.format.btnColor}
+          >
+            Save
+          </StyledButton>*/}
           <div
             className={css`
             text-align: center;
@@ -155,6 +149,47 @@ export default function Player() {
           </Box>
         </Box>
       </Box>
+      <Dialog
+        open={saving}
+        onClose={() => setSaving(false)}
+      >
+        <Box sx={{ backgroundColor: 'white' }}>
+          {saves.map((save, index) => {
+            if (!save) {
+              return (<Container>
+                <Button
+                  onClick={() => {
+                    localStorage.setItem(`save_${index}`, JSON.stringify({ state: gameState.$state, pageId: parseInt(id!) }))
+                    setSaving(false);
+                  }}
+                >
+                  Save {index} empty
+                </Button>
+              </Container>)
+            }
+
+            return <Container>
+              <Button
+                onClick={() => {
+                  localStorage.setItem(`save_${index}`, JSON.stringify({ state: gameState.$state, pageId: parseInt(id!) }))
+                  setSaving(false);
+                }}
+              >
+                Save {index}
+              </Button>
+            </Container>
+          })}
+          <Container>
+            <Button
+              onClick={() => {
+                setSaving(false);
+              }}
+            >
+              Quit
+            </Button>
+          </Container>
+        </Box>
+      </Dialog>
     </Box>
   );
 }

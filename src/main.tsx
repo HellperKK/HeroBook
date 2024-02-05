@@ -12,6 +12,8 @@ import Editor from "./pages/Editor";
 import Main from "./pages/Main";
 import Settings from "./pages/Settings";
 import Player from "./pages/Player";
+import PlayerMenu from "./pages/PlayerMenu";
+import PlayerLoad from "./pages/PlayerLoad";
 
 enableMapSet();
 
@@ -22,7 +24,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/" element={<Main />} />
         <Route path="/editor/:id" element={<Editor />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/player/:id" element={<Player />} />
+        <Route path="/player/menu" element={<PlayerMenu />} />
+        <Route path="/player/load" element={<PlayerLoad />} />
+        <Route path="/player/:id" element={<Player loaded={false}/>} />
+        <Route path="/playerLoad/:id" element={<Player loaded={true}/>} />
       </Routes>
     </BrowserRouter>
   </Provider>
