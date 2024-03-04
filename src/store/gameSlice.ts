@@ -44,7 +44,7 @@ const initialState: GameState = {
 };
 
 export const gameSlice = createSlice({
-  name: "money",
+  name: "game",
   initialState,
   reducers: {
     addPage: (state) => {
