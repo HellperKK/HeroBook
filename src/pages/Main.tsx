@@ -1,5 +1,10 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Main() {
-  return <Link to="/editor/1">Editor</Link>
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/editor/1");
+  })
+  return <div></div>
 }
