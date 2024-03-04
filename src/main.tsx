@@ -3,8 +3,9 @@ import { Provider } from "react-redux";
 import { enableMapSet } from 'immer'
 import {
   Route,
-  BrowserRouter,
-  Routes
+  HashRouter,
+  Routes,
+  
 } from "react-router-dom";
 
 import { store } from "./store/store";
@@ -19,7 +20,7 @@ enableMapSet();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/editor/:id" element={<Editor />} />
@@ -29,6 +30,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/player/:id" element={<Player loaded={false}/>} />
         <Route path="/playerLoad/:id" element={<Player loaded={true}/>} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 );
