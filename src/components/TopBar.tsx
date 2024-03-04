@@ -104,7 +104,7 @@ export default function TopBar() {
     // download('game.html', format(JSON.stringify(state), false, state.settings));
     const zip = new JSZip();
     addAssetsToZip(globalAssets, zip);
-    compile(game, zip);
+    compile(game, globalAssets, zip);
   };
 
   return (

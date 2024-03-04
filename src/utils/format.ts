@@ -5,6 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 import { safeFileName } from "./utils";
 import { Game } from "./initialStuff";
+import { AssetGroup } from "../store/gameSlice";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const format = (game: Game) => `
@@ -121,7 +122,7 @@ const format = (game: Game) => `
 </html>
 `;
 
-const compile = async (game: Game, zip: JSZip) => {
+const compile = async (game: Game, assets: AssetGroup, zip: JSZip) => {
   const gameL = lens<Game>();
   const cleanState = gameL.pages.set((pages) =>
     pages.map((page) => ({
@@ -134,8 +135,11 @@ const compile = async (game: Game, zip: JSZip) => {
     }))
   )(game);
 
+  const images = assets.images.map(image => image.name)
+
   zip.file("data.json", JSON.stringify(cleanState));
-  zip.file("index.html", format(game));
+  zip.file("assets/images/data.json", JSON.stringify(images));
+  // zip.file("index.html", format(game));
   zip.folder("saves");
 
   try {
