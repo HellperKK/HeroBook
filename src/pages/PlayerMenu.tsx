@@ -4,8 +4,8 @@ import { RootState } from "../store/store";
 import { Link, useNavigate } from "react-router-dom";
 import { initialTexts } from "../utils/initialStuff";
 import { css } from "@emotion/css";
-import Button from "@mui/material/Button";
 import { Container } from "@mui/material";
+import StyledButton from '../components/game/StyledButton'
 
 export default function PlayerMenu() {
   const navigate = useNavigate();
@@ -23,9 +23,12 @@ export default function PlayerMenu() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background-color: ${game.format.page}
           `}
       >
-        <Button
+        <StyledButton
+          type="button"
+          color={game.format.btnColor}
           onClick={() => {
             const firstPage = game.pages.find(page => page.isFirst)
 
@@ -35,14 +38,16 @@ export default function PlayerMenu() {
           }}
         >
           {game.settings.texts?.play ?? initialTexts.play}
-        </Button>
+        </StyledButton>
         {/*<Button
           onClick={() => {navigate("/player/load") }}
           disabled={false}
         >
           {game.settings.texts?.continue ?? initialTexts.continue}
         </Button>*/}
-        <Button
+        <StyledButton
+          type="button"
+          color={game.format.btnColor}
           onClick={() => {
             const firstPage = game.pages[0]
 
@@ -52,7 +57,7 @@ export default function PlayerMenu() {
           }}
         >
           {game.settings.texts?.quit ?? initialTexts.quit}
-        </Button>
+        </StyledButton>
       </div>
     </div>)
 }
