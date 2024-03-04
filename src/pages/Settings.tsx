@@ -85,6 +85,16 @@ export default function Settings() {
             }
           />
         </Box>
+        <Box sx={{ height: "60px", paddingTop: "20px" }}>
+          <TextField
+            label="Menu"
+            variant="outlined"
+            value={game.settings.texts?.menu ?? initialTexts.menu}
+            onChange={(e) =>
+              dispatch(updateTexts({ menu: e.target.value }))
+            }
+          />
+        </Box>
         <Typography variant="h3">Colors</Typography>
         <Box>
           <Stack direction="row" spacing={1}>

@@ -37,7 +37,7 @@ export default function PlayerMenu() {
             }
           }}
         >
-          {game.settings.texts?.play ?? initialTexts.play}
+          {game.settings.texts?.play || initialTexts.play}
         </StyledButton>
         {/*<Button
           onClick={() => {navigate("/player/load") }}
@@ -56,7 +56,7 @@ export default function PlayerMenu() {
             }
           }}
         >
-          {game.settings.texts?.quit ?? initialTexts.quit}
+          {game.settings.texts?.quit || initialTexts.quit}
         </StyledButton>
       </div>
     </div>)

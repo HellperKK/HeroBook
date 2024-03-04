@@ -38,7 +38,8 @@ interface Category {
 interface Texts {
   play: string;
   continue: string;
-  quit: string
+  quit: string;
+  menu: string;
 }
 
 interface Settings {
@@ -56,10 +57,11 @@ interface Game {
   pages: Array<Page>;
 }
 
-const initialTexts = {
+const initialTexts: Texts = {
   play: "Play",
   continue: "Continue",
   quit: "Quit",
+  menu: "Menu"
 }
 
 const initialChoice = {

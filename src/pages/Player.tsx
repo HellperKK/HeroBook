@@ -6,13 +6,13 @@ import ejs from "ejs";
 
 import { RootState } from "../store/store";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Choice, SaveState, } from "../utils/initialStuff";
+import { Choice, SaveState, initialTexts, } from "../utils/initialStuff";
 import { evalCondition, safeMarkdown } from "../utils/utils";
 import StyledImg from "../components/game/StyledImg";
 import { css } from "@emotion/css";
 import { Jinter } from "jintr";
 import StyledButton from "../components/game/StyledButton";
-import { Button, Container, Dialog, Modal, Typography } from "@mui/material";
+import { Button, Container, Dialog } from "@mui/material";
 
 interface Props {
   loaded: boolean
@@ -111,7 +111,7 @@ export default function Player(props: Props) {
             }}
             color={selectedPage.format.btnColor ?? game.format.btnColor}
           >
-            Menu
+            {game.settings.texts?.menu || initialTexts.menu}
           </StyledButton>
           {/*<StyledButton
             type="button"
