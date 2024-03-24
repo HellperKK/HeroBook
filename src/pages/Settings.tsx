@@ -7,8 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setFirst, updateGlobalFormat, updateSettings, updateTexts } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Page, initialTexts } from "../utils/initialStuff";
-import ScriptEditor from "../components/ScriptEditor";
+import { initialTexts } from "../utils/initialStuff";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -125,7 +124,7 @@ export default function Settings() {
               onChange={(color) => updateGlobalFormat({ background: color })}
             />
           </Stack>
-        <Typography variant="h3">Starting page</Typography>
+          <Typography variant="h3">Starting page</Typography>
           <Container>
             <Select
               value={fistPage.id}
