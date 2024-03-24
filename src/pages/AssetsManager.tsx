@@ -159,8 +159,12 @@ export default function AssetsManager() {
                       audio.pause()
                     }
                     const newAudio = new Audio(content);
+                    newAudio.onended = () => {
+                      setAudio(null);
+                      setMusicIndex(-1);
+                    }
                     newAudio.play();
-                    setAudio(newAudio)
+                    setAudio(newAudio);
                     setMusicIndex(index);
                   }}
                   variant="contained"
