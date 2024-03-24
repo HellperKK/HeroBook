@@ -23,6 +23,8 @@ export interface Asset {
 
 export interface AssetGroup {
   images: Array<Asset>;
+  musics: Array<Asset>;
+  sounds: Array<Asset>;
 }
 
 export interface GameState {
@@ -37,6 +39,8 @@ const initialState: GameState = {
   game: initialGame,
   assets: {
     images: [],
+    musics: [],
+    sounds: [],
   },
   gameState: { $state: {} },
   resetBool: false,
@@ -51,8 +55,10 @@ export const gameSlice = createSlice({
       state.game.pages.push(initialPage(state.game.settings.pageCount + 1));
       state.game.settings.pageCount++;
     },
-    removePage: (state, action: PayloadAction<{removeId: number}>) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.removeId)
+    removePage: (state, action: PayloadAction<{ removeId: number }>) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.removeId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -65,8 +71,10 @@ export const gameSlice = createSlice({
         state.game.pages[0].isFirst = true;
       }
     },
-    addChoice: (state, action: PayloadAction<{pageId: number}>) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+    addChoice: (state, action: PayloadAction<{ pageId: number }>) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -74,8 +82,13 @@ export const gameSlice = createSlice({
 
       state.game.pages[pageIndex].next.push(initialChoice);
     },
-    removeChoice: (state, action: PayloadAction<{pageId: number, choiceIndex: number}>) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+    removeChoice: (
+      state,
+      action: PayloadAction<{ pageId: number; choiceIndex: number }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -87,8 +100,13 @@ export const gameSlice = createSlice({
       state.game = action.payload.game;
       state.resetBool = !state.resetBool;
     },
-    changePage: (state, action: PayloadAction<{pageId: number, page:Partial<Page>}>) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+    changePage: (
+      state,
+      action: PayloadAction<{ pageId: number; page: Partial<Page> }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -110,9 +128,15 @@ export const gameSlice = createSlice({
     },
     changeChoice: (
       state,
-      action: PayloadAction<{ choice: Partial<Choice>; position: number; pageId: number }>
+      action: PayloadAction<{
+        choice: Partial<Choice>;
+        position: number;
+        pageId: number;
+      }>
     ) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -129,8 +153,13 @@ export const gameSlice = createSlice({
         page.isFirst = page.id === action.payload;
       });
     },
-    updateFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {
-      const pageIndex = state.game.pages.findIndex(page => page.id == action.payload.pageId)
+    updateFormat: (
+      state,
+      action: PayloadAction<{ format: Partial<Format>; pageId: number }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
       if (pageIndex === -1) {
         return;
@@ -168,6 +197,36 @@ export const gameSlice = createSlice({
 
           break;
 
+        case "musics":
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.musics.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.musics.push(asset);
+            }
+          }
+
+          break;
+
+        case "sounds":
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.sounds.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.sounds.push(asset);
+            }
+          }
+
+          break;
+
         default:
           break;
       }
@@ -178,19 +237,51 @@ export const gameSlice = createSlice({
     ) => {
       switch (action.payload.type) {
         case "images":
-          const assets = state.assets.images;
+          const assetsImages = state.assets.images;
 
-          const assetIndex = assets.findIndex(
+          const assetIndexImages = assetsImages.findIndex(
             (a) => a.name === action.payload.name
           );
 
-          if (assetIndex === -1) {
+          if (assetIndexImages === -1) {
             return;
           }
 
-          assets.splice(assetIndex, 1);
+          assetsImages.splice(assetIndexImages, 1);
 
-          state.assets.images = assets;
+          state.assets.images = assetsImages;
+          break;
+
+        case "musics":
+          const assetsMusic = state.assets.musics;
+
+          const assetIndexMusic = assetsMusic.findIndex(
+            (a) => a.name === action.payload.name
+          );
+
+          if (assetIndexMusic === -1) {
+            return;
+          }
+
+          assetsMusic.splice(assetIndexMusic, 1);
+
+          state.assets.musics = assetsMusic;
+          break;
+
+        case "sounds":
+          const assetsSound = state.assets.sounds;
+
+          const assetIndexSound = assetsSound.findIndex(
+            (a) => a.name === action.payload.name
+          );
+
+          if (assetIndexSound === -1) {
+            return;
+          }
+
+          assetsSound.splice(assetIndexSound, 1);
+
+          state.assets.sounds = assetsSound;
           break;
 
         default:
@@ -206,7 +297,7 @@ export const gameSlice = createSlice({
     updateTexts: (state, action: PayloadAction<Partial<Texts>>) => {
       state.game.settings.texts = {
         ...(state.game.settings.texts ?? initialTexts),
-        ...action.payload
+        ...action.payload,
       };
     },
     changeGameState: (state, action: PayloadAction<any>) => {
@@ -219,6 +310,8 @@ export const gameSlice = createSlice({
       state.game = initialGame;
       state.assets = {
         images: [],
+        musics: [],
+        sounds: [],
       };
       state.gameState = { $state: {} };
       state.resetBool = !state.resetBool;

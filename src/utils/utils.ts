@@ -143,6 +143,14 @@ const getExtensions = (assetType: string) => {
         "image/png",
         "image/webp",
       ];
+
+    case "musics":
+      return [
+        "audio/ogg",
+        "audio/x-wav",
+        "audio/mp3",
+        "audio/mpeg",
+      ];
     default:
       return [];
   }

@@ -27,7 +27,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { saveAs } from "file-saver";
 import { Fragment } from "react";
 
-import AssetsManager from "./topBar/AssetsManager";
+import AssetsManager from "../pages/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
 
 import { loadState, safeFileName } from "../utils/utils";
@@ -43,7 +43,6 @@ export default function TopBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [assets, setAssets] = useState(false);
   const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
 
@@ -136,7 +135,7 @@ export default function TopBar() {
                   Tools
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={() => setAssets(true)}>Assets</MenuItem>
+                  <MenuItem onClick={() => navigate("/assets")}>Assets</MenuItem>
                   <MenuItem onClick={() => setGraph(true)}>Pages graph</MenuItem>
                 </Menu>
               </Fragment>
@@ -229,7 +228,6 @@ export default function TopBar() {
           </Container>
         </Box>
       </Modal>
-      <AssetsManager open={assets} close={() => setAssets(false)} />
       {/* <Modal open={infos}>
         <Card>
           hi

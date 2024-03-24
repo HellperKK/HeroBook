@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import Player from "./pages/Player";
 import PlayerMenu from "./pages/PlayerMenu";
 import PlayerLoad from "./pages/PlayerLoad";
+import AssetsManager from "./pages/AssetsManager";
 
 enableMapSet();
 
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/player/load" element={<PlayerLoad />} />
         <Route path="/player/:id" element={<Player loaded={false}/>} />
         <Route path="/playerLoad/:id" element={<Player loaded={true}/>} />
+        <Route path="/assets" element={<AssetsManager />} />
       </Routes>
     </HashRouter>
   </Provider>
