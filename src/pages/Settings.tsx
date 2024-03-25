@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { setFirst, updateGlobalFormat, updateSettings, updateTexts } from "../store/gameSlice";
+import { changeExpert, setFirst, updateGlobalFormat, updateSettings, updateTexts } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { initialTexts } from "../utils/initialStuff";
@@ -14,7 +14,7 @@ import Stack from "@mui/material/Stack";
 import styled from "@emotion/styled";
 import ColorPicker from "../components/utils/ColorPicker";
 import Select from "@mui/material/Select";
-import { MenuItem } from "@mui/material";
+import { MenuItem, Switch } from "@mui/material";
 
 const FixedTypo = styled(Typography)`
   width: 100px;
@@ -23,7 +23,7 @@ const FixedTypo = styled(Typography)`
 export default function Settings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { game } = useSelector((state: RootState) => state.game);
+  const { game, expert } = useSelector((state: RootState) => state.game);
 
   const fistPage = game.pages.find(page => page.isFirst)!;
 
@@ -32,6 +32,14 @@ export default function Settings() {
       <Container>
         <Link to={`/editor/${game.pages[0].id}`}>Back to editor</Link>
         <Typography variant="h2">Settings</Typography>
+        <Typography variant="h3">Editor level</Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography>Expert options enabled ?</Typography>
+          <Switch value={!!expert} onChange={(e) => {
+            console.log(e.target.checked);
+            dispatch(changeExpert(e.target.checked))
+          }}/>
+        </Stack>
         <Typography variant="h3">Parameters</Typography>
         <Box sx={{ height: "60px", paddingTop: "20px" }}>
           <TextField

@@ -44,7 +44,7 @@ export default function Editor() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [editCategories, setEditCategories] = useState(false);
 
-  const { game } = useSelector((state: RootState) => state.game);
+  const { game, expert } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const categories = game.settings.categories ?? [];
   const visibleCategories = categories.filter(category => category.visible);
@@ -53,7 +53,8 @@ export default function Editor() {
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10));
 
   if (!selectedPage) {
-    return <p>No page</p>
+    navigate(`/editor/${game.pages[0].id}`)
+    return <></>
   }
 
   console.log(selectedPage);
@@ -68,7 +69,14 @@ export default function Editor() {
       <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={3} xl={2} sx={{ overflowY: "scroll", height: "80vh", marginTop: "20px" }}>
+        <Grid item xs={3} xl={2} sx={
+          {
+            overflowY: "scroll",
+            height: "90vh",
+            marginTop: "20px",
+            backgroundColor: "#ccc"
+          }
+        }>
           {/* Page List */}
           <List sx={{ overflow: "auto" }}>
             <ListItem>
@@ -157,9 +165,9 @@ export default function Editor() {
                 <Tooltip title="content visualization" arrow>
                   <Tab icon={"Visualize"} />
                 </Tooltip>
-                <Tooltip title="content edition" arrow>
+                {expert && <Tooltip title="content edition" arrow>
                   <Tab icon={"Script"} />
-                </Tooltip>
+                </Tooltip>}
               </Tabs>
             </Box>
 

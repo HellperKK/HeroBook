@@ -34,12 +34,13 @@ const StyledImg = styled.img`
 `;
 
 export default function PageEditor() {
-  const { game, assets } = useSelector((state: RootState) => state.game);
+  const { game, assets, expert } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
   const categories = game.settings.categories ?? [];
   const { id } = useParams();
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
+  console.log(assets);
 
   return (
     <Box
@@ -134,6 +135,32 @@ export default function PageEditor() {
           <DeleteSharpIcon />
         </Button>
         <Space size={2} />
+        <Select value={selectedPage.audio}>
+          {assets.musics.map((music) => (
+            <MenuItem
+              key={music.name}
+              value={music.name}
+              onClick={() =>
+                dispatch(changePage({ page: { audio: music.name }, pageId: selectedPage.id }))
+              }
+            >
+              <StyledImg src={music.content} alt="" />
+              <Space size={2} />
+              <Typography sx={{ display: "inline-block" }}>{noExt(music.name)}</Typography>
+            </MenuItem>
+          ))}
+        </Select>
+        <Space size={2} />
+        <Button
+          disabled={!selectedPage.audio}
+          variant="contained"
+          onClick={() =>
+            dispatch(changePage({ page: { audio: undefined }, pageId: selectedPage.id }))
+          }
+        >
+          <DeleteSharpIcon />
+        </Button>
+        <Space size={2} />
         <Typography>{draging ? "drag images here" : ""}</Typography>
       </Box>
       <Box sx={{ paddingTop: "20px" }}>
@@ -186,15 +213,16 @@ export default function PageEditor() {
                   ))}
                 </Select>
                 <Space size={2} />
-                <TextField
-                  label="Choice Condition"
-                  variant="outlined"
-                  value={choice.condition ?? ""}
-                  sx={{ width: "50%" }}
-                  onChange={(e) =>
-                    dispatch(changeChoice({ choice: { condition: e.target.value }, position: index, pageId: selectedPage.id }))
-                  }
-                />
+                {expert &&
+                  <TextField
+                    label="Choice Condition"
+                    variant="outlined"
+                    value={choice.condition ?? ""}
+                    sx={{ width: "50%" }}
+                    onChange={(e) =>
+                      dispatch(changeChoice({ choice: { condition: e.target.value }, position: index, pageId: selectedPage.id }))
+                    }
+                  />}
                 <Space size={2} />
                 <Button
                   variant="contained"

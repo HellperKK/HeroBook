@@ -37,13 +37,19 @@ const StyledMiniature = styled.img`
   max-height: 40px;
 `;
 
+interface AudioInfo {
+  index: number,
+  audio: HTMLAudioElement | null,
+}
+
 export default function AssetsManager() {
   const { assets, game } = useSelector((state: RootState) => state.game);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [musicIndex, setMusicIndex] = useState(-1);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const initialAudioInfo: AudioInfo = { index: -1, audio: null }
+
+  const [audioInfo, setAudioInfo] = useState<AudioInfo>(initialAudioInfo);
 
   const [selectedAsset, setSelectedAsset] = useState(-1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -146,38 +152,39 @@ export default function AssetsManager() {
               <ImageListItem
                 key={name}
                 sx={{
-                  border:
-                    selectedImageIndex == index ? "solid 3px blue" : "none",
                   cursor: "pointer",
                   overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end"
                 }}
               >
                 <span>{name}</span>
-                {index !== musicIndex && <Button
+                {index !== audioInfo.index && <Button
                   onClick={() => {
-                    if (audio !== null) {
-                      audio.pause()
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
                     }
                     const newAudio = new Audio(content);
                     newAudio.onended = () => {
-                      setAudio(null);
-                      setMusicIndex(-1);
+                      setAudioInfo(initialAudioInfo);
                     }
                     newAudio.play();
-                    setAudio(newAudio);
-                    setMusicIndex(index);
+                    setAudioInfo({
+                      index,
+                      audio: newAudio,
+                    });
                   }}
                   variant="contained"
                 >
                   <PlayArrowSharpIcon />
                 </Button>}
-                {index === musicIndex && <Button
+                {index === audioInfo.index && <Button
                   onClick={() => {
-                    if (audio !== null) {
-                      audio.pause()
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
                     }
-                    setAudio(null);
-                    setMusicIndex(-1);
+                    setAudioInfo(initialAudioInfo);
                   }}
                   variant="contained"
                 >
@@ -185,9 +192,9 @@ export default function AssetsManager() {
                 </Button>}
                 <Button
                   onClick={() => {
-                    if (audio !== null) {
-                      audio.pause()
-                      setAudio(null);
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
+                      setAudioInfo(initialAudioInfo);
                     }
                     removeAssets("musics", name)()
                   }}

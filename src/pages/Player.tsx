@@ -18,6 +18,11 @@ interface Props {
   loaded: boolean
 }
 
+interface AudioInfo {
+  name: string,
+  audio: HTMLAudioElement,
+}
+
 export default function Player(props: Props) {
   const navigate = useNavigate();
   const { game, assets } = useSelector((state: RootState) => state.game);
@@ -29,6 +34,7 @@ export default function Player(props: Props) {
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10));
   const gameState = useMemo(() => ({ $state: state ?? {} }), []);
   const [saving, setSaving] = useState(false);
+  const [audioInfo, setAudioInfo] = useState<AudioInfo | null>(null);
 
   const saves = Array.from({ length: 4 }, (_item, index) => {
     const save = localStorage.getItem(`save_${index}`)
@@ -52,11 +58,30 @@ export default function Player(props: Props) {
 
   const nextPage = (id: number) => {
     if (id === 0) {
+      if (audio) {
+        audio.pause()
+      }
+      if (audioInfo) {
+        audioInfo.audio.pause();
+      }
       navigate("/player/menu")
     }
     else {
       navigate(`/player/${id}`);
     }
+  }
+
+  let body = safeMarkdown(selectedPage.text);
+  const image = assets.images.find(image => image.name === selectedPage.image)
+  const audioAsset = assets.musics.find(music => music.name === selectedPage.audio)
+  let audio: HTMLAudioElement | null = null;
+  if (audioAsset && ((audioInfo && audioInfo.name !== audioAsset.name) || !audioInfo)) {
+    if (audioInfo) {
+      audioInfo.audio.pause();
+    }
+    audio = new Audio(audioAsset.content);
+    audio.loop = true;
+    audio.play();
   }
 
   const choiceButton = (choice: Choice, index: number) => {
@@ -65,6 +90,9 @@ export default function Player(props: Props) {
         type="button"
         key={`poll_${index + 42}`}
         onClick={() => {
+          if (audio) {
+            setAudioInfo({ name: audioAsset!.name, audio })
+          }
           nextPage(choice.pageId);
         }}
         color={selectedPage.format.btnColor ?? game.format.btnColor}
@@ -75,9 +103,6 @@ export default function Player(props: Props) {
     );
   };
 
-  let body = safeMarkdown(selectedPage.text);
-  const image = assets.images.find(image => image.name === selectedPage.image)
-
   try {
     body = safeMarkdown(ejs.render(selectedPage.text, gameState));
   } catch (error) { }
@@ -85,7 +110,14 @@ export default function Player(props: Props) {
   return (
     <Box>
       <Container>
-        <Link to={`/editor/${game.pages[0].id}`}>Back to editor</Link>
+        <Link to={`/editor/${game.pages[0].id}`} onClick={() => {
+          if (audio) {
+            audio.pause()
+          }
+          if (audioInfo) {
+            audioInfo.audio.pause();
+          }
+        }}>Back to editor</Link>
       </Container>
       <Box
         sx={{
@@ -107,6 +139,12 @@ export default function Player(props: Props) {
           <StyledButton
             type="button"
             onClick={() => {
+              if (audio) {
+                audio.pause()
+              }
+              if (audioInfo) {
+                audioInfo.audio.pause();
+              }
               navigate("/player/menu")
             }}
             color={selectedPage.format.btnColor ?? game.format.btnColor}
