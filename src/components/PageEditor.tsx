@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import PermMediaSharpIcon from "@mui/icons-material/PermMediaSharp";
+import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 
 import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
@@ -134,6 +135,8 @@ export default function PageEditor() {
         >
           <DeleteSharpIcon />
         </Button>
+        <Space size={2} />
+        <Tooltip title="page music" arrow><MusicNoteSharpIcon /></Tooltip>
         <Space size={2} />
         <Select value={selectedPage.audio}>
           {assets.musics.map((music) => (
