@@ -26,6 +26,7 @@ export default function PlayerMenu() {
             background-color: ${game.format.page}
           `}
       >
+        <h1>{game.settings.gameTitle}</h1>
         <StyledButton
           type="button"
           color={game.format.btnColor}
