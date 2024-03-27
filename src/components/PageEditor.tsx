@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-import {  noExt } from "../utils/utils";
+import { noExt } from "../utils/utils";
 import { findPage } from "../utils/page";
 
 import Space from "./utils/Space";
@@ -70,7 +70,7 @@ export default function PageEditor() {
           const newAssets = await loadAssets(arrFiles);
 
           dispatch(addAssets({ assets: newAssets, type: "images" }));
-          dispatch(changePage({ page: {image: newAssets[0].name}, pageId: selectedPage.id }))
+          dispatch(changePage({ page: { image: newAssets[0].name }, pageId: selectedPage.id }))
 
           setDraging(false);
         }}
@@ -139,6 +139,15 @@ export default function PageEditor() {
         <Tooltip title="page music" arrow><MusicNoteSharpIcon /></Tooltip>
         <Space size={2} />
         <Select value={selectedPage.audio}>
+          <MenuItem
+            key="no-music"
+            value="no-music"
+            onClick={() =>
+              dispatch(changePage({ page: { audio: "no-music" }, pageId: selectedPage.id }))
+            }
+          >
+            <Typography sx={{ display: "inline-block" }}>silence</Typography>
+          </MenuItem>
           {assets.musics.map((music) => (
             <MenuItem
               key={music.name}
@@ -147,8 +156,6 @@ export default function PageEditor() {
                 dispatch(changePage({ page: { audio: music.name }, pageId: selectedPage.id }))
               }
             >
-              <StyledImg src={music.content} alt="" />
-              <Space size={2} />
               <Typography sx={{ display: "inline-block" }}>{noExt(music.name)}</Typography>
             </MenuItem>
           ))}
@@ -201,11 +208,11 @@ export default function PageEditor() {
                   }}
                 >
                   <MenuItem
-                      key={0}
-                      value={0}
-                    >
-                      game menu
-                    </MenuItem>
+                    key={0}
+                    value={0}
+                  >
+                    game menu
+                  </MenuItem>
                   {game.pages.map((pa) => (
                     <MenuItem
                       key={pa.id}
@@ -230,7 +237,7 @@ export default function PageEditor() {
                 <Button
                   variant="contained"
                   onClick={() =>
-                    dispatch(removeChoice({pageId: selectedPage.id, choiceIndex: index}))
+                    dispatch(removeChoice({ pageId: selectedPage.id, choiceIndex: index }))
                   }
                 >
                   <DeleteSharpIcon />
@@ -241,7 +248,7 @@ export default function PageEditor() {
               <Button
                 variant="contained"
                 onClick={() =>
-                  dispatch(addChoice({pageId: selectedPage.id}))
+                  dispatch(addChoice({ pageId: selectedPage.id }))
                 }
                 sx={{ width: "85%" }}
               >

@@ -72,16 +72,23 @@ export default function Player(props: Props) {
   }
 
   let body = safeMarkdown(selectedPage.text);
+
   const image = assets.images.find(image => image.name === selectedPage.image)
+
   const audioAsset = assets.musics.find(music => music.name === selectedPage.audio)
+
   let audio: HTMLAudioElement | null = null;
-  if (audioAsset && ((audioInfo && audioInfo.name !== audioAsset.name) || !audioInfo)) {
+  if (audioAsset && ((audioInfo && audioInfo.name !== audioAsset.name) || !audioInfo || audioInfo.name === "no-music")) {
     if (audioInfo) {
       audioInfo.audio.pause();
     }
     audio = new Audio(audioAsset.content);
     audio.loop = true;
     audio.play();
+  }
+
+  if (selectedPage.audio === "no-music" && audioInfo) {
+    audioInfo.audio.pause();
   }
 
   const choiceButton = (choice: Choice, index: number) => {
@@ -92,6 +99,9 @@ export default function Player(props: Props) {
         onClick={() => {
           if (audio) {
             setAudioInfo({ name: audioAsset!.name, audio })
+          }
+          else if(selectedPage.audio === "no-music") {
+            setAudioInfo({ name: "no-music", audio: new Audio() })
           }
           nextPage(choice.pageId);
         }}
