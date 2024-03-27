@@ -136,9 +136,11 @@ const compile = async (game: Game, assets: AssetGroup, zip: JSZip) => {
   )(game);
 
   const images = assets.images.map(image => image.name)
+  const musics = assets.musics.map(music => music.name)
 
   zip.file("data.json", JSON.stringify(cleanState));
   zip.file("assets/images/data.json", JSON.stringify(images));
+  zip.file("assets/musics/data.json", JSON.stringify(musics));
   // zip.file("index.html", format(game));
   zip.folder("saves");
 

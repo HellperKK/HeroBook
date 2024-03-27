@@ -54,8 +54,12 @@ export default function TopBar() {
     const state = await loadState();
     dispatch(loadGame({ game: state.game }));
     dispatch(addAssets({
-      assets: state.assets,
+      assets: state.images,
       type: "images",
+    }));
+    dispatch(addAssets({
+      assets: state.musics,
+      type: "musics",
     }));
   };
 
