@@ -173,7 +173,12 @@ const getExtensions = (assetType: string) => {
       ];
 
     case "musics":
-      return ["audio/ogg", "audio/x-wav", "audio/mp3", "audio/mpeg"];
+      return [
+        "audio/ogg",
+        "audio/x-wav",
+        "audio/mp3",
+        "audio/mpeg"
+      ];
     default:
       return [];
   }
