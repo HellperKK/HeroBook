@@ -323,7 +323,17 @@ export const gameSlice = createSlice({
       if (!settings.categories) {
         settings.categories = [];
       }
-      settings.categories.push(initialCategory);
+
+      const newCategory = {...initialCategory};
+      let index = 0;
+
+      while (state.game.settings.categories?.some(category => category.name === `${newCategory.name} ${index}`)) {
+        index++
+      }
+
+      newCategory.name = `${newCategory.name} ${index}`;
+
+      settings.categories.push(newCategory);
     },
     removeCategory: (state, action: PayloadAction<number>) => {
       const settings = state.game.settings;

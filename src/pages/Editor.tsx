@@ -8,18 +8,13 @@ import Box from "@mui/system/Box";
 import Tooltip from "@mui/material/Tooltip";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
+
+import AddSharpIcon from "@mui/icons-material/AddSharp";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
 import AllInboxSharpIcon from '@mui/icons-material/AllInboxSharp';
-
-import FlagSharpIcon from "@mui/icons-material/FlagSharp";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import AddSharpIcon from "@mui/icons-material/AddSharp";
-import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-import EditSharpIcon from "@mui/icons-material/EditSharp";
-import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 // import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 
 import { useState } from "react";
@@ -37,12 +32,13 @@ import { RootState } from "../store/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { Page } from "../utils/initialStuff";
 import ScriptEditor from "../components/ScriptEditor";
+import PageList from "../components/PageList";
+import PageFolder from "../components/PageFolder";
 
 export default function Editor() {
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState(0);
-  const [editCategories, setEditCategories] = useState(false);
 
   const { game, expert } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
@@ -78,75 +74,8 @@ export default function Editor() {
           }
         }>
           {/* Page List */}
-          <List sx={{ overflow: "auto" }}>
-            <ListItem>
-              <Tooltip title="categories" arrow>
-                <Button
-                  variant="contained"
-                  sx={{ width: "100%" }}
-                  onClick={() =>
-                    setEditCategories(true)
-                  }
-                >
-                  <AllInboxSharpIcon />
-                </Button>
-              </Tooltip>
-            </ListItem>
-            {game.pages
-              .filter(page => page.category === undefined ||
-                page.category === "" ||
-                visibleCategories.some(category => category.name === page.category)
-              ).map((page, index) => (
-                <ListItem
-                  onClick={() => {
-                    navigate(`/editor/${page.id}`)
-                  }}
-                  key={page.id}
-                  sx={{
-                    bgcolor: defineColor(page),
-                    cursor: "pointer",
-                  }}
-                >
-                  <PageTitleEdition pagePosition={index} pageTitle={page.name} />
-                  { page.isFirst && <FlagSharpIcon
-                          sx={{
-                            color: "black",
-                          }}
-                        />}
-                  <Space size={2} />
-                  <Tooltip title="delete page" arrow>
-                    <Button
-                      variant="contained"
-                      disabled={game.pages.length === 1}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        dispatch(removePage({removeId: page.id}));
-
-                        /*if (page === selectedPage) {
-                          const id = game.pages[0].id
-                          navigate(`/editor/${id}`)
-                        }*/
-                      }}
-                    >
-                      <DeleteSharpIcon />
-                    </Button>
-                  </Tooltip>
-                </ListItem>
-              ))}
-            <ListItem>
-              <Tooltip title="add a page" arrow>
-                <Button
-                  variant="contained"
-                  sx={{ width: "100%" }}
-                  onClick={() =>
-                    dispatch(addPage())
-                  }
-                >
-                  <AddSharpIcon />
-                </Button>
-              </Tooltip>
-            </ListItem>
-          </List>
+          {/*<PageList />*/}
+          <PageFolder />
         </Grid>
 
         {/* Page Data */}
@@ -188,71 +117,6 @@ export default function Editor() {
           {/* <Divider textAlign="left">Page Data</Divider> */}
         </Grid>
       </Grid>
-      <Modal
-        open={editCategories}
-        onClose={() => setEditCategories(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          sx={{ width: "50vw", margin: "auto", backgroundColor: "white", overflowX: "auto" }}
-        >
-          <List sx={{ overflow: "auto" }}>
-
-            {categories.map((category, index) =>
-              <ListItem
-                key={`category${index + 42}`}>
-                <TextField
-                  label="Category name"
-                  variant="outlined"
-                  value={category.name}
-                  onChange={(e) =>
-                    dispatch(changeCategory({ category: { name: e.target.value }, position: index }))
-                  }
-                />
-                <Tooltip title="change category visibility" arrow>
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      dispatch(changeCategory({ category: { visible: !category.visible }, position: index }))
-                    }
-                  >
-                    {category.visible ? <VisibilitySharpIcon /> : <VisibilityOffSharpIcon />}
-                  </Button>
-                </Tooltip>
-                <Tooltip title="remove category" arrow>
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      dispatch(removeCategory(index))
-                    }
-                  >
-                    <DeleteSharpIcon />
-                  </Button>
-                </Tooltip>
-              </ListItem>)}
-            <ListItem>
-              <Tooltip title="add category" arrow>
-                <Button
-                  variant="contained"
-                  onClick={() =>
-                    dispatch(addCategory())
-                  }
-                >
-                  <AddSharpIcon />
-                </Button>
-              </Tooltip>
-            </ListItem>
-          </List>
-          <Button
-            variant="contained"
-            onClick={() => setEditCategories(false)}
-            sx={{ width: "100%" }}
-          >
-            <CloseSharpIcon />
-          </Button>
-        </Box>
-      </Modal >
     </Box >
   );
 }
