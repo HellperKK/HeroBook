@@ -1,11 +1,14 @@
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { PropsWithChildren, useState } from "react";
 
 import ChevronRightSharpIcon from '@mui/icons-material/ChevronRightSharp';
+import NoteAddSharpIcon from '@mui/icons-material/NoteAddSharp';
 import ExpandMoreSharpIcon from '@mui/icons-material/ExpandMoreSharp';
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import { useDispatch } from "react-redux";
-import { changePage } from "../../store/gameSlice";
+import { addPage, changePage } from "../../store/gameSlice";
+import { css } from "@emotion/css";
+import StaticSpan from "../utils/staticSpan";
 
 type Props = PropsWithChildren<{
   name: string
@@ -22,7 +25,7 @@ export default function Folder(props: Props) {
   });
   const trueName = name || "no category"
 
-  
+
   const style = {
     backgroundColor: isOver ? '#888' : undefined,
   };
@@ -31,7 +34,16 @@ export default function Folder(props: Props) {
     <div>
       <div ref={setNodeRef} style={style}>
         <Button onClick={() => setIsOpen(isOpen => !isOpen)}>{icon}</Button>
-        {trueName}
+        <StaticSpan width={100}>{trueName}</StaticSpan>
+        <Tooltip title="add a page" arrow>
+          <Button
+            onClick={() =>
+              dispatch(addPage(name))
+            }
+          >
+            <NoteAddSharpIcon />
+          </Button>
+        </Tooltip>
       </div>
       {isOpen && <div>
         {children}

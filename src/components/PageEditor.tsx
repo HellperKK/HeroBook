@@ -84,30 +84,6 @@ export default function PageEditor() {
           }
         />
         <Space size={2} />
-        Category
-        <Space size={2} />
-        <Select value={selectedPage.category ?? ""}>
-          <MenuItem
-            value=""
-            onClick={() =>
-              dispatch(changePage({ page: { category: "" }, pageId: selectedPage.id }))
-            }
-          >
-            <Typography>No category</Typography>
-          </MenuItem>
-          {categories.map((category, index) => (
-            <MenuItem
-              key={`category${index + 42}`}
-              value={category.name}
-              onClick={() =>
-                dispatch(changePage({ page: { category: category.name }, pageId: selectedPage.id }))
-              }
-            >
-              <Typography>{category.name}</Typography>
-            </MenuItem>
-          ))}
-        </Select>
-        <Space size={2} />
         <Tooltip title="page illustration" arrow><PermMediaSharpIcon /></Tooltip>
         <Space size={2} />
         <Select value={selectedPage.image}>

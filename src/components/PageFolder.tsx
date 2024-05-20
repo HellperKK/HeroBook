@@ -41,16 +41,6 @@ export default function PageFolder() {
           <CreateNewFolderSharpIcon />
         </Button>
       </Tooltip>
-      <Tooltip title="add a page" arrow>
-        <Button
-          variant="contained"
-          onClick={() =>
-            dispatch(addPage())
-          }
-        >
-          <NoteAddSharpIcon />
-        </Button>
-      </Tooltip>
       <DndContext onDragEnd={handleDragEnd}>
         {categories.map(category => (
           <Folder name={category.name}>

@@ -53,8 +53,11 @@ export const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    addPage: (state) => {
-      state.game.pages.push(initialPage(state.game.settings.pageCount + 1));
+    addPage: (state, action: PayloadAction<string>) => {
+      const newPage = initialPage(state.game.settings.pageCount + 1)
+      newPage.category = action.payload;
+      
+      state.game.pages.push(newPage);
       state.game.settings.pageCount++;
     },
     removePage: (state, action: PayloadAction<{ removeId: number }>) => {

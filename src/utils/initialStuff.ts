@@ -71,7 +71,7 @@ const initialChoice = {
 };
 
 const initialCategory = {
-  name: "category name",
+  name: "category",
   visible: true,
 };
 

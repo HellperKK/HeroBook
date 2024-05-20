@@ -74,7 +74,7 @@ export default function PageList() {
         variant="contained"
         sx={{ width: "100%" }}
         onClick={() =>
-          dispatch(addPage())
+          dispatch(addPage(""))
         }
       >
         <AddSharpIcon />
