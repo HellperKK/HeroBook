@@ -124,6 +124,10 @@ const initialGame: Game = {
           action: "Brownie",
           pageId: 4,
         },
+        {
+          action: "I'm not hungry actually",
+          pageId: 0,
+        },
       ],
       format: {},
       image: "",
