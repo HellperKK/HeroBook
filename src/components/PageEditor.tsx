@@ -41,7 +41,6 @@ export default function PageEditor() {
   const categories = game.settings.categories ?? [];
   const { id } = useParams();
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
-  console.log(assets);
 
   return (
     <Box
@@ -170,7 +169,6 @@ export default function PageEditor() {
                   value={choice.action}
                   sx={{ width: "50%" }}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     dispatch(changeChoice({ choice: { action: e.target.value }, position: index, pageId: selectedPage.id }));
                   }
                   }

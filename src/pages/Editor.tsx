@@ -53,7 +53,6 @@ export default function Editor() {
     return <></>
   }
 
-  console.log(selectedPage);
   const defineColor = (page: Page) => {
     if (page.id === selectedPage.id) return "secondary.light";
 
