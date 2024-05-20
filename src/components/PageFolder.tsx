@@ -43,16 +43,16 @@ export default function PageFolder() {
       </Tooltip>
       <DndContext onDragEnd={handleDragEnd}>
         {categories.map(category => (
-          <Folder name={category.name}>
+          <Folder key={category.name} name={category.name}>
             {game.pages.filter(page => page.category === category.name).map(page => (
-              <File page={page} onClick={() => navigate(`/editor/${page.id}`)} />
+              <File key={page.id} page={page} onClick={() => navigate(`/editor/${page.id}`)} />
             ))}
           </Folder>
         ))}
 
         <Folder name="">
           {game.pages.filter(page => page.category === "" || page.category === undefined).map(page => (
-            <File page={page} onClick={() => navigate(`/editor/${page.id}`)} />
+            <File key={page.id} page={page} onClick={() => navigate(`/editor/${page.id}`)} />
           ))}
         </Folder>
       </DndContext>
