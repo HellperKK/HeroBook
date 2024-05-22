@@ -44,22 +44,16 @@ export default function File(props: Props) {
         <DragIndicatorSharpIcon />
       </button>
       <Space size={2} />
-      <StaticSpan width={90}>{page.name}</StaticSpan>
+      <StaticSpan width={70}>{page.name}</StaticSpan>
       <Tooltip title="delete page" arrow>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              dispatch(removePage({removeId: page.id}));
-
-              /*if (page === selectedPage) {
-                const id = game.pages[0].id
-                navigate(`/editor/${id}`)
-              }*/
-            }}
-          >
-            <DeleteSharpIcon />
-          </Button>
-        </Tooltip>
+        <Button
+          onClick={() => {
+            dispatch(removePage({ removeId: page.id }));
+          }}
+        >
+          <DeleteSharpIcon />
+        </Button>
+      </Tooltip>
     </div>
   );
   //return <Button ref={setNodeRef} variant="contained" onClick={onClick}>{page.name}</Button>

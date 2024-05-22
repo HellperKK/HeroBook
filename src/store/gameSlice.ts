@@ -338,17 +338,22 @@ export const gameSlice = createSlice({
 
       settings.categories.push(newCategory);
     },
-    removeCategory: (state, action: PayloadAction<number>) => {
+    removeCategory: (state, action: PayloadAction<string>) => {
       const settings = state.game.settings;
       if (!settings.categories || !(settings.categories.length > 0)) {
         return;
       }
-      const categoryName = settings.categories[action.payload].name;
 
-      settings.categories.splice(action.payload, 1);
+      const index = settings.categories.findIndex(category => category.name === action.payload)
+
+      if (index === -1) {
+        return;
+      }
+
+      settings.categories.splice(index, 1);
 
       for (const pages of state.game.pages) {
-        if (pages.category == categoryName) {
+        if (pages.category == action.payload) {
           pages.category = "";
         }
       }

@@ -4,11 +4,12 @@ import { PropsWithChildren, useState } from "react";
 import ChevronRightSharpIcon from '@mui/icons-material/ChevronRightSharp';
 import NoteAddSharpIcon from '@mui/icons-material/NoteAddSharp';
 import ExpandMoreSharpIcon from '@mui/icons-material/ExpandMoreSharp';
-import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
+import { useDroppable } from "@dnd-kit/core";
 import { useDispatch } from "react-redux";
-import { addPage, changePage } from "../../store/gameSlice";
+import { addPage, changePage, removeCategory } from "../../store/gameSlice";
 import { css } from "@emotion/css";
 import StaticSpan from "../utils/staticSpan";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 
 type Props = PropsWithChildren<{
   name: string
@@ -34,7 +35,18 @@ export default function Folder(props: Props) {
     <div>
       <div ref={setNodeRef} style={style}>
         <Button onClick={() => setIsOpen(isOpen => !isOpen)}>{icon}</Button>
-        <StaticSpan width={100}>{trueName}</StaticSpan>
+        <StaticSpan width={80}>{trueName}</StaticSpan>
+        <Tooltip title="delete category" arrow>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              dispatch(removeCategory(name));
+            }}
+            disabled={name === ""}
+          >
+            <DeleteSharpIcon />
+          </Button>
+        </Tooltip>
         <Tooltip title="add a page" arrow>
           <Button
             onClick={() =>
