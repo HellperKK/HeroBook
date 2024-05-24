@@ -50,6 +50,7 @@ interface Settings {
   pageCount: number;
   categories?: Array<Category>;
   texts?: Texts;
+  expert?: boolean;
 }
 
 interface Game {

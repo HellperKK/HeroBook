@@ -23,7 +23,10 @@ const FixedTypo = styled(Typography)`
 export default function Settings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { game, expert } = useSelector((state: RootState) => state.game);
+  const { game } = useSelector((state: RootState) => state.game);
+
+  console.log(game.settings.expert);
+  
 
   const fistPage = game.pages.find(page => page.isFirst)!;
 
@@ -35,7 +38,7 @@ export default function Settings() {
         <Typography variant="h3">Editor level</Typography>
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography>Expert options enabled ?</Typography>
-          <Switch value={!!expert} onChange={(e) => {
+          <Switch checked={game.settings.expert ?? false} onChange={(e) => {
             console.log(e.target.checked);
             dispatch(changeExpert(e.target.checked))
           }}/>

@@ -10,7 +10,7 @@ import CreateNewFolderSharpIcon from '@mui/icons-material/CreateNewFolderSharp';
 import NoteAddSharpIcon from '@mui/icons-material/NoteAddSharp';
 
 export default function PageFolder() {
-  const { game, expert } = useSelector((state: RootState) => state.game);
+  const { game } = useSelector((state: RootState) => state.game);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();

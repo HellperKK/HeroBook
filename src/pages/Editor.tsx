@@ -40,7 +40,7 @@ export default function Editor() {
 
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const { game, expert } = useSelector((state: RootState) => state.game);
+  const { game } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const categories = game.settings.categories ?? [];
   const visibleCategories = categories.filter(category => category.visible);
@@ -93,7 +93,7 @@ export default function Editor() {
                 <Tooltip title="content visualization" arrow>
                   <Tab icon={"Visualize"} />
                 </Tooltip>
-                {expert && <Tooltip title="content edition" arrow>
+                {game.settings.expert && <Tooltip title="content edition" arrow>
                   <Tab icon={"Script"} />
                 </Tooltip>}
               </Tabs>

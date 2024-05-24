@@ -12,7 +12,7 @@ import Space from "./utils/Space";
 import { addPage, removePage } from "../store/gameSlice";
 
 export default function PageList() {
-  const { game, expert } = useSelector((state: RootState) => state.game);
+  const { game } = useSelector((state: RootState) => state.game);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();

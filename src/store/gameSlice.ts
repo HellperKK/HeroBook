@@ -33,7 +33,6 @@ export interface GameState {
   gameState: { $state: any };
   resetBool: boolean;
   visualizingStates: Array<string>;
-  expert?: boolean;
 }
 
 const initialState: GameState = {
@@ -46,7 +45,6 @@ const initialState: GameState = {
   gameState: { $state: {} },
   resetBool: false,
   visualizingStates: [],
-  expert: false,
 };
 
 export const gameSlice = createSlice({
@@ -401,7 +399,8 @@ export const gameSlice = createSlice({
       state.visualizingStates[action.payload.id] = action.payload.content;
     },
     changeExpert: (state, action: PayloadAction<boolean>) => {
-      state.expert = action.payload;
+      console.log(action.payload);
+      state.game.settings.expert = action.payload;
     },
   },
 });

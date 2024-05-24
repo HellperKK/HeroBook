@@ -35,13 +35,13 @@ const StyledImg = styled.img`
 `;
 
 export default function PageEditor() {
-  const { game, assets, expert } = useSelector((state: RootState) => state.game);
+  const { game, assets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
   const [draging, setDraging] = useState(false);
   const categories = game.settings.categories ?? [];
   const { id } = useParams();
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
-  console.log(selectedPage);
+  console.log(game);
 
   return (
     <Box
@@ -223,7 +223,7 @@ export default function PageEditor() {
                   ))}
                 </Select>
                 <Space size={2} />
-                {expert &&
+                {game.settings.expert &&
                   <TextField
                     label="Choice Condition"
                     variant="outlined"
