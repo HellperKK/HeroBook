@@ -54,7 +54,7 @@ export default function AssetsManager() {
   const [selectedAsset, setSelectedAsset] = useState(-1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  const { images, musics } = assets;
+  const { images, musics, sounds } = assets;
 
   const addAsset = (assetType: string) => async () => {
     const files = await openFiles(getExtensions(assetType), true);
@@ -197,6 +197,79 @@ export default function AssetsManager() {
                       setAudioInfo(initialAudioInfo);
                     }
                     removeAssets("musics", name)()
+                  }}
+                  variant="contained"
+                >
+                  <DeleteSharpIcon />
+                </Button>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Container>
+      </TabPanel>
+
+      {/* sounds pannel*/}
+      <TabPanel value={selectedTab} index={2}>
+        <Container>
+          <ImageList cols={4} rowHeight={300}>
+            <ImageListItem sx={{ height: 450 }}>
+              <Button
+                variant="contained"
+                sx={{ width: "100%", height: "100%" }}
+                onClick={addAsset("sounds")}
+              >
+                <AddSharpIcon />
+              </Button>
+            </ImageListItem>
+            {sounds.map(({ name, content }, index) => (
+              <ImageListItem
+                key={name}
+                sx={{
+                  cursor: "pointer",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end"
+                }}
+              >
+                <span>{name}</span>
+                {index !== audioInfo.index && <Button
+                  onClick={() => {
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
+                    }
+                    const newAudio = new Audio(content);
+                    newAudio.onended = () => {
+                      setAudioInfo(initialAudioInfo);
+                    }
+                    newAudio.play();
+                    setAudioInfo({
+                      index,
+                      audio: newAudio,
+                    });
+                  }}
+                  variant="contained"
+                >
+                  <PlayArrowSharpIcon />
+                </Button>}
+                {index === audioInfo.index && <Button
+                  onClick={() => {
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
+                    }
+                    setAudioInfo(initialAudioInfo);
+                  }}
+                  variant="contained"
+                >
+                  <StopSharpIcon />
+                </Button>}
+                <Button
+                  onClick={() => {
+                    if (audioInfo.audio !== null) {
+                      audioInfo.audio.pause()
+                      setAudioInfo(initialAudioInfo);
+                    }
+                    removeAssets("sounds", name)()
                   }}
                   variant="contained"
                 >

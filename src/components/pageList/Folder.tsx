@@ -6,10 +6,11 @@ import NoteAddSharpIcon from '@mui/icons-material/NoteAddSharp';
 import ExpandMoreSharpIcon from '@mui/icons-material/ExpandMoreSharp';
 import { useDroppable } from "@dnd-kit/core";
 import { useDispatch } from "react-redux";
-import { addPage, changePage, removeCategory } from "../../store/gameSlice";
+import { addPage, changePage, removeCategory, renameCategory } from "../../store/gameSlice";
 import { css } from "@emotion/css";
 import StaticSpan from "../utils/staticSpan";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import CategoryEditableField from "../utils/CategoryEditableField";
 
 type Props = PropsWithChildren<{
   name: string
@@ -35,7 +36,13 @@ export default function Folder(props: Props) {
     <div>
       <div ref={setNodeRef} style={style}>
         <Button onClick={() => setIsOpen(isOpen => !isOpen)}>{icon}</Button>
-        <StaticSpan width={80}>{trueName}</StaticSpan>
+        <StaticSpan width={80}>
+          {name !== "" ? <CategoryEditableField
+            content={trueName}
+            label="category name"
+            onChange={(e) => {dispatch(renameCategory({oldName: trueName, newName: e.target.value}))}}
+          /> : <span>{trueName}</span>}
+        </StaticSpan>
         <Tooltip title="delete category" arrow>
           <Button
             onClick={(e) => {

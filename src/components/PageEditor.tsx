@@ -41,6 +41,7 @@ export default function PageEditor() {
   const categories = game.settings.categories ?? [];
   const { id } = useParams();
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
+  console.log(selectedPage);
 
   return (
     <Box
@@ -83,7 +84,7 @@ export default function PageEditor() {
           }
         />
         <Space size={2} />
-        <Tooltip title="page illustration" arrow><PermMediaSharpIcon /></Tooltip>
+        Illustration
         <Space size={2} />
         <Select value={selectedPage.image}>
           {assets.images.map((image) => (
@@ -111,7 +112,7 @@ export default function PageEditor() {
           <DeleteSharpIcon />
         </Button>
         <Space size={2} />
-        <Tooltip title="page music" arrow><MusicNoteSharpIcon /></Tooltip>
+        Music
         <Space size={2} />
         <Select value={selectedPage.audio}>
           <MenuItem
@@ -141,6 +142,31 @@ export default function PageEditor() {
           variant="contained"
           onClick={() =>
             dispatch(changePage({ page: { audio: undefined }, pageId: selectedPage.id }))
+          }
+        >
+          <DeleteSharpIcon />
+        </Button>
+        Sound
+        <Space size={2} />
+        <Select value={selectedPage.sound}>
+          {assets.sounds.map((sound) => (
+            <MenuItem
+              key={sound.name}
+              value={sound.name}
+              onClick={() =>
+                dispatch(changePage({ page: { sound: sound.name }, pageId: selectedPage.id }))
+              }
+            >
+              <Typography sx={{ display: "inline-block" }}>{noExt(sound.name)}</Typography>
+            </MenuItem>
+          ))}
+        </Select>
+        <Space size={2} />
+        <Button
+          disabled={!selectedPage.sound}
+          variant="contained"
+          onClick={() =>
+            dispatch(changePage({ page: { sound: undefined }, pageId: selectedPage.id }))
           }
         >
           <DeleteSharpIcon />

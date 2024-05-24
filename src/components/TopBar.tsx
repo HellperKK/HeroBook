@@ -6,6 +6,7 @@ import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import FeedSharpIcon from "@mui/icons-material/FeedSharp";
+import AllInboxSharpIcon from '@mui/icons-material/AllInboxSharp';
 // import HelpSharp from '@mui/icons-material/HelpSharp';
 
 import Button from "@mui/material/Button";
@@ -211,6 +212,11 @@ export default function TopBar() {
           <Tooltip title="game settings" arrow>
             <Button variant="contained" onClick={() => navigate("/settings")}>
               <SettingsSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="game assets" arrow>
+            <Button variant="contained" onClick={() => navigate("/assets")}>
+              <AllInboxSharpIcon />
             </Button>
           </Tooltip>
         </ButtonGroup>

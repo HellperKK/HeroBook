@@ -3,7 +3,7 @@ import { Page } from "../../utils/initialStuff";
 import { useDraggable } from "@dnd-kit/core";
 import DragIndicatorSharpIcon from '@mui/icons-material/DragIndicatorSharp';
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Space from "../utils/Space";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
@@ -12,12 +12,13 @@ import StaticSpan from "../utils/staticSpan";
 
 type Props = {
   page: Page;
-  onClick: () => void
+  onClick: () => void;
 }
 
 export default function File(props: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const { page, onClick } = props;
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -25,6 +26,7 @@ export default function File(props: Props) {
   });
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    backgroundColor: page.isFirst ? "#888" : "transparent",
   } : undefined;
 
   const className = css`
@@ -32,6 +34,7 @@ export default function File(props: Props) {
     cursor: pointer;
     border-left: 1px solid #888;
     margin-left: 30px;
+    background-color: ${page.id === +id! ? "#888" : "transparent"};
   `
 
   return (

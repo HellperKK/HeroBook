@@ -371,6 +371,29 @@ export const gameSlice = createSlice({
         };
       }
     },
+    renameCategory: (
+      state,
+      action: PayloadAction<{ oldName: string; newName: string }>
+    ) => {
+      if (!state.game.settings.categories) {
+        return;
+      }
+      const { oldName, newName } = action.payload;
+
+      const category = state.game.settings.categories.find(cat => cat.name === oldName);
+
+      if (!category) {
+        return;
+      }
+
+      category.name = newName;
+
+      for (const page of state.game.pages) {
+        if (page.category === oldName) {
+          page.category = newName;
+        }
+      }
+    },
     changeVisualState: (
       state,
       action: PayloadAction<{ id: number; content: string }>
@@ -407,6 +430,7 @@ export const {
   removeCategory,
   changeVisualState,
   changeExpert,
+  renameCategory,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -91,6 +91,14 @@ export default function Player(props: Props) {
     audioInfo.audio.pause();
   }
 
+  const soundAsset = assets.sounds.find(sound => sound.name === selectedPage.sound)
+
+  if (soundAsset) {
+    audio = new Audio(soundAsset.content);
+    audio.loop = false;
+    audio.play();
+  }
+
   const choiceButton = (choice: Choice, index: number) => {
     return (
       <StyledButton
@@ -98,7 +106,7 @@ export default function Player(props: Props) {
         key={`poll_${index + 42}`}
         onClick={() => {
           if (audio) {
-            setAudioInfo({ name: audioAsset!.name, audio })
+            setAudioInfo({ name: audioAsset?.name, audio })
           }
           else if(selectedPage.audio === "no-music") {
             setAudioInfo({ name: "no-music", audio: new Audio() })
