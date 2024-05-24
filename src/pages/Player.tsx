@@ -106,7 +106,7 @@ export default function Player(props: Props) {
         key={`poll_${index + 42}`}
         onClick={() => {
           if (audio) {
-            setAudioInfo({ name: audioAsset?.name, audio })
+            setAudioInfo({ name: audioAsset?.name ?? "", audio })
           }
           else if(selectedPage.audio === "no-music") {
             setAudioInfo({ name: "no-music", audio: new Audio() })
