@@ -8,7 +8,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { useDispatch } from "react-redux";
 import { addPage, changePage, removeCategory, renameCategory } from "../../store/gameSlice";
 import { css } from "@emotion/css";
-import StaticSpan from "../utils/staticSpan";
+import StaticSpan from "../utils/StaticSpan";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import CategoryEditableField from "../utils/CategoryEditableField";
 

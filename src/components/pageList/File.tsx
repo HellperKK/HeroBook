@@ -8,7 +8,7 @@ import Space from "../utils/Space";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import { removePage } from "../../store/gameSlice";
-import StaticSpan from "../utils/staticSpan";
+import StaticSpan from "../utils/StaticSpan";
 
 type Props = {
   page: Page;
