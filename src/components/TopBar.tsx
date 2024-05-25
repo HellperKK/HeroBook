@@ -81,7 +81,6 @@ export default function TopBar() {
       await invoke("save", { content: binary, fileType: "project", openModal: false });
       return;
     } catch (e) {
-      console.log(e)
       const blob = await zip.generateAsync({ type: "blob" });
       saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }
@@ -98,7 +97,6 @@ export default function TopBar() {
       const binary = await zip.generateAsync({ type: "base64" });
       await invoke("save", { content: binary, fileType: "project", openModal: true });
     } catch (e) {
-      console.log(e);
       const blob = await zip.generateAsync({ type: "blob" });
       saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }

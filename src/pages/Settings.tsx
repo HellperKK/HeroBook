@@ -25,9 +25,6 @@ export default function Settings() {
   const dispatch = useDispatch();
   const { game } = useSelector((state: RootState) => state.game);
 
-  console.log(game.settings.expert);
-  
-
   const fistPage = game.pages.find(page => page.isFirst)!;
 
   return (
@@ -39,7 +36,6 @@ export default function Settings() {
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography>Expert options enabled ?</Typography>
           <Switch checked={game.settings.expert ?? false} onChange={(e) => {
-            console.log(e.target.checked);
             dispatch(changeExpert(e.target.checked))
           }}/>
         </Stack>

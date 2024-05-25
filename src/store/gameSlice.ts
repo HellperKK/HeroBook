@@ -399,7 +399,6 @@ export const gameSlice = createSlice({
       state.visualizingStates[action.payload.id] = action.payload.content;
     },
     changeExpert: (state, action: PayloadAction<boolean>) => {
-      console.log(action.payload);
       state.game.settings.expert = action.payload;
     },
   },
