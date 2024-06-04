@@ -54,7 +54,7 @@ export const gameSlice = createSlice({
     addPage: (state, action: PayloadAction<string>) => {
       const newPage = initialPage(state.game.settings.pageCount + 1)
       newPage.category = action.payload;
-      
+
       state.game.pages.push(newPage);
       state.game.settings.pageCount++;
     },
@@ -384,11 +384,25 @@ export const gameSlice = createSlice({
         return;
       }
 
-      category.name = newName;
+      let trueNewName;
+
+      if (newName !== '') {
+        trueNewName = newName;
+        category.name = trueNewName;
+      } else {
+        let index = 0;
+
+        while (state.game.settings.categories?.some(category => category.name === `category ${index}`)) {
+          index++
+        }
+
+        trueNewName = `category ${index}`;
+        category.name = trueNewName;
+      }
 
       for (const page of state.game.pages) {
         if (page.category === oldName) {
-          page.category = newName;
+          page.category = trueNewName;
         }
       }
     },
