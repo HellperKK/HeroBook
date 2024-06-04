@@ -1,34 +1,35 @@
 import TextField from "@mui/material/TextField";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface CompProp {
   content: string;
   label: string;
   onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    content: string
   ) => void;
 }
 
 export default function CategoryEditableField(props: CompProp) {
   const { content, label, onChange } = props;
-  const [editing, setEditing] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const ref = useRef<HTMLInputElement>()
+
 
   return editing ? (
     <TextField
       onBlur={() => {
+        if (ref.current !== undefined) {
+          onChange(ref.current.value)
+        }
         setEditing(false);
       }}
       autoFocus
       label={label}
       variant="outlined"
-      value={content}
-      onChange={onChange}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" && e.shiftKey) {
-          setEditing(false);
-        }
-      }}
+      inputRef={ref}
+      defaultValue={content}
+      // onChange={onChange}
     />
   ) : (
     <span

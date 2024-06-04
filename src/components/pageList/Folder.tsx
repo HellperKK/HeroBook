@@ -40,7 +40,7 @@ export default function Folder(props: Props) {
           {name !== "" ? <CategoryEditableField
             content={trueName}
             label="category name"
-            onChange={(e) => {dispatch(renameCategory({oldName: trueName, newName: e.target.value}))}}
+            onChange={(newName:string) => {dispatch(renameCategory({oldName: trueName, newName}))}}
           /> : <span>{trueName}</span>}
         </StaticSpan>
         <Tooltip title="delete category" arrow>
