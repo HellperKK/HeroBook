@@ -17,6 +17,8 @@ import PlayerMenu from "./pages/PlayerMenu";
 import PlayerLoad from "./pages/PlayerLoad";
 import AssetsManager from "./pages/AssetsManager";
 
+import "./main.css";
+
 enableMapSet();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
