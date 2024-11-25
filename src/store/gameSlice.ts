@@ -120,6 +120,24 @@ export const gameSlice = createSlice({
         ...action.payload.page,
       };
     },
+    changePageCategory: (
+      state,
+      action: PayloadAction<{ pageId: number; category: string }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const page = state.game.pages[pageIndex];
+      page.category = action.payload.category;
+
+      state.game.pages.splice(pageIndex, 1);
+      state.game.pages.unshift(page);
+    },
     changePageAt: (
       state,
       action: PayloadAction<{ page: Partial<Page>; position: number }>
@@ -388,7 +406,6 @@ export const gameSlice = createSlice({
 
       if (newName !== '') {
         trueNewName = newName;
-        category.name = trueNewName;
       } else {
         let index = 0;
 
@@ -397,8 +414,9 @@ export const gameSlice = createSlice({
         }
 
         trueNewName = `category ${index}`;
-        category.name = trueNewName;
       }
+
+      category.name = trueNewName;
 
       for (const page of state.game.pages) {
         if (page.category === oldName) {
@@ -425,6 +443,7 @@ export const {
   changeChoice,
   changeGameState,
   changePage,
+  changePageCategory,
   changePageAt,
   loadGame,
   newProject,
