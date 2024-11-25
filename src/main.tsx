@@ -5,7 +5,6 @@ import {
   Route,
   HashRouter,
   Routes,
-  
 } from "react-router-dom";
 
 import { store } from "./store/store";
