@@ -11,10 +11,10 @@ const loadAssets = async (files: Array<File>) => {
     ) => {
       const assetsMemo = await assetsMemoPromise;
 
-      if (/^image/.test(fi.type)) {
+      //if (/^image/.test(fi.type)) {
         const image = await readImage(fi);
         assetsMemo.push({ name: fi.name, content: image });
-      }
+      //}
 
       return assetsMemo;
     },

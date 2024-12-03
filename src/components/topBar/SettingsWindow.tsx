@@ -1,6 +1,4 @@
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import SettingsBackupRestoreSharpIcon from "@mui/icons-material/SettingsBackupRestoreSharp";
-import SaveSharpIcon from "@mui/icons-material/SaveSharp";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/system/Box";
@@ -10,10 +8,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import Tooltip from "@mui/material/Tooltip";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
 
 import { updateSettings } from "../../store/gameSlice";
 import { RootState } from "../../store/store";
@@ -29,8 +25,6 @@ export default function SettingsWindow(props: CompProps) {
   const { game } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [settings, setSettings] = useState(game.settings);
-
   return (
     <Dialog open={open} onClose={close}>
       <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
@@ -40,9 +34,9 @@ export default function SettingsWindow(props: CompProps) {
             <TextField
               label="Author"
               variant="outlined"
-              value={settings.author}
+              value={game.settings.author}
               onChange={(e) =>
-                setSettings({ ...settings, author: e.target.value })
+                dispatch(updateSettings({author: e.target.value}))
               }
             />
           </Box>
@@ -50,9 +44,9 @@ export default function SettingsWindow(props: CompProps) {
             <TextField
               label="Title"
               variant="outlined"
-              value={settings.gameTitle}
+              value={game.settings.gameTitle}
               onChange={(e) =>
-                setSettings({ ...settings, gameTitle: e.target.value })
+                dispatch(updateSettings({gameTitle: e.target.value}))
               }
             />
           </Box>
@@ -64,24 +58,6 @@ export default function SettingsWindow(props: CompProps) {
           justifyContent: "center",
         }}
       >
-        <Tooltip title="revert changes" arrow>
-          <Button
-            variant="contained"
-            onClick={() => setSettings(game.settings)}
-          >
-            <SettingsBackupRestoreSharpIcon />
-          </Button>
-        </Tooltip>
-        <Tooltip title="save" arrow>
-          <Button
-            variant="contained"
-            onClick={() =>
-              dispatch(updateSettings(settings))
-            }
-          >
-            <SaveSharpIcon />
-          </Button>
-        </Tooltip>
         <Button variant="contained" onClick={close}>
           <CloseSharpIcon />
         </Button>

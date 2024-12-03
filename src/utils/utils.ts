@@ -2,11 +2,9 @@ import JSZip from "jszip";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { Jinter } from "jintr";
-import { invoke } from "@tauri-apps/api/tauri";
 
 import { Choice, initialGame, Page } from "./initialStuff";
 import { Asset } from "../store/gameSlice";
-import { saveAs } from "file-saver";
 
 const readImage = (file: Blob): Promise<string> => {
   return new Promise((resolve) => {
@@ -97,12 +95,14 @@ const loadState = async () => {
     game = JSON.parse(text);
   }
 
-  const images = zip.folder("assets/images");
+  const imagesFolder = zip.folder("assets/images");
 
-  let assets = new Array<Asset>();
+  let images = new Array<Asset>();
 
-  if (images !== null) {
-    assets = await Object.entries(images.files).reduce<Promise<Array<Asset>>>(
+  if (imagesFolder !== null) {
+    images = await Object.entries(imagesFolder.files).reduce<
+      Promise<Array<Asset>>
+    >(
       async (
         assetsMemoPromise: Promise<Array<Asset>>,
         pair: [string, JSZip.JSZipObject]
@@ -121,7 +121,33 @@ const loadState = async () => {
     );
   }
 
-  return { game, assets, zip };
+  const musicsFolder = zip.folder("assets/musics");
+
+  let musics = new Array<Asset>();
+
+  if (musicsFolder !== null) {
+    musics = await Object.entries(musicsFolder.files).reduce<
+      Promise<Array<Asset>>
+    >(
+      async (
+        assetsMemoPromise: Promise<Array<Asset>>,
+        pair: [string, JSZip.JSZipObject]
+      ) => {
+        const assetsMemo = await assetsMemoPromise;
+        const matches = pair[0].match(/assets\/musics\/(.+)/);
+        if (matches) {
+          const blob = await pair[1].async("blob");
+          const img = await readImage(blob);
+
+          assetsMemo.push({ name: matches[1], content: img });
+        }
+        return assetsMemo;
+      },
+      Promise.resolve(new Array<Asset>())
+    );
+  }
+
+  return { game, images, musics, zip };
 };
 
 const noExt = (name: string) => name.split(".").shift();
@@ -145,6 +171,14 @@ const getExtensions = (assetType: string) => {
         "image/png",
         "image/webp",
       ];
+
+    case "musics":
+      return [
+        "audio/ogg",
+        "audio/x-wav",
+        "audio/mp3",
+        "audio/mpeg"
+      ];
     default:
       return [];
   }
@@ -153,7 +187,6 @@ const getExtensions = (assetType: string) => {
 const evalCondition = ($state: any, condition: string) => {
   const jinter = new Jinter(condition);
   jinter.scope.set("$state", $state);
-  console.log($state);
   return jinter.interpret();
 };
 

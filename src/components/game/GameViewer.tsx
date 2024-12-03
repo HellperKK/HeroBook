@@ -13,6 +13,7 @@ import StyledImg from "./StyledImg";
 import { css } from "@emotion/css";
 import { RootState } from "../../store/store";
 import { useEffect, useMemo } from "react";
+import { Jinter } from "jintr";
 
 interface CompProp {
   page: Page;
@@ -20,11 +21,14 @@ interface CompProp {
 }
 
 export default function GameViewer(props: CompProp) {
-  const { game, assets, /*gameState,*/ selectedPage } = useSelector((state: RootState) => state.game);
+  const { game, assets, /*gameState,*/ } = useSelector((state: RootState) => state.game);
 
   const { page, onClick } = props;
 
   const gameState = useMemo(() => ({ $state: {} }), []);
+  const jinter = new Jinter(page.script ?? "")
+  jinter.scope.set("$state", gameState.$state);
+  jinter.interpret();
 
   const choiceButton = (choice: Choice, index: number) => {
     return (

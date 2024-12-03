@@ -7,11 +7,14 @@ import {
   Game,
   Page,
   Settings,
+  Texts,
   initialCategory,
   initialChoice,
   initialGame,
   initialPage,
+  initialTexts,
 } from "../utils/initialStuff";
+import { text } from "stream/consumers";
 
 export interface Asset {
   name: string;
@@ -20,65 +23,120 @@ export interface Asset {
 
 export interface AssetGroup {
   images: Array<Asset>;
+  musics: Array<Asset>;
+  sounds: Array<Asset>;
 }
 
 export interface GameState {
   game: Game;
-  selectedPage: number;
   assets: AssetGroup;
   gameState: { $state: any };
   resetBool: boolean;
-  visulaizingStates: Array<string>;
+  visualizingStates: Array<string>;
 }
 
 const initialState: GameState = {
   game: initialGame,
-  selectedPage: 0,
   assets: {
     images: [],
+    musics: [],
+    sounds: [],
   },
   gameState: { $state: {} },
   resetBool: false,
-  visulaizingStates: [],
+  visualizingStates: [],
 };
 
 export const gameSlice = createSlice({
-  name: "money",
+  name: "game",
   initialState,
   reducers: {
-    changeSelectedPage: (state, action: PayloadAction<number>) => {
-      state.selectedPage = action.payload;
-    },
-    addPage: (state) => {
-      state.game.pages.push(initialPage(state.game.settings.pageCount + 1));
+    addPage: (state, action: PayloadAction<string>) => {
+      const newPage = initialPage(state.game.settings.pageCount + 1)
+      newPage.category = action.payload;
+
+      state.game.pages.push(newPage);
       state.game.settings.pageCount++;
     },
-    removePage: (state, action: PayloadAction<number>) => {
-      const removeFirst = state.game.pages[action.payload].isFirst;
-      state.game.pages.splice(action.payload, 1);
+    removePage: (state, action: PayloadAction<{ removeId: number }>) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.removeId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const removeFirst = state.game.pages[pageIndex].isFirst;
+      state.game.pages.splice(pageIndex, 1);
 
       if (removeFirst) {
         state.game.pages[0].isFirst = true;
       }
+    },
+    addChoice: (state, action: PayloadAction<{ pageId: number }>) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
 
-      if (state.selectedPage === state.game.pages.length) {
-        state.selectedPage--;
+      if (pageIndex === -1) {
+        return;
       }
+
+      state.game.pages[pageIndex].next.push(initialChoice);
     },
-    addChoice: (state) => {
-      state.game.pages[state.selectedPage].next.push(initialChoice);
-    },
-    removeChoice: (state, action: PayloadAction<number>) => {
-      state.game.pages[state.selectedPage].next.splice(action.payload, 1);
+    removeChoice: (
+      state,
+      action: PayloadAction<{ pageId: number; choiceIndex: number }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      state.game.pages[pageIndex].next.splice(action.payload.choiceIndex, 1);
     },
     loadGame: (state, action: PayloadAction<{ game: Game }>) => {
       state.game = action.payload.game;
+      state.resetBool = !state.resetBool;
     },
-    changePage: (state, action: PayloadAction<Partial<Page>>) => {
-      state.game.pages[state.selectedPage] = {
-        ...state.game.pages[state.selectedPage],
-        ...action.payload,
+    changePage: (
+      state,
+      action: PayloadAction<{ pageId: number; page: Partial<Page> }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      state.game.pages[pageIndex] = {
+        ...state.game.pages[pageIndex],
+        ...action.payload.page,
       };
+    },
+    changePageCategory: (
+      state,
+      action: PayloadAction<{ pageId: number; category: string }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const page = state.game.pages[pageIndex];
+      page.category = action.payload.category;
+
+      state.game.pages.splice(pageIndex, 1);
+      state.game.pages.unshift(page);
     },
     changePageAt: (
       state,
@@ -91,27 +149,47 @@ export const gameSlice = createSlice({
     },
     changeChoice: (
       state,
-      action: PayloadAction<{ choice: Partial<Choice>; position: number }>
+      action: PayloadAction<{
+        choice: Partial<Choice>;
+        position: number;
+        pageId: number;
+      }>
     ) => {
-      const next = state.game.pages[state.selectedPage].next;
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const next = state.game.pages[pageIndex].next;
       next[action.payload.position] = {
         ...next[action.payload.position],
         ...action.payload.choice,
       };
     },
     setFirst: (state, action: PayloadAction<number>) => {
-      state.game.pages.forEach((page, index) => {
-        page.isFirst = index === action.payload;
+      state.game.pages.forEach((page) => {
+        page.isFirst = page.id === action.payload;
       });
     },
-    setSelectedPage: (state, action: PayloadAction<number>) => {
-      state.selectedPage = action.payload;
-    },
-    updateFormat: (state, action: PayloadAction<Partial<Format>>) => {
-      const page = state.game.pages[state.selectedPage];
+    updateFormat: (
+      state,
+      action: PayloadAction<{ format: Partial<Format>; pageId: number }>
+    ) => {
+      const pageIndex = state.game.pages.findIndex(
+        (page) => page.id == action.payload.pageId
+      );
+
+      if (pageIndex === -1) {
+        return;
+      }
+
+      const page = state.game.pages[pageIndex];
       page.format = {
         ...page.format,
-        ...action.payload,
+        ...action.payload.format,
       };
     },
     updateGlobalFormat: (state, action: PayloadAction<Format>) => {
@@ -126,7 +204,47 @@ export const gameSlice = createSlice({
     ) => {
       switch (action.payload.type) {
         case "images":
-          state.assets.images.push(...action.payload.assets);
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.images.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.images.push(asset);
+            }
+          }
+
+          break;
+
+        case "musics":
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.musics.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.musics.push(asset);
+            }
+          }
+
+          break;
+
+        case "sounds":
+          for (const asset of action.payload.assets) {
+            const oldAsset = state.assets.sounds.find(
+              (a) => a.name === asset.name
+            );
+
+            if (oldAsset !== undefined) {
+              oldAsset.content = asset.content;
+            } else {
+              state.assets.sounds.push(asset);
+            }
+          }
 
           break;
 
@@ -140,19 +258,51 @@ export const gameSlice = createSlice({
     ) => {
       switch (action.payload.type) {
         case "images":
-          const assets = state.assets.images;
+          const assetsImages = state.assets.images;
 
-          const assetIndex = assets.findIndex(
+          const assetIndexImages = assetsImages.findIndex(
             (a) => a.name === action.payload.name
           );
 
-          if (assetIndex === -1) {
+          if (assetIndexImages === -1) {
             return;
           }
 
-          assets.splice(assetIndex, 1);
+          assetsImages.splice(assetIndexImages, 1);
 
-          state.assets.images = assets;
+          state.assets.images = assetsImages;
+          break;
+
+        case "musics":
+          const assetsMusic = state.assets.musics;
+
+          const assetIndexMusic = assetsMusic.findIndex(
+            (a) => a.name === action.payload.name
+          );
+
+          if (assetIndexMusic === -1) {
+            return;
+          }
+
+          assetsMusic.splice(assetIndexMusic, 1);
+
+          state.assets.musics = assetsMusic;
+          break;
+
+        case "sounds":
+          const assetsSound = state.assets.sounds;
+
+          const assetIndexSound = assetsSound.findIndex(
+            (a) => a.name === action.payload.name
+          );
+
+          if (assetIndexSound === -1) {
+            return;
+          }
+
+          assetsSound.splice(assetIndexSound, 1);
+
+          state.assets.sounds = assetsSound;
           break;
 
         default:
@@ -165,6 +315,12 @@ export const gameSlice = createSlice({
         ...action.payload,
       };
     },
+    updateTexts: (state, action: PayloadAction<Partial<Texts>>) => {
+      state.game.settings.texts = {
+        ...(state.game.settings.texts ?? initialTexts),
+        ...action.payload,
+      };
+    },
     changeGameState: (state, action: PayloadAction<any>) => {
       state.gameState = action.payload;
     },
@@ -173,9 +329,10 @@ export const gameSlice = createSlice({
     },
     newProject: (state) => {
       state.game = initialGame;
-      state.selectedPage = 0;
       state.assets = {
         images: [],
+        musics: [],
+        sounds: [],
       };
       state.gameState = { $state: {} };
       state.resetBool = !state.resetBool;
@@ -185,19 +342,34 @@ export const gameSlice = createSlice({
       if (!settings.categories) {
         settings.categories = [];
       }
-      settings.categories.push(initialCategory);
+
+      const newCategory = {...initialCategory};
+      let index = 0;
+
+      while (state.game.settings.categories?.some(category => category.name === `${newCategory.name} ${index}`)) {
+        index++
+      }
+
+      newCategory.name = `${newCategory.name} ${index}`;
+
+      settings.categories.push(newCategory);
     },
-    removeCategory: (state, action: PayloadAction<number>) => {
+    removeCategory: (state, action: PayloadAction<string>) => {
       const settings = state.game.settings;
       if (!settings.categories || !(settings.categories.length > 0)) {
         return;
       }
-      const categoryName = settings.categories[action.payload].name;
 
-      settings.categories.splice(action.payload, 1);
+      const index = settings.categories.findIndex(category => category.name === action.payload)
+
+      if (index === -1) {
+        return;
+      }
+
+      settings.categories.splice(index, 1);
 
       for (const pages of state.game.pages) {
-        if (pages.category == categoryName) {
+        if (pages.category == action.payload) {
           pages.category = "";
         }
       }
@@ -215,23 +387,63 @@ export const gameSlice = createSlice({
         };
       }
     },
+    renameCategory: (
+      state,
+      action: PayloadAction<{ oldName: string; newName: string }>
+    ) => {
+      if (!state.game.settings.categories) {
+        return;
+      }
+      const { oldName, newName } = action.payload;
+
+      const category = state.game.settings.categories.find(cat => cat.name === oldName);
+
+      if (!category) {
+        return;
+      }
+
+      let trueNewName;
+
+      if (newName !== '') {
+        trueNewName = newName;
+      } else {
+        let index = 0;
+
+        while (state.game.settings.categories?.some(category => category.name === `category ${index}`)) {
+          index++
+        }
+
+        trueNewName = `category ${index}`;
+      }
+
+      category.name = trueNewName;
+
+      for (const page of state.game.pages) {
+        if (page.category === oldName) {
+          page.category = trueNewName;
+        }
+      }
+    },
     changeVisualState: (
       state,
       action: PayloadAction<{ id: number; content: string }>
     ) => {
-      state.visulaizingStates[action.payload.id] = action.payload.content;
+      state.visualizingStates[action.payload.id] = action.payload.content;
+    },
+    changeExpert: (state, action: PayloadAction<boolean>) => {
+      state.game.settings.expert = action.payload;
     },
   },
 });
 
 export const {
-  changeSelectedPage,
   addPage,
   addAssets,
   addChoice,
   changeChoice,
   changeGameState,
   changePage,
+  changePageCategory,
   changePageAt,
   loadGame,
   newProject,
@@ -240,14 +452,16 @@ export const {
   removePage,
   resetGameState,
   setFirst,
-  setSelectedPage,
   updateFormat,
   updateGlobalFormat,
   updateSettings,
+  updateTexts,
   addCategory,
   changeCategory,
   removeCategory,
   changeVisualState,
+  changeExpert,
+  renameCategory,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

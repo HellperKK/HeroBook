@@ -4,64 +4,31 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import { lowlight } from 'lowlight'
-import markdown from 'highlight.js/lib/languages/markdown'
+import javascript from 'highlight.js/lib/languages/javascript'
 
 import './codeColor.css'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
-lowlight.registerLanguage('ejs', (api) => {
-    const md = markdown(api);
-    const newTokens = [
-        {
-            className: 'code-expression',
-            begin: '<%=',
-            end: '%>'
-        },
-        {
-            className: 'code-comment',
-            begin: '<%#',
-            end: '%>'
-        },
-        {
-            className: 'code-ejs',
-            begin: '<%',
-            end: '%>'
-        },
-    ]
-
-    md.contains.unshift(...newTokens);
-    return md;
-})
-
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
-    if (!editor) {
-        return null
-    }
-
-    return (
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}>
-            code block
-        </button>
-    )
-}
+lowlight.registerLanguage('javascript', javascript)
 
 interface Props {
     content: string;
     onUpdate: (content: string) => void
 }
 
-export default function CodeEditor({ content, onUpdate }: Props) {
+export default function JsCodeEditor({ content, onUpdate }: Props) {
     const {  resetBool } = useSelector((state: RootState) => state.game);
     const { id } = useParams();
+
     const editor = useEditor({
         extensions: [
             Document,
             Paragraph,
             Text,
             CodeBlockLowlight
-                .configure({ defaultLanguage: 'ejs', lowlight, }),
+                .configure({ defaultLanguage: 'javascript', lowlight }),
         ],
         content: `<pre>${content}</pre>`,
         onUpdate: ({ editor }) => {

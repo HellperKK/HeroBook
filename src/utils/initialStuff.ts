@@ -1,3 +1,8 @@
+interface SaveState {
+  state: any,
+  pageId: number
+}
+
 interface Choice {
   action: string;
   pageId: number;
@@ -21,7 +26,10 @@ interface Page {
   next: Array<Choice>;
   format: Format;
   image: string;
+  audio?: string;
+  sound?: string;
   category?: string;
+  script?: string;
 }
 
 interface Category {
@@ -29,11 +37,20 @@ interface Category {
   visible: boolean;
 }
 
+interface Texts {
+  play: string;
+  continue: string;
+  quit: string;
+  menu: string;
+}
+
 interface Settings {
   author: string;
   gameTitle: string;
   pageCount: number;
   categories?: Array<Category>;
+  texts?: Texts;
+  expert?: boolean;
 }
 
 interface Game {
@@ -43,13 +60,20 @@ interface Game {
   pages: Array<Page>;
 }
 
+const initialTexts: Texts = {
+  play: "Play",
+  continue: "Continue",
+  quit: "Quit",
+  menu: "Menu"
+}
+
 const initialChoice = {
   action: "Go to the base page",
   pageId: 1,
 };
 
 const initialCategory = {
-  name: "category name",
+  name: "category",
   visible: true,
 };
 
@@ -62,6 +86,7 @@ function initialPage(id = 1): Page {
     next: [initialChoice],
     format: {},
     image: "",
+    audio: "",
   };
 }
 
@@ -71,6 +96,7 @@ const initialGame: Game = {
     author: "",
     gameTitle: "",
     pageCount: 4,
+    texts: initialTexts,
   },
   format: {
     textColor: "initial",
@@ -80,6 +106,7 @@ const initialGame: Game = {
     background: "#dbfffd",
     page: "#a9e5e2",
   },
+
   pages: [
     {
       id: 1,
@@ -99,9 +126,14 @@ const initialGame: Game = {
           action: "Brownie",
           pageId: 4,
         },
+        {
+          action: "I'm not hungry actually",
+          pageId: 0,
+        },
       ],
       format: {},
       image: "",
+      audio: "",
     },
     {
       id: 2,
@@ -116,6 +148,7 @@ const initialGame: Game = {
       ],
       format: {},
       image: "",
+      audio: "",
     },
     {
       id: 3,
@@ -130,6 +163,7 @@ const initialGame: Game = {
       ],
       format: {},
       image: "",
+      audio: "",
     },
     {
       id: 4,
@@ -144,9 +178,10 @@ const initialGame: Game = {
       ],
       format: {},
       image: "",
+      audio: "",
     },
   ],
 };
 
-export { initialChoice, initialPage, initialGame, initialCategory };
-export type { Page, Game, Choice, Format, Settings, Category };
+export { initialChoice, initialPage, initialGame, initialCategory, initialTexts };
+export type { Page, Game, Choice, Format, Settings, Category, Texts, SaveState };

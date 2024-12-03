@@ -6,6 +6,7 @@ import PlayArrowSharpIcon from "@mui/icons-material/PlayArrowSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import FeedSharpIcon from "@mui/icons-material/FeedSharp";
+import AllInboxSharpIcon from '@mui/icons-material/AllInboxSharp';
 // import HelpSharp from '@mui/icons-material/HelpSharp';
 
 import Button from "@mui/material/Button";
@@ -27,34 +28,39 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { saveAs } from "file-saver";
 import { Fragment } from "react";
 
-import GameWindow from "./game/GameWindow";
-import AssetsManager from "./topBar/AssetsManager";
+import AssetsManager from "../pages/AssetsManager";
 import GraphViewer from "./topBar/GraphViewer";
-import SettingsWindow from "./topBar/SettingsWindow";
 
 import { loadState, safeFileName } from "../utils/utils";
 import { compile } from "../utils/format";
-import { addAssets, loadGame, newProject, resetGameState } from "../store/gameSlice";
+import { addAssets, loadGame, newProject } from "../store/gameSlice";
 import { RootState } from "../store/store";
 import { addAssetsToZip } from "../utils/assets";
 import JSZip from "jszip";
+import { useNavigate } from "react-router-dom";
 
 export default function TopBar() {
   const { game, assets: globalAssets } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [settings, setSettings] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [assets, setAssets] = useState(false);
   const [graph, setGraph] = useState(false);
   // const [infos, setInfos] = useState(false);
+
+  const play = () => {
+    navigate("/player/menu");
+  }
 
   const loadAState = async () => {
     const state = await loadState();
     dispatch(loadGame({ game: state.game }));
     dispatch(addAssets({
-      assets: state.assets,
+      assets: state.images,
       type: "images",
+    }));
+    dispatch(addAssets({
+      assets: state.musics,
+      type: "musics",
     }));
   };
 
@@ -75,9 +81,8 @@ export default function TopBar() {
       await invoke("save", { content: binary, fileType: "project", openModal: false });
       return;
     } catch (e) {
-      console.log(e)
       const blob = await zip.generateAsync({ type: "blob" });
-      //saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
+      saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }
 
     //saveAs(blob, "game.zip");
@@ -92,7 +97,6 @@ export default function TopBar() {
       const binary = await zip.generateAsync({ type: "base64" });
       await invoke("save", { content: binary, fileType: "project", openModal: true });
     } catch (e) {
-      console.log(e);
       const blob = await zip.generateAsync({ type: "blob" });
       saveAs(blob, safeFileName(`${game.settings.gameTitle || "game"}.zip`));
     }
@@ -102,7 +106,7 @@ export default function TopBar() {
     // download('game.html', format(JSON.stringify(state), false, state.settings));
     const zip = new JSZip();
     addAssetsToZip(globalAssets, zip);
-    compile(game, zip);
+    compile(game, globalAssets, zip);
   };
 
   return (
@@ -120,7 +124,7 @@ export default function TopBar() {
                 </Button>
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={makeNewProject}>New project</MenuItem>
-                  <MenuItem onClick={loadAState}>Open project</MenuItem>
+                  <MenuItem onClick={() => loadAState()}>Open project</MenuItem>
                   <MenuItem onClick={saveState}>Save</MenuItem>
                   <MenuItem onClick={saveStateAs}>Save as</MenuItem>
                 </Menu>
@@ -134,7 +138,7 @@ export default function TopBar() {
                   Tools
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={() => setAssets(true)}>Assets</MenuItem>
+                  <MenuItem onClick={() => navigate("/assets")}>Assets</MenuItem>
                   <MenuItem onClick={() => setGraph(true)}>Pages graph</MenuItem>
                 </Menu>
               </Fragment>
@@ -147,9 +151,13 @@ export default function TopBar() {
                   Game
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={() => setPlaying(true)}>Play</MenuItem>
+                  <MenuItem onClick={
+                    play}
+                  >
+                    Play
+                  </MenuItem>
                   <MenuItem onClick={compileState}>Compile</MenuItem>
-                  <MenuItem onClick={() => setSettings(true)}>Settings</MenuItem>
+                  <MenuItem onClick={() => navigate("/settings")}>Settings</MenuItem>
                 </Menu>
               </Fragment>
             )}
@@ -181,7 +189,7 @@ export default function TopBar() {
           <Tooltip title="open project" arrow>
             <Button
               variant="contained"
-              onClick={loadState}
+              onClick={() => loadAState()}
             >
               <FolderOpenSharpIcon />
             </Button>
@@ -189,9 +197,7 @@ export default function TopBar() {
           <Tooltip title="test game" arrow>
             <Button
               variant="contained"
-              onClick={() => {
-                setPlaying(true);
-              }}
+              onClick={play}
             >
               <PlayArrowSharpIcon />
             </Button>
@@ -202,33 +208,17 @@ export default function TopBar() {
             </Button>
           </Tooltip>
           <Tooltip title="game settings" arrow>
-            <Button variant="contained" onClick={() => setSettings(true)}>
+            <Button variant="contained" onClick={() => navigate("/settings")}>
               <SettingsSharpIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="game assets" arrow>
+            <Button variant="contained" onClick={() => navigate("/assets")}>
+              <AllInboxSharpIcon />
             </Button>
           </Tooltip>
         </ButtonGroup>
       </Grid>
-      <SettingsWindow open={settings} close={() => setSettings(false)} />
-      <Modal open={playing}>
-        <Box
-          sx={{ height: "100vh", backgroundColor: "white", overflowX: "auto" }}
-        >
-          <GameWindow start={game.pages[0].id} />
-
-          <Container>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setPlaying(false);
-                // dispatch(resetGameState());
-              }}
-              sx={{ width: "100%" }}
-            >
-              <CloseSharpIcon />
-            </Button>
-          </Container>
-        </Box>
-      </Modal>
       <Modal open={graph}>
         <Box
           sx={{ height: "100vh", backgroundColor: "white", overflowX: "auto" }}
@@ -246,7 +236,6 @@ export default function TopBar() {
           </Container>
         </Box>
       </Modal>
-      <AssetsManager open={assets} close={() => setAssets(false)} />
       {/* <Modal open={infos}>
         <Card>
           hi

@@ -5,6 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 import { safeFileName } from "./utils";
 import { Game } from "./initialStuff";
+import { AssetGroup } from "../store/gameSlice";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const format = (game: Game) => `
@@ -49,6 +50,10 @@ const format = (game: Game) => `
         return eval(condition);
       };
 
+      const evalScript = ($state, script) => {
+        eval(script);
+      };
+
       const data = ${JSON.stringify(game)}
       const divStory = document.querySelector(".story")
       const divImage = divStory.querySelector(".story-image")
@@ -84,6 +89,7 @@ const format = (game: Game) => `
         divStory.style.backgroundColor = pageFormat.page || globalFormat.page
         divText.style.color = pageFormat.textColor || globalFormat.textColor
 
+        evalScript(state.$state, page.script ?? "")
         let body = safeMarkdown(page.text);
 
         try {
@@ -116,7 +122,7 @@ const format = (game: Game) => `
 </html>
 `;
 
-const compile = async (game: Game, zip: JSZip) => {
+const compile = async (game: Game, assets: AssetGroup, zip: JSZip) => {
   const gameL = lens<Game>();
   const cleanState = gameL.pages.set((pages) =>
     pages.map((page) => ({
@@ -129,8 +135,15 @@ const compile = async (game: Game, zip: JSZip) => {
     }))
   )(game);
 
+  const images = assets.images.map(image => image.name)
+  const musics = assets.musics.map(music => music.name)
+  const sounds = assets.sounds.map(sound => sound.name)
+
   zip.file("data.json", JSON.stringify(cleanState));
-  zip.file("index.html", format(game));
+  zip.file("assets/images/data.json", JSON.stringify(images));
+  zip.file("assets/musics/data.json", JSON.stringify(musics));
+  zip.file("assets/sounds/data.json", JSON.stringify(sounds));
+  // zip.file("index.html", format(game));
   zip.folder("saves");
 
   try {
