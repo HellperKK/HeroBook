@@ -196,6 +196,8 @@ export default function Player(props: Props) {
             sx={{
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {selectedPage.next.filter((choice: Choice) => {

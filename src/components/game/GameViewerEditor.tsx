@@ -185,6 +185,8 @@ export default function GameViewerEditor(props: CompProp) {
           sx={{
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           {page.next.filter(choice => {
