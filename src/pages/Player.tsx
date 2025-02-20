@@ -142,7 +142,6 @@ export default function Player(props: Props) {
           padding: "10%",
           minHeight: "50vh",
           backgroundColor: selectedPage.format.background ?? game.format.background,
-          overflowX: "auto",
         }}
       >
         <Box

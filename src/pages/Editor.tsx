@@ -60,7 +60,7 @@ export default function Editor() {
   };
 
   return (
-    <Box sx={{ padding: "8px", backgroundColor: "white", overflowY: "scroll" }}>
+    <Box sx={{ padding: "8px", backgroundColor: "white" }}>
       <TopBar />
       {/* Editor */}
       <Grid container spacing={2} alignItems="stretch">
