@@ -7,8 +7,9 @@ import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
 
 import BrushSharpIcon from "@mui/icons-material/BrushSharp";
+import AddSharpIcon from '@mui/icons-material/AddSharp';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -21,10 +22,23 @@ import { RootState } from "../store/store";
 import { useParams } from "react-router-dom";
 
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import { useImmer } from "use-immer";
 
 const FixedTypo = styled(Typography)`
   width: 100px;
 `;
+
+function rebuildState(states: Array<{ name: string, value: string }>) {
+  const state: any = {};
+  states.forEach(({ name, value }) => {
+    try {
+      state[name] = JSON.parse(value);
+    } catch (error) {
+      state[name] = "";
+    }
+  });
+  return state;
+}
 
 export default function ViewWindow() {
   const { game, visualizingStates } = useSelector((state: RootState) => state.game);
@@ -32,14 +46,47 @@ export default function ViewWindow() {
   const { id } = useParams();
   const selectedPageIndex = game.pages.findIndex(page => page.id === parseInt(id!, 10));
   const selectedPage = game.pages[selectedPageIndex];
+  const initialStates = Object.entries(JSON.parse(visualizingStates[selectedPageIndex] ?? "{}"))
+    .map(([name, value]) => ({ name, value: JSON.stringify(value as any) }))
 
-  const state: string = visualizingStates[selectedPageIndex] ?? "{}";
+  const [states, updateStates] = useImmer<Array<{ name: string, value: string }>>(initialStates);
+
+  useEffect(() => {
+    updateStates(_ => initialStates)
+  }, [id]);
+
+  useEffect(() => {
+    const state = rebuildState(states);
+    dispatch(changeVisualState({ id: selectedPageIndex, content: JSON.stringify(state), }));
+  }, [states]);
+
+  const state: string = rebuildState(states);
 
   const trueState = { $state: {} };
-  try {
-    trueState.$state = JSON.parse(state);
-  } catch (error) {
+  trueState.$state = state;
 
+  const addState = () => {
+    updateStates(draft => {
+      draft.push({ name: "state", value: "0" });
+    })
+  }
+
+  const deleteState = (index: number) => {
+    updateStates(draft => {
+      draft.splice(index, 1);
+    })
+  }
+
+  const updateState = (index: number, value: string) => {
+    updateStates(draft => {
+      draft[index].value = value;
+    })
+  }
+
+  const updateStateKey = (index: number, value: string) => {
+    updateStates(draft => {
+      draft[index].name = value;
+    })
   }
 
   const [editing, setEditing] = useState(false);
@@ -141,16 +188,48 @@ export default function ViewWindow() {
                 </Button>
               </Tooltip>
             </Stack>
-            <Stack direction="row" spacing={1}>
-              <TextField
-                multiline
-                fullWidth
-                label="Page state"
-                variant="outlined"
-                value={state}
-                onChange={(e) => dispatch(changeVisualState({ id: selectedPageIndex, content: e.target.value }))}
-                sx={{ marginTop: "20px" }}
-              />
+            <Stack direction="column" spacing={1} sx={{ marginTop: "20px" }}>
+              {
+                states.map((state, index) => (
+                  <div>
+                    <TextField
+                      key={index}
+                      label="property name"
+                      variant="outlined"
+                      value={state.name}
+                      onChange={(e) => {
+                        updateStateKey(index, e.target.value);
+                      }}
+                      sx={{ width: "35%" }}
+                    />
+                    <TextField
+                      key={index}
+                      label="property value"
+                      variant="outlined"
+                      value={state.value}
+                      onChange={(e) => {
+                        updateState(index, e.target.value);
+                      }}
+                      sx={{ width: "35%" }}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        deleteState(index);
+                      }}
+                    >
+                      <DeleteSharpIcon />
+                    </Button>
+                  </div>
+                ))}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addState();
+                }}
+              >
+                <AddSharpIcon />
+              </Button>
             </Stack>
           </Box>
         ) : (
