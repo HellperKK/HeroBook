@@ -142,7 +142,6 @@ export default function Player(props: Props) {
           padding: "10%",
           minHeight: "50vh",
           backgroundColor: selectedPage.format.background ?? game.format.background,
-          overflowX: "auto",
         }}
       >
         <Box
@@ -196,6 +195,8 @@ export default function Player(props: Props) {
             sx={{
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {selectedPage.next.filter((choice: Choice) => {
