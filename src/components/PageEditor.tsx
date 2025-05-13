@@ -27,6 +27,7 @@ import { RootState } from "../store/store";
 import CodeEditor from "./codeEditor/CodeEditor";
 import { loadAssets } from "../utils/assets";
 import { useParams } from "react-router-dom";
+import { countWords } from "../utils/countWords";
 // import MarkdownEditor from './MarkdownEditor';
 
 const StyledImg = styled.img`
@@ -41,7 +42,11 @@ export default function PageEditor() {
   const categories = game.settings.categories ?? [];
   const { id } = useParams();
   const selectedPage = game.pages.find(page => page.id === parseInt(id!, 10))!;
-  console.log(game);
+  const { length: globalTextLength, words: globalWordCount } = game.pages.reduce((memo, page) => {
+    memo.length += page.text.length;
+    memo.words += countWords(page.text);
+    return memo;
+  }, { length: 0, words: 0 })
 
   return (
     <Box
@@ -181,6 +186,8 @@ export default function PageEditor() {
             dispatch(changePage({ page: { text: content }, pageId: selectedPage.id }));
           }
         }} />}
+        <div>Page count: {selectedPage.text.length} chars and about {countWords(selectedPage.text)} words</div>
+        <div>Global count: {globalTextLength} chars and about {globalWordCount} words</div>
       </Box>
       {/* Choice List */}
       <Box
