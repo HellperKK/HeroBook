@@ -17,6 +17,7 @@ import PlayerLoad from "./pages/PlayerLoad";
 import AssetsManager from "./pages/AssetsManager";
 
 import "./main.css";
+import AllPages from "./pages/AllPages";
 
 enableMapSet();
 
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/player/:id" element={<Player loaded={false}/>} />
         <Route path="/playerLoad/:id" element={<Player loaded={true}/>} />
         <Route path="/assets" element={<AssetsManager />} />
+        <Route path="/allPages" element={<AllPages />} />
       </Routes>
     </HashRouter>
   </Provider>

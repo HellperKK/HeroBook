@@ -140,6 +140,7 @@ export default function TopBar() {
                 <Menu {...bindMenu(popupState)}>
                   <MenuItem onClick={() => navigate("/assets")}>Assets</MenuItem>
                   <MenuItem onClick={() => setGraph(true)}>Pages graph</MenuItem>
+                  <MenuItem onClick={() => navigate("/allPages")}>Proofreading</MenuItem>
                 </Menu>
               </Fragment>
             )}
