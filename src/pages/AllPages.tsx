@@ -16,7 +16,7 @@ export default function AllPages() {
   const dispatch = useDispatch();
 
   return (
-    <div>
+    <div className={css`background-color: white`}>
       <Container>
         <Link to={`/editor/${game.pages[0].id}`}>Back to editor</Link>
       </Container>
