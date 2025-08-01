@@ -1,0 +1,11 @@
+.button {
+  position: relative;
+  font-size: calc(var(--font-size) * var(--font-ratio));
+  background-color: var(--primary);
+  color: var(--text-primary);
+  padding: var(--padding-size);
+  margin: 4px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}

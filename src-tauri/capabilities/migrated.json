@@ -1,0 +1,32 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [
+        "$CONFIG/template-config.json"
+      ]
+    },
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [
+        "$CONFIG/template-config.json"
+      ]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        "$CONFIG/template-config.json"
+      ]
+    },
+    "shell:allow-open",
+    "shell:default",
+    "fs:default"
+  ]
+}

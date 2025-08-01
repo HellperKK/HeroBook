@@ -1,0 +1,30 @@
+:root {
+  --primary: #6200ee;
+  --primary-variant: #3700b3;
+  --secondary: #03d4c6;
+  --secondary-variant: #018786;
+  --background: #f5f5f5;
+  --surface: #f5f5f5;
+  --surface-hover: #c1c1c1;
+  --error: #b00020;
+
+  --text-primary: #f5f5f5;
+  --text-secondary: #101010;
+  --text-background: #101010;
+  --text-surface: #101010;
+  --text-error: #f5f5f5;
+
+  --font-size: 1rem;
+  --font-ratio: 1;
+  --padding-size: 4px;
+  --font-family: sans-serif;
+}
+
+* {
+  font-family: var(--font-family);
+}
+
+@font-face {
+  font-family: dyslexic;
+  src: url(./assets/fonts/OpenDyslexic-Regular.woff);
+}

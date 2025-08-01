@@ -1,8 +1,8 @@
 [package]
-name = "herobook-tauri"
+name = "app-template"
 version = "0.0.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["HellperKK"]
 license = ""
 repository = ""
 edition = "2021"
@@ -10,15 +10,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2", features = [] }
+tauri-build = { version = "2.0.0-rc", features = [] }
 
 [dependencies]
-tauri = { version = "1.3", features = ["shell-open"] }
+tauri = { version = "2.0.0-rc", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-rfd = "*"
-base64 = "0.21.2"
-reqwest = { version = "0.11.18", features = ["blocking", "json"] }
+tauri-plugin-shell = "2.0.0-rc"
+tauri-plugin-fs = "2.0.0-rc"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

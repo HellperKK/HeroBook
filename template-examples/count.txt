@@ -1,3 +1,0 @@
-<%if($state.count === undefined){$state.count = 0}%>
-<%$state.count++%>
-Count : <%= $state.count%>
