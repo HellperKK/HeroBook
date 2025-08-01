@@ -1,2 +1,2 @@
 export const rootPath = "Herobook";
-export const projectsPath = "Herobook/Projects";
+export const projectsPath = `${rootPath}/Projects`;
