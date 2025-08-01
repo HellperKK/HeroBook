@@ -1,6 +1,7 @@
 import {
 	BaseDirectory,
 	exists,
+	mkdir,
 	readTextFile,
 	writeTextFile,
 } from "@tauri-apps/plugin-fs";
@@ -11,6 +12,7 @@ import Empty from "./pages/empty/Empty";
 import { camelToKebab } from "./utils/camelToKebab";
 import SettingsContext from "./utils/contexts/settingsContext";
 import { isDesktopApp } from "./utils/isDesktopApp";
+import { projectsPath, rootPath } from "./utils/paths";
 import { defaultTheme } from "./utils/styles/default";
 import type { Theme } from "./utils/styles/Theme";
 
@@ -67,8 +69,30 @@ export default function App() {
 		}
 	};
 
+	const manageProjectsDirectories = async () => {
+		const isDesktop = await isDesktopApp();
+		if (!isDesktop) {
+			return;
+		}
+
+		let projectsDirectoryExists = await exists(rootPath, {
+			baseDir: BaseDirectory.Document,
+		});
+		if (!projectsDirectoryExists) {
+			await mkdir(rootPath, { baseDir: BaseDirectory.Document });
+		}
+
+		projectsDirectoryExists = await exists(projectsPath, {
+			baseDir: BaseDirectory.Document,
+		});
+		if (!projectsDirectoryExists) {
+			await mkdir(projectsPath, { baseDir: BaseDirectory.Document });
+		}
+	};
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: false positive
 	useEffect(() => {
+		manageProjectsDirectories();
 		loadTheme();
 	}, []);
 
