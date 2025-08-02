@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
 	darkContrastTheme,
@@ -19,41 +19,51 @@ import Text from "../../texts/text/Text";
 import DropDownBar from "./DropDownBar";
 import MenuButton from "./MenuButton";
 import "./menuLayout.scss";
+import { invoke } from "@tauri-apps/api/core";
+import { Outlet, useNavigate } from "react-router-dom";
+import { isDesktopApp } from "../../../utils/isDesktopApp";
 
 type Props = {
-	children: ReactElement;
 	theme: Theme;
 	updateTheme: (theme: Partial<Theme>) => void;
 };
 
-export default function MenuLayout({ children, theme, updateTheme }: Props) {
+export default function MenuLayout({ theme, updateTheme }: Props) {
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 
 	const [stylingOpen, setStylingOpen] = useState(false);
 
 	return (
 		<div className="menu-layout">
 			<div className="menu-dropdown">
-				{/*<DropDownBar label={t("file")}>
-                    <MenuButton>{t("open")}</MenuButton>
-                    <MenuButton>{t("save")}</MenuButton>
-                    <MenuButton
-                        onClick={async () => {
-                            if (await isDesktopApp()) {
-                                await invoke("quit", {})
-                            }
-                        }}
-                    >
-                        {t("quit")}
-                    </MenuButton>
-                </DropDownBar>*/}
+				{
+					<DropDownBar label={t("file")}>
+						<MenuButton onClick={() => navigate("/new")}>
+							New project
+						</MenuButton>
+						<MenuButton>Open project</MenuButton>
+						<MenuButton onClick={() => navigate("/")}>Close project</MenuButton>
+						<MenuButton
+							onClick={async () => {
+								if (await isDesktopApp()) {
+									await invoke("quit", {});
+								}
+							}}
+						>
+							{t("quit")}
+						</MenuButton>
+					</DropDownBar>
+				}
 				<DropDownBar label={t("window")}>
 					<MenuButton onClick={() => setStylingOpen(true)}>
 						{t("settings")}
 					</MenuButton>
 				</DropDownBar>
 			</div>
-			<div className="menu-content">{children}</div>
+			<div className="menu-content">
+				<Outlet />
+			</div>
 
 			{/* Styling modale */}
 			<Modal

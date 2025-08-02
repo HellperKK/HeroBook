@@ -99,14 +99,14 @@ export default function App() {
 
 	return (
 		<SettingsContext.Provider value={theme}>
-			<MenuLayout theme={theme} updateTheme={updateTheme}>
 				<HashRouter>
 					<Routes>
-						<Route path="/" element={<StartPage />} />
-						<Route path="/new" element={<NewProject />} />
+						<Route path="/" element={<MenuLayout theme={theme} updateTheme={updateTheme} />}>
+							<Route index element={<StartPage />} />
+							<Route path="/new" element={<NewProject />} />
+						</Route>
 					</Routes>
 				</HashRouter>
-			</MenuLayout>
 		</SettingsContext.Provider>
 	);
 }
