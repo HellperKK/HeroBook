@@ -28,8 +28,8 @@
         "fullscreen": false,
         "resizable": true,
         "title": "herobook engine",
-        "width": 480,
-        "height": 320
+        "width": 1280,
+        "height": 720
       }
     ],
     "security": {
