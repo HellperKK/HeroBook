@@ -7,4 +7,5 @@ export type Settings = {
 	texts: Texts;
 	expert: boolean;
 	format: Format;
+	firstPage: number;
 };

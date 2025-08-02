@@ -1,8 +1,10 @@
 import type { Project } from "../Project";
+import { emptyPage } from "./emptyPage";
 
 export const emptyProject: Project = {
     version: "2.0.0",
     settings: {
+        firstPage: 1,
         author: "",
         gameTitle: "",
         texts: {
@@ -24,6 +26,6 @@ export const emptyProject: Project = {
     categories: [{
         name: "no category",
         visible: true,
-        pages: [],
+        pages: [emptyPage],
     }],
 };
