@@ -8,16 +8,17 @@ type Props = PropsWithChildren<{
 	onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	className?: string;
 	type?: "button" | "submit" | "reset";
+	disabled?: boolean;
 }>;
 
-export default function Button({ children, onClick, className, type }: Props) {
+export default function Button({ children, onClick, className, type, disabled }: Props) {
 	const context = useContext(SettingsContext);
 	const [isDisabled, setIsDisabled] = useState(false);
 
 	return (
 		<button
 			type={type ?? "button"}
-			disabled={isDisabled}
+			disabled={disabled ||isDisabled}
 			className={`button ${className ?? ""}`}
 			onClick={(e) => {
 				if (!isDisabled) {
