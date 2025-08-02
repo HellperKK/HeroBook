@@ -1,0 +1,1 @@
+export const safeProjectName = (name: string) => name.replaceAll(/\W/g, "-").replaceAll(/-+/g, "-");

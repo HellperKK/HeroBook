@@ -1,10 +1,19 @@
 import Button from "../../components/inputs/button/Button";
 import "./newProject.scss";
+import {
+	BaseDirectory,
+	exists,
+	mkdir,
+	writeTextFile,
+} from "@tauri-apps/plugin-fs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "../../components/inputs/textField/TextField";
 import Toggle from "../../components/inputs/toggle/Toggle";
 import Label from "../../components/texts/label/Label";
+import { emptyProject } from "../../utils/game/empty/emptyProject";
+import { projectsPath } from "../../utils/paths";
+import { safeProjectName } from "../../utils/safeProjectName";
 
 export default function NewProject() {
 	const navigate = useNavigate();
@@ -43,15 +52,48 @@ export default function NewProject() {
 					/>
 				</div>
 				<Button
-					onClick={() => {
+					onClick={async () => {
 						if (
 							formState.projectName === "" ||
 							formState.projectAuthor === ""
 						) {
+							console.log("empty project name or author");
 							return;
 						}
 
-						console.log(formState);
+						const safeName = safeProjectName(formState.projectName);
+						const projectPath = `${projectsPath}/${safeName}`;
+
+						if (
+							await exists(projectPath, { baseDir: BaseDirectory.Document })
+						) {
+							console.log("project already exists");
+							return;
+						}
+						await mkdir(projectPath, {
+							baseDir: BaseDirectory.Document,
+						});
+						await mkdir(`${projectPath}/images`, {
+							baseDir: BaseDirectory.Document,
+						});
+						await mkdir(`${projectPath}/musics`, {
+							baseDir: BaseDirectory.Document,
+						});
+						await mkdir(`${projectPath}/sounds`, {
+							baseDir: BaseDirectory.Document,
+						});
+						await mkdir(`${projectPath}/videos`, {
+							baseDir: BaseDirectory.Document,
+						});
+						await writeTextFile(
+							`${projectPath}/data.json`,
+							JSON.stringify(emptyProject, null, 4),
+							{
+								baseDir: BaseDirectory.Document,
+							},
+						);
+
+						navigate("/editor");
 					}}
 				>
 					Create
