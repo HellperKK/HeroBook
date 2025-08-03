@@ -42,5 +42,4 @@ export default function File({ page }: Props) {
 			<Button>Delete</Button>
 		</div>
 	);
-	//return <Button ref={setNodeRef} variant="contained" onClick={onClick}>{page.name}</Button>
 }
