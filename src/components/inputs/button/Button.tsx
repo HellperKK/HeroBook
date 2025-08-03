@@ -11,14 +11,20 @@ type Props = PropsWithChildren<{
 	disabled?: boolean;
 }>;
 
-export default function Button({ children, onClick, className, type, disabled }: Props) {
+export default function Button({
+	children,
+	onClick,
+	className,
+	type,
+	disabled,
+}: Props) {
 	const context = useContext(SettingsContext);
 	const [isDisabled, setIsDisabled] = useState(false);
 
 	return (
 		<button
 			type={type ?? "button"}
-			disabled={disabled ||isDisabled}
+			disabled={disabled || isDisabled}
 			className={`button ${className ?? ""}`}
 			onClick={(e) => {
 				if (!isDisabled) {
