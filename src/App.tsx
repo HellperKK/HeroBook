@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import MenuLayout from "./components/layout/menuLayout/MenuLayout";
+import Editor from "./pages/editor/Editor";
 import NewProject from "./pages/new-project/NewProject";
 import StartPage from "./pages/start-page/StartPage";
 import { camelToKebab } from "./utils/camelToKebab";
@@ -104,6 +105,7 @@ export default function App() {
 						<Route path="/" element={<MenuLayout theme={theme} updateTheme={updateTheme} />}>
 							<Route index element={<StartPage />} />
 							<Route path="/new" element={<NewProject />} />
+							<Route path="/editor" element={<Editor />} />
 						</Route>
 					</Routes>
 				</HashRouter>
