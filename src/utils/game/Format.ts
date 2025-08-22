@@ -1,8 +1,12 @@
-export type Format = {
+export type ChoiceFormat = {
+	btnColor: string;
+	btnTextColor: string;
+	btnFont: string;
+}
+
+export type Format = ChoiceFormat &{
 	textColor: string;
 	textFont: string;
-	btnColor: string;
-	btnFont: string;
 	background: string;
 	page: string;
 };

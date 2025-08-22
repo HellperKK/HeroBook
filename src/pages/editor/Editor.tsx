@@ -1,50 +1,99 @@
-import { type ReactElement, useState } from "react";
+import { useState } from "react";
 import Button from "../../components/inputs/button/Button";
-import FileTabs from "../../components/surfaces/file-tabs/Tabs";
-import TabPannel from "../../components/surfaces/tabs/TabPannel";
 import "./editor.scss";
-import FolderBar from "../../components/misc/folder-bar/FolderBar";
-
-type App = {
-	name: string;
-	element: ReactElement;
-};
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import TextField from "../../components/inputs/textField/TextField";
+import Toggle from "../../components/inputs/toggle/Toggle";
+import TabPannel from "../../components/surfaces/tabs/TabPannel";
+import Tabs from "../../components/surfaces/tabs/Tabs";
+import Label from "../../components/texts/label/Label";
+import type { RootState } from "../../store/store";
+import RenderBlock from "./blocks/RenderBlock";
 
 export default function Editor() {
-	const [apps, setApps] = useState<Array<App>>([]);
+	const navigate = useNavigate();
+	const params = useParams();
+	const {
+		pages,
+		settings: { format, gameTitle, author, expert, firstPage },
+	} = useSelector((state: RootState) => state.project);
 	const [leftToggle, setLeftToggle] = useState(false);
+	const [rightToggle, setRightToggle] = useState(false);
 
-	const _addApp = (name: string, element: ReactElement) => {
-		const newApps = apps.slice();
-		newApps.push({ name, element });
-		setApps(newApps);
-	};
+	// biome-ignore lint/style/noNonNullAssertion: will allways work
+	const page = pages.find((page) => page.id === +params.id!)!;
 
-	const deleteApp = (index: number) => {
-		const newApps = apps.slice();
-		newApps.splice(index, 1);
-		setApps(newApps);
-	};
-
+	const leftSize = leftToggle ? "400px" : "70px";
+	const rightSize = rightToggle ? "400px" : "70px";
+	
 	return (
 		<div
 			className="editor"
-			style={{ gridTemplateColumns: leftToggle ? "500px 1fr" : "70px 1fr" }}
+			style={{ gridTemplateColumns: `${leftSize} 1fr ${rightSize}` }}
 		>
 			<div className="editor-leftbar">
 				<Button onClick={() => setLeftToggle((toggled) => !toggled)}>
 					{leftToggle ? "Close" : "Open"}
 				</Button>
-				{leftToggle && <FolderBar />}
+				{leftToggle && (
+					<>
+						<Button type="button" onClick={() => navigate("/editor")}>
+							Go Back
+						</Button>
+						<div></div>
+					</>
+				)}
 			</div>
-			<div className="editor-tabs">
-				<FileTabs onTabClose={(index) => deleteApp(index)}>
-					{apps.map((app) => (
-						<TabPannel key={app.name} title={app.name}>
-							{app.element}
-						</TabPannel>
+			<div
+				className="game-outer"
+				style={{
+					backgroundColor: page.format?.background ?? format.background,
+				}}
+			>
+				<div
+					className="game-inner"
+					style={{ backgroundColor: page.format?.page ?? format.page }}
+				>
+					{page.content.map((block) => (
+						<RenderBlock block={block} key={block.id} />
 					))}
-				</FileTabs>
+				</div>
+			</div>
+			<div className="editor-rightbar">
+				<Button onClick={() => setRightToggle((toggled) => !toggled)}>
+					{leftToggle ? "Close" : "Open"}
+				</Button>
+				{rightToggle && (
+					<Tabs>
+						<TabPannel title="Project">
+							<div>
+								<Label width="110px">Game title</Label>
+								<TextField value={gameTitle} />
+							</div>
+							<div>
+								<Label width="110px">Author name</Label>
+								<TextField value={author} />
+							</div>
+							<div>
+								<Label width="110px">Export mode?</Label>
+								<Toggle checked={expert} />
+							</div>
+							<div>
+								<Label width="110px">First page</Label>
+								<select value={firstPage}>
+									{pages.map((page) => (
+										<option key={page.id} value={page.id}>
+											{page.name}
+										</option>
+									))}
+								</select>
+							</div>
+						</TabPannel>
+						<TabPannel title="Page">Two</TabPannel>
+						<TabPannel title="Element">Three</TabPannel>
+					</Tabs>
+				)}
 			</div>
 		</div>
 	);

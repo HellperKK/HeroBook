@@ -111,6 +111,7 @@ export default function App() {
 						<Route path="/new" element={<NewProject />} />
 						<Route path="/editor">
 							<Route index element={<GraphPage />} />
+							<Route path="page/:id" element={<Editor />} />
 						</Route>
 					</Route>
 				</Routes>

@@ -1,6 +1,6 @@
 .editor {
     display: grid;
-    grid-template-areas: "leftbar tabs";
+    grid-template-areas: "leftbar tabs lightbar";
     height: 100%;
 }
 
@@ -13,6 +13,30 @@
     overflow: hidden;
 }
 
-.editor-tabs {
+.editor-rightbar {
+    grid-area: lightbar;
+    background-color: var(--surface);
+    color: var(--text-surface);
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    overflow: hidden;
+}
+
+.game-outer {
     grid-area: tabs;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-inner {
+    width: 80ch;
+    min-height: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
 }

@@ -1,28 +1,25 @@
+import type { ChoiceFormat } from "./Format";
+
+type BlockBase = {
+	id: number;
+};
+export type Choice = BlockBase & {
+	type: "choice";
+	text: string;
+	pageId: number;
+	format?: Partial<ChoiceFormat>;
+};
 export type Block =
-	| {
+	| (BlockBase & {
 			type: "text";
 			content: string;
-	  }
-	| {
+	  })
+	| (BlockBase & {
 			type: "image";
 			path: string;
-	  }
-	| {
-			type: "audio";
-			path: string;
-			autoplay: boolean;
-	  }
-	| {
-			type: "sound";
-			path: string;
-			autoplay: boolean;
-	  }
-	| {
+	  })
+	| (BlockBase & {
 			type: "video";
 			path: string;
-	  }
-	| {
-			type: "choice";
-			text: string;
-            pageId: number;
-	  };
+	  })
+	| Choice;
