@@ -5,6 +5,7 @@ export const emptyProject: Project = {
 	settings: {
 		firstPage: 1,
 		author: "",
+		folderName: "",
 		gameTitle: "",
 		texts: {
 			play: "Play",

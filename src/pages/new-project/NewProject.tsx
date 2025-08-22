@@ -97,6 +97,7 @@ export default function NewProject() {
 						);
 						dispatch(
 							initProject({
+								folderName: safeName,
 								gameTitle: formState.projectName,
 								author: formState.projectAuthor,
 								expert: formState.expertMode,
