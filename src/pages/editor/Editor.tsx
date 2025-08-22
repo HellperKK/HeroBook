@@ -1,17 +1,19 @@
 import { useState } from "react";
 import Button from "../../components/inputs/button/Button";
 import "./editor.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import TextField from "../../components/inputs/textField/TextField";
 import Toggle from "../../components/inputs/toggle/Toggle";
 import TabPannel from "../../components/surfaces/tabs/TabPannel";
 import Tabs from "../../components/surfaces/tabs/Tabs";
 import Label from "../../components/texts/label/Label";
+import { changeGlobalSettings } from "../../store/projectSlice";
 import type { RootState } from "../../store/store";
 import RenderBlock from "./blocks/RenderBlock";
 
 export default function Editor() {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const params = useParams();
 	const {
@@ -26,7 +28,7 @@ export default function Editor() {
 
 	const leftSize = leftToggle ? "400px" : "70px";
 	const rightSize = rightToggle ? "400px" : "70px";
-	
+
 	return (
 		<div
 			className="editor"
@@ -69,19 +71,55 @@ export default function Editor() {
 						<TabPannel title="Project">
 							<div>
 								<Label width="110px">Game title</Label>
-								<TextField value={gameTitle} />
+								<TextField
+									onChange={(gameTitle) =>
+										dispatch(
+											changeGlobalSettings({
+												gameTitle,
+											}),
+										)
+									}
+									value={gameTitle}
+								/>
 							</div>
 							<div>
 								<Label width="110px">Author name</Label>
-								<TextField value={author} />
+								<TextField
+									onChange={(author) =>
+										dispatch(
+											changeGlobalSettings({
+												author,
+											}),
+										)
+									}
+									value={author}
+								/>
 							</div>
 							<div>
 								<Label width="110px">Export mode?</Label>
-								<Toggle checked={expert} />
+								<Toggle
+									onChange={(expert) =>
+										dispatch(
+											changeGlobalSettings({
+												expert,
+											}),
+										)
+									}
+									checked={expert}
+								/>
 							</div>
 							<div>
 								<Label width="110px">First page</Label>
-								<select value={firstPage}>
+								<select
+									onChange={(e) =>
+										dispatch(
+											changeGlobalSettings({
+												firstPage: +e.target.value,
+											}),
+										)
+									}
+									value={firstPage}
+								>
 									{pages.map((page) => (
 										<option key={page.id} value={page.id}>
 											{page.name}

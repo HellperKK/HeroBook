@@ -2,6 +2,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { emptyProject } from "../utils/game/empty/emptyProject";
 import type { Project } from "../utils/game/Project";
+import type { Settings } from "../utils/game/Settings";
 
 export interface Asset {
 	name: string;
@@ -20,20 +21,19 @@ export const projectSlice = createSlice({
 	name: "game",
 	initialState,
 	reducers: {
-		addPage: (_state, _action: PayloadAction<string>) => {},
+		addPage: (_state) => {},
 		initProject: (
 			state,
-			action: PayloadAction<{
-				gameTitle: string;
-				author: string;
-				expert: boolean;
-			}>,
+			action: PayloadAction<Partial<Settings>>,
 		) => {
-			state.settings = {...state.settings, ...action.payload};
+			state.settings = { ...state.settings, ...action.payload };
+		},
+		changeGlobalSettings: (state, action: PayloadAction<Partial<Settings>>) => {
+			state.settings = { ...state.settings, ...action.payload };
 		},
 	},
 });
 
-export const { addPage, initProject } = projectSlice.actions;
+export const { addPage, initProject, changeGlobalSettings } = projectSlice.actions;
 
 export default projectSlice.reducer;
