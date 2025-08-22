@@ -7,15 +7,18 @@ import {
 	writeTextFile,
 } from "@tauri-apps/plugin-fs";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import TextField from "../../components/inputs/textField/TextField";
 import Toggle from "../../components/inputs/toggle/Toggle";
 import Label from "../../components/texts/label/Label";
+import { initProject } from "../../store/projectSlice";
 import { emptyProject } from "../../utils/game/empty/emptyProject";
 import { projectsPath } from "../../utils/paths";
 import { safeProjectName } from "../../utils/safeProjectName";
 
 export default function NewProject() {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [formState, setFormState] = useState({
 		projectName: "",
@@ -91,6 +94,13 @@ export default function NewProject() {
 							{
 								baseDir: BaseDirectory.Document,
 							},
+						);
+						dispatch(
+							initProject({
+								gameTitle: formState.projectName,
+								author: formState.projectAuthor,
+								expert: formState.expertMode,
+							}),
 						);
 
 						navigate("/editor");

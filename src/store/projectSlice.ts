@@ -20,11 +20,20 @@ export const projectSlice = createSlice({
 	name: "game",
 	initialState,
 	reducers: {
-		addPage: (_state, _action: PayloadAction<string>) => {
+		addPage: (_state, _action: PayloadAction<string>) => {},
+		initProject: (
+			state,
+			action: PayloadAction<{
+				gameTitle: string;
+				author: string;
+				expert: boolean;
+			}>,
+		) => {
+			state.settings = {...state.settings, ...action.payload};
 		},
 	},
 });
 
-export const { addPage } = projectSlice.actions;
+export const { addPage, initProject } = projectSlice.actions;
 
 export default projectSlice.reducer;
