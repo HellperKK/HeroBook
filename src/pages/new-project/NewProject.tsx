@@ -54,6 +54,7 @@ export default function NewProject() {
 						onChange={(value) => updateFormState({ expertMode: value })}
 					/>
 				</div>
+				<Button onClick={() => navigate("/")}>Cancel</Button>
 				<Button
 					onClick={async () => {
 						if (
@@ -109,7 +110,6 @@ export default function NewProject() {
 				>
 					Create
 				</Button>
-				<Button onClick={() => navigate("/")}>Cancel</Button>
 			</div>
 		</div>
 	);
