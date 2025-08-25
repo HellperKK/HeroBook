@@ -9,5 +9,5 @@ export type Settings = {
 	expert: boolean;
 	format: Format;
 	firstPage: number;
-	startScript?: string;
+	startScript: string;
 };

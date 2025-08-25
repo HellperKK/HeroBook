@@ -7,7 +7,7 @@ export type Choice = BlockBase & {
 	type: "choice";
 	text: string;
 	pageId: number;
-	action?: string;
+	action: string;
 	format?: Partial<ChoiceFormat>;
 };
 export type Block =
