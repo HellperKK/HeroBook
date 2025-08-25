@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import TextField from "../../components/inputs/textField/TextField";
 import Toggle from "../../components/inputs/toggle/Toggle";
+import Accordion from "../../components/surfaces/accordion/Accordion";
 import TabPannel from "../../components/surfaces/tabs/TabPannel";
 import Tabs from "../../components/surfaces/tabs/Tabs";
 import Label from "../../components/texts/label/Label";
 import { changeGlobalSettings } from "../../store/projectSlice";
 import type { RootState } from "../../store/store";
 import RenderBlock from "./blocks/RenderBlock";
+import JsCodeEditor from "./jsCodeEditor/JsCodeEditor";
 
 export default function Editor() {
 	const dispatch = useDispatch();
@@ -18,7 +20,7 @@ export default function Editor() {
 	const params = useParams();
 	const {
 		pages,
-		settings: { format, gameTitle, author, expert, firstPage },
+		settings: { format, gameTitle, author, expert, firstPage, startScript },
 	} = useSelector((state: RootState) => state.project);
 	const [leftToggle, setLeftToggle] = useState(false);
 	const [rightToggle, setRightToggle] = useState(false);
@@ -69,64 +71,78 @@ export default function Editor() {
 				{rightToggle && (
 					<Tabs>
 						<TabPannel title="Project">
-							<div>
-								<Label width="110px">Game title</Label>
-								<TextField
-									onChange={(gameTitle) =>
+							<Accordion label="Base Settings">
+								<div>
+									<Label width="110px">Game title</Label>
+									<TextField
+										onChange={(gameTitle) =>
+											dispatch(
+												changeGlobalSettings({
+													gameTitle,
+												}),
+											)
+										}
+										value={gameTitle}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Author name</Label>
+									<TextField
+										onChange={(author) =>
+											dispatch(
+												changeGlobalSettings({
+													author,
+												}),
+											)
+										}
+										value={author}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Export mode?</Label>
+									<Toggle
+										onChange={(expert) =>
+											dispatch(
+												changeGlobalSettings({
+													expert,
+												}),
+											)
+										}
+										checked={expert}
+									/>
+								</div>
+								<div>
+									<Label width="110px">First page</Label>
+									<select
+										onChange={(e) =>
+											dispatch(
+												changeGlobalSettings({
+													firstPage: +e.target.value,
+												}),
+											)
+										}
+										value={firstPage}
+									>
+										{pages.map((page) => (
+											<option key={page.id} value={page.id}>
+												{page.name}
+											</option>
+										))}
+									</select>
+								</div>
+							</Accordion>
+							<Accordion label="Start script">
+								<JsCodeEditor
+									value={startScript ?? ""}
+									onChange={(value) =>
 										dispatch(
 											changeGlobalSettings({
-												gameTitle,
+												startScript: value,
 											}),
 										)
 									}
-									value={gameTitle}
 								/>
-							</div>
-							<div>
-								<Label width="110px">Author name</Label>
-								<TextField
-									onChange={(author) =>
-										dispatch(
-											changeGlobalSettings({
-												author,
-											}),
-										)
-									}
-									value={author}
-								/>
-							</div>
-							<div>
-								<Label width="110px">Export mode?</Label>
-								<Toggle
-									onChange={(expert) =>
-										dispatch(
-											changeGlobalSettings({
-												expert,
-											}),
-										)
-									}
-									checked={expert}
-								/>
-							</div>
-							<div>
-								<Label width="110px">First page</Label>
-								<select
-									onChange={(e) =>
-										dispatch(
-											changeGlobalSettings({
-												firstPage: +e.target.value,
-											}),
-										)
-									}
-									value={firstPage}
-								>
-									{pages.map((page) => (
-										<option key={page.id} value={page.id}>
-											{page.name}
-										</option>
-									))}
-								</select>
-							</div>
+							</Accordion>
 						</TabPannel>
 						<TabPannel title="Page">Two</TabPannel>
 						<TabPannel title="Element">Three</TabPannel>
