@@ -27,6 +27,8 @@ export default function ButtonChoice({ choice }: Props) {
 					choice.format?.btnTextColor ??
 					page.format?.btnTextColor ??
 					format.btnTextColor,
+				fontFamily:
+					choice.format?.btnFont ?? page.format?.btnFont ?? format.btnFont,
 			}}
 		>
 			{choice.text}

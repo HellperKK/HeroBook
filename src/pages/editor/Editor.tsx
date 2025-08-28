@@ -10,8 +10,12 @@ import Accordion from "../../components/surfaces/accordion/Accordion";
 import TabPannel from "../../components/surfaces/tabs/TabPannel";
 import Tabs from "../../components/surfaces/tabs/Tabs";
 import Label from "../../components/texts/label/Label";
-import { changeGlobalFormat, changeGlobalSettings } from "../../store/projectSlice";
+import {
+	changeGlobalFormat,
+	changeGlobalSettings,
+} from "../../store/projectSlice";
 import type { RootState } from "../../store/store";
+import { allowedFonts } from "../../utils/game/allowedFonts";
 import RenderBlock from "./blocks/RenderBlock";
 import JsCodeEditor from "./jsCodeEditor/JsCodeEditor";
 
@@ -67,7 +71,7 @@ export default function Editor() {
 			</div>
 			<div className="editor-rightbar">
 				<Button onClick={() => setRightToggle((toggled) => !toggled)}>
-					{leftToggle ? "Close" : "Open"}
+					{rightToggle ? "Close" : "Open"}
 				</Button>
 				{rightToggle && (
 					<Tabs>
@@ -173,6 +177,21 @@ export default function Editor() {
 									/>
 								</div>
 								<div>
+									<Label width="110px">Text font</Label>
+									<select
+										value={format.textFont}
+										onChange={(e) =>
+											dispatch(changeGlobalFormat({ textFont: e.target.value }))
+										}
+									>
+										{allowedFonts.map((font) => (
+											<option key={font} value={font}>
+												{font}
+											</option>
+										))}
+									</select>
+								</div>
+								<div>
 									<Label width="110px">Button</Label>
 									<ColorPicker
 										onChange={(btnColor) =>
@@ -197,6 +216,21 @@ export default function Editor() {
 										}
 										value={format.btnTextColor}
 									/>
+								</div>
+								<div>
+									<Label width="110px">Button font</Label>
+									<select
+										value={format.btnFont}
+										onChange={(e) =>
+											dispatch(changeGlobalFormat({ btnFont: e.target.value }))
+										}
+									>
+										{allowedFonts.map((font) => (
+											<option key={font} value={font}>
+												{font}
+											</option>
+										))}
+									</select>
 								</div>
 							</Accordion>
 							<Accordion label="Start script">

@@ -1,4 +1,4 @@
-import type { ChoiceFormat } from "./Format";
+import type { ChoiceFormat, TextFormat } from "./Format";
 
 type BlockBase = {
 	id: number;
@@ -14,6 +14,7 @@ export type Block =
 	| (BlockBase & {
 			type: "text";
 			content: string;
+			format?: Partial<TextFormat>;
 	  })
 	| (BlockBase & {
 			type: "image";
