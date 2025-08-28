@@ -3,13 +3,14 @@ import Button from "../../components/inputs/button/Button";
 import "./editor.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import ColorPicker from "../../components/inputs/colorPicker/ColorPicker";
 import TextField from "../../components/inputs/textField/TextField";
 import Toggle from "../../components/inputs/toggle/Toggle";
 import Accordion from "../../components/surfaces/accordion/Accordion";
 import TabPannel from "../../components/surfaces/tabs/TabPannel";
 import Tabs from "../../components/surfaces/tabs/Tabs";
 import Label from "../../components/texts/label/Label";
-import { changeGlobalSettings } from "../../store/projectSlice";
+import { changeGlobalFormat, changeGlobalSettings } from "../../store/projectSlice";
 import type { RootState } from "../../store/store";
 import RenderBlock from "./blocks/RenderBlock";
 import JsCodeEditor from "./jsCodeEditor/JsCodeEditor";
@@ -129,6 +130,73 @@ export default function Editor() {
 											</option>
 										))}
 									</select>
+								</div>
+							</Accordion>
+							<Accordion label="Styling">
+								<div>
+									<Label width="110px">Background</Label>
+									<ColorPicker
+										onChange={(background) =>
+											dispatch(
+												changeGlobalFormat({
+													background,
+												}),
+											)
+										}
+										value={format.background}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Page</Label>
+									<ColorPicker
+										onChange={(page) =>
+											dispatch(
+												changeGlobalFormat({
+													page,
+												}),
+											)
+										}
+										value={format.page}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Text</Label>
+									<ColorPicker
+										onChange={(textColor) =>
+											dispatch(
+												changeGlobalFormat({
+													textColor,
+												}),
+											)
+										}
+										value={format.btnTextColor}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Button</Label>
+									<ColorPicker
+										onChange={(btnColor) =>
+											dispatch(
+												changeGlobalFormat({
+													btnColor,
+												}),
+											)
+										}
+										value={format.btnColor}
+									/>
+								</div>
+								<div>
+									<Label width="110px">Button text</Label>
+									<ColorPicker
+										onChange={(btnTextColor) =>
+											dispatch(
+												changeGlobalFormat({
+													btnTextColor,
+												}),
+											)
+										}
+										value={format.btnTextColor}
+									/>
 								</div>
 							</Accordion>
 							<Accordion label="Start script">
