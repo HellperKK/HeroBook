@@ -29,9 +29,34 @@ export const projectSlice = createSlice({
 		changeGlobalFormat: (state, action: PayloadAction<Partial<Format>>) => {
 			state.settings.format = { ...state.settings.format, ...action.payload };
 		},
+		changePageFormat: (
+			state,
+			action: PayloadAction<{ format: Partial<Format>; pageId: number }>,
+		) => {
+			const page = state.pages.find(
+				(page) => page.id === action.payload.pageId,
+			);
+
+			if (!page) return;
+
+			page.format = { ...page.format, ...action.payload.format };			
+		},
+		clearPageFormat: (
+			state,
+			action: PayloadAction<{ property: keyof Format; pageId: number }>,
+		) => {
+			const page = state.pages.find(
+				(page) => page.id === action.payload.pageId,
+			);
+
+			if (!page) return;
+
+			delete page.format[action.payload.property];
+		},
 	},
 });
 
-export const { addPage, changeGlobalSettings, changeGlobalFormat } = projectSlice.actions;
+export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat, clearPageFormat } =
+	projectSlice.actions;
 
 export default projectSlice.reducer;

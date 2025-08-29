@@ -13,6 +13,8 @@ import Label from "../../components/texts/label/Label";
 import {
 	changeGlobalFormat,
 	changeGlobalSettings,
+	changePageFormat,
+	clearPageFormat,
 } from "../../store/projectSlice";
 import type { RootState } from "../../store/store";
 import { allowedFonts } from "../../utils/game/allowedFonts";
@@ -32,6 +34,7 @@ export default function Editor() {
 
 	// biome-ignore lint/style/noNonNullAssertion: will allways work
 	const page = pages.find((page) => page.id === +params.id!)!;
+	const pageFormat = { ...format, ...page.format };
 
 	const leftSize = leftToggle ? "400px" : "70px";
 	const rightSize = rightToggle ? "400px" : "70px";
@@ -246,7 +249,225 @@ export default function Editor() {
 								/>
 							</Accordion>
 						</TabPannel>
-						<TabPannel title="Page">Two</TabPannel>
+						<TabPannel title="Page">
+							<Accordion label="Styling">
+								<div>
+									<Label width="110px">Background</Label>
+									<ColorPicker
+										onChange={(background) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														background,
+													},
+												}),
+											)
+										}
+										value={pageFormat.background}
+									/>
+									<Button
+										disabled={!page.format.background}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "background",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Page</Label>
+									<ColorPicker
+										onChange={(pageColor) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														page: pageColor,
+													},
+												}),
+											)
+										}
+										value={pageFormat.page}
+									/>
+									<Button
+										disabled={!page.format.page}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "page",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Text</Label>
+									<ColorPicker
+										onChange={(textColor) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														textColor,
+													},
+												}),
+											)
+										}
+										value={pageFormat.textColor}
+									/>
+									<Button
+										disabled={!page.format.textColor}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "textColor",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Text font</Label>
+									<select
+										value={pageFormat.textFont}
+										onChange={(e) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														textFont: e.target.value,
+													},
+												}),
+											)
+										}
+									>
+										{allowedFonts.map((font) => (
+											<option key={font} value={font}>
+												{font}
+											</option>
+										))}
+									</select>
+									<Button
+										disabled={!page.format.textFont}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "textFont",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Button</Label>
+									<ColorPicker
+										onChange={(btnColor) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														btnColor,
+													},
+												}),
+											)
+										}
+										value={pageFormat.btnColor}
+									/>
+									<Button
+										disabled={!page.format.btnColor}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "btnColor",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Button text</Label>
+									<ColorPicker
+										onChange={(btnTextColor) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														btnTextColor,
+													},
+												}),
+											)
+										}
+										value={pageFormat.btnTextColor}
+									/>
+									<Button
+										disabled={!page.format.btnTextColor}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "btnTextColor",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+								<div>
+									<Label width="110px">Button font</Label>
+									<select
+										value={pageFormat.btnFont}
+										onChange={(e) =>
+											dispatch(
+												changePageFormat({
+													pageId: page.id,
+													format: {
+														btnFont: e.target.value,
+													},
+												}),
+											)
+										}
+									>
+										{allowedFonts.map((font) => (
+											<option key={font} value={font}>
+												{font}
+											</option>
+										))}
+									</select>
+									<Button
+										disabled={!page.format.btnFont}
+										onClick={() =>
+											dispatch(
+												clearPageFormat({
+													pageId: page.id,
+													property: "btnFont",
+												}),
+											)
+										}
+									>
+										Reset
+									</Button>
+								</div>
+							</Accordion>
+						</TabPannel>
 						<TabPannel title="Element">Three</TabPannel>
 					</Tabs>
 				)}
