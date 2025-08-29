@@ -3,18 +3,18 @@ import type { ChoiceFormat, TextFormat } from "./Format";
 type BlockBase = {
 	id: number;
 };
-export type Choice = BlockBase & {
+export type ChoiceBlock = BlockBase & {
 	type: "choice";
 	text: string;
 	pageId: number;
 	action: string;
-	format?: Partial<ChoiceFormat>;
+	format: Partial<ChoiceFormat>;
 };
 export type Block =
 	| (BlockBase & {
 			type: "text";
 			content: string;
-			format?: Partial<TextFormat>;
+			format: Partial<TextFormat>;
 	  })
 	| (BlockBase & {
 			type: "image";
@@ -24,4 +24,4 @@ export type Block =
 			type: "video";
 			path: string;
 	  })
-	| Choice;
+	| ChoiceBlock;

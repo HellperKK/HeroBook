@@ -5,5 +5,5 @@ export type Page = {
 	id: number;
 	name: string;
 	content: Array<Block>;
-	format?: Partial<Format>;
+	format: Partial<Format>;
 };

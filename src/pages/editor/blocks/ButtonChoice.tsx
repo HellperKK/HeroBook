@@ -2,9 +2,9 @@ import "./buttonChoice.scss";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import type { RootState } from "../../../store/store";
-import type { Choice } from "../../../utils/game/Block";
+import type { ChoiceBlock } from "../../../utils/game/Block";
 
-type Props = { choice: Choice };
+type Props = { choice: ChoiceBlock };
 
 export default function ButtonChoice({ choice }: Props) {
 	const params = useParams();
