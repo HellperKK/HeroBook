@@ -126,16 +126,16 @@ export default function Editor() {
                 </div>
               </Accordion>
               <Accordion label="Styling">
-                <GlobalStyleEdition value={format} label="Background" property="background">
+                <GlobalStyleEdition label="Background" property="background">
                   {(data) => <ColorPicker {...data} />}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Page" property="page">
+                <GlobalStyleEdition label="Page" property="page">
                   {(data) => <ColorPicker {...data} />}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Text" property="textColor">
+                <GlobalStyleEdition label="Text" property="textColor">
                   {(data) => <ColorPicker {...data} />}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Text font" property="textFont">
+                <GlobalStyleEdition label="Text font" property="textFont">
                   {(data) => (
                     <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
                       {allowedFonts.map((font) => (
@@ -146,13 +146,13 @@ export default function Editor() {
                     </select>
                   )}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Button" property="btnColor">
+                <GlobalStyleEdition label="Button" property="btnColor">
                   {(data) => <ColorPicker {...data} />}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Button text" property="btnTextColor">
+                <GlobalStyleEdition label="Button text" property="btnTextColor">
                   {(data) => <ColorPicker {...data} />}
                 </GlobalStyleEdition>
-                <GlobalStyleEdition value={format} label="Button font" property="btnFont">
+                <GlobalStyleEdition label="Button font" property="btnFont">
                   {(data) => (
                     <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
                       {allowedFonts.map((font) => (
@@ -179,16 +179,16 @@ export default function Editor() {
             </TabPannel>
             <TabPannel title="Page">
               <Accordion label="Styling">
-                <PageStyleEdition label="Background" page={page} property="background" value={format}>
+                <PageStyleEdition label="Background" page={page} property="background">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Page" page={page} property="page" value={format}>
+                <PageStyleEdition label="Page" page={page} property="page">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Text" page={page} property="textColor" value={format}>
+                <PageStyleEdition label="Text" page={page} property="textColor">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Text font" page={page} property="textFont" value={format}>
+                <PageStyleEdition label="Text font" page={page} property="textFont">
                   {(data) => (
                     <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
                       {allowedFonts.map((font) => (
@@ -199,13 +199,13 @@ export default function Editor() {
                     </select>
                   )}
                 </PageStyleEdition>
-                <PageStyleEdition label="Button" page={page} property="btnColor" value={format}>
+                <PageStyleEdition label="Button" page={page} property="btnColor">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Button text" page={page} property="btnTextColor" value={format}>
+                <PageStyleEdition label="Button text" page={page} property="btnTextColor">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Button text font" page={page} property="btnFont" value={format}>
+                <PageStyleEdition label="Button text font" page={page} property="btnFont">
                   {(data) => (
                     <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
                       {allowedFonts.map((font) => (
