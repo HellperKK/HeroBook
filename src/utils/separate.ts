@@ -1,4 +1,4 @@
-export function separate<A>(values: Array<A>, separator: () => A):Array<A> {
+export function separate<A>(values: Array<A>, separator: () => A): Array<A> {
   if (values.length === 0) {
     return [];
   }
