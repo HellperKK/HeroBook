@@ -27,16 +27,14 @@ export const projectSlice = createSlice({
         const trueKey = key as keyof Format;
         if (value === undefined && page.format[trueKey] !== undefined) {
           delete page.format[trueKey];
+        } else {
+          page.format[trueKey] = value;
         }
-		else {
-			page.format[trueKey] = value;
-		}
       }
     },
   },
 });
 
-export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat } =
-  projectSlice.actions;
+export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat } = projectSlice.actions;
 
 export default projectSlice.reducer;
