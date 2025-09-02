@@ -5,17 +5,6 @@ import type { Format } from '../utils/game/Format';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
 
-export interface Asset {
-  name: string;
-  content: string;
-}
-
-export interface AssetGroup {
-  images: Array<Asset>;
-  musics: Array<Asset>;
-  sounds: Array<Asset>;
-}
-
 const initialState: Project = emptyProject;
 
 export const projectSlice = createSlice({
