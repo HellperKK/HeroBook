@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/inputs/button/Button';
 import Label from '../../../components/texts/label/Label';
-import { changePageFormat, clearPageFormat } from '../../../store/projectSlice';
+import { changePageFormat } from '../../../store/projectSlice';
 import type { RootState } from '../../../store/store';
 import type { Format } from '../../../utils/game/Format';
 import type { Page } from '../../../utils/game/Page';
@@ -38,9 +38,11 @@ export default function PageStyleEdition({ children, label, page, property }: Pr
         disabled={!page.format[property]}
         onClick={() =>
           dispatch(
-            clearPageFormat({
+            changePageFormat({
               pageId: page.id,
-              property,
+              format: {
+                [property]: undefined,
+              },
             }),
           )
         }
