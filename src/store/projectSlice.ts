@@ -13,10 +13,10 @@ export const projectSlice = createSlice({
   reducers: {
     addPage: (_state) => {},
     changeGlobalSettings: (state, action: PayloadAction<Partial<Settings>>) => {
-      state.settings = { ...state.settings, ...action.payload };
+      Object.assign(state.settings, action.payload);
     },
     changeGlobalFormat: (state, action: PayloadAction<Partial<Format>>) => {
-      state.settings.format = { ...state.settings.format, ...action.payload };
+      Object.assign(state.settings.format, action.payload);
     },
     changePageFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {
       const page = state.pages.find((page) => page.id === action.payload.pageId);
