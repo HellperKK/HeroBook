@@ -1,4 +1,4 @@
-import type { ChoiceFormat, TextFormat } from "./Format";
+import type { ChoiceFormat, MediaFormat, TextFormat } from "./Format";
 
 type BlockBase = {
 	id: number;
@@ -19,9 +19,11 @@ export type Block =
 	| (BlockBase & {
 			type: "image";
 			path: string;
+			format: Partial<MediaFormat>;
 	  })
 	| (BlockBase & {
 			type: "video";
 			path: string;
+			format: Partial<MediaFormat>;
 	  })
 	| ChoiceBlock;

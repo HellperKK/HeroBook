@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { emptyProject } from '../utils/game/empty/emptyProject';
-import type { Format } from '../utils/game/Format';
+import type { ChoiceFormat, Format, TextFormat } from '../utils/game/Format';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
 
@@ -20,7 +20,6 @@ export const projectSlice = createSlice({
     },
     changePageFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {
       const page = state.pages.find((page) => page.id === action.payload.pageId);
-
       if (!page) return;
 
       for (const [key, value] of Object.entries(action.payload.format)) {
@@ -32,9 +31,48 @@ export const projectSlice = createSlice({
         }
       }
     },
+    changeBlockFormat: (
+      state,
+      action: PayloadAction<{ format: Partial<Format>; blockPosition: number; pageId: number }>,
+    ) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      const block = page.content[action.payload.blockPosition];
+      if (!block) return;
+
+      switch (block.type) {
+        case 'image':
+        case 'video':
+          return;
+        case 'text':
+          for (const [key, value] of Object.entries(action.payload.format)) {
+            const trueKey = key as keyof TextFormat;
+            if (value === undefined && block.format[trueKey] !== undefined) {
+              delete block.format[trueKey];
+            } else {
+              block.format[trueKey] = value;
+            }
+          }
+          break;
+        case 'choice':
+          for (const [key, value] of Object.entries(action.payload.format)) {
+            const trueKey = key as keyof ChoiceFormat;
+            if (value === undefined && block.format[trueKey] !== undefined) {
+              delete block.format[trueKey];
+            } else {
+              block.format[trueKey] = value;
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    },
   },
 });
 
-export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat } = projectSlice.actions;
+export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat, changeBlockFormat } =
+  projectSlice.actions;
 
 export default projectSlice.reducer;

@@ -9,7 +9,12 @@ export type TextFormat = {
 	textFont: string;
 }
 
-export type Format = ChoiceFormat & TextFormat & {
+export type MediaFormat = {
+	width: string;
+	height: string;
+}
+
+export type Format = ChoiceFormat & TextFormat & MediaFormat & {
 	background: string;
 	page: string;
 };
