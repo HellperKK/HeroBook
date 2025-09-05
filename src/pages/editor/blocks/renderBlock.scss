@@ -1,0 +1,8 @@
+.text-block {
+    cursor: pointer;
+
+    &.active {
+        border: 1px solid red;
+        padding: 4px;
+    }
+}

@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
 import type { ChoiceBlock } from '../../../utils/game/Block';
 
-type Props = { choice: ChoiceBlock; onClick?: () => void };
+type Props = { choice: ChoiceBlock; onClick?: () => void; className?: string };
 
-export default function ButtonChoice({ choice, onClick }: Props) {
+export default function ButtonChoice({ choice, onClick, className }: Props) {
   const params = useParams();
   const {
     pages,
@@ -18,14 +18,14 @@ export default function ButtonChoice({ choice, onClick }: Props) {
 
   return (
     <button
-      className="button-choice"
+      className={`button-choice${className ?? ''}`}
       type="button"
       style={{
         backgroundColor: choice.format?.btnColor ?? page.format?.btnColor ?? format.btnColor,
         color: choice.format?.btnTextColor ?? page.format?.btnTextColor ?? format.btnTextColor,
         fontFamily: choice.format?.btnFont ?? page.format?.btnFont ?? format.btnFont,
       }}
-	  onClick={onClick}
+      onClick={onClick}
     >
       {choice.text}
     </button>

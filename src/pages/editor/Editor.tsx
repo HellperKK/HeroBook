@@ -59,7 +59,12 @@ export default function Editor() {
       >
         <div className="game-inner" style={{ backgroundColor: page.format?.page ?? format.page }}>
           {page.content.map((block, index) => (
-            <RenderBlock block={block} key={block.id} onClick={() => setBlockIndex(index)} />
+            <RenderBlock
+              active={blockIndex === index}
+              block={block}
+              key={block.id}
+              onClick={() => setBlockIndex(index)}
+            />
           ))}
         </div>
       </div>
@@ -208,7 +213,7 @@ export default function Editor() {
                 <PageStyleEdition label="Button text" page={page} property="btnTextColor">
                   {(data) => <ColorPicker {...data} />}
                 </PageStyleEdition>
-                <PageStyleEdition label="Button text font" page={page} property="btnFont">
+                <PageStyleEdition label="Button font" page={page} property="btnFont">
                   {(data) => (
                     <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
                       {allowedFonts.map((font) => (
@@ -222,45 +227,52 @@ export default function Editor() {
               </Accordion>
             </TabPannel>
             <TabPannel title="Element">
-              {selectedBlock && selectedBlock.type === 'text' && (
-                <>
-                  <BlockStyleEdition label="Text" page={page} blockPosition={blockIndex} property="textColor">
-                    {(data) => <ColorPicker {...data} />}
-                  </BlockStyleEdition>
-                  <BlockStyleEdition label="Text font" page={page} blockPosition={blockIndex} property="textFont">
-                    {(data) => (
-                      <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
-                        {allowedFonts.map((font) => (
-                          <option key={font} value={font}>
-                            {font}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  </BlockStyleEdition>
-                </>
-              )}
-              {selectedBlock && selectedBlock.type === 'choice' && (
-                <>
-                  <BlockStyleEdition label="Button" page={page} blockPosition={blockIndex} property="btnColor">
-                    {(data) => <ColorPicker {...data} />}
-                  </BlockStyleEdition>
-                  <BlockStyleEdition label="Button text" page={page} blockPosition={blockIndex} property="btnTextColor">
-                    {(data) => <ColorPicker {...data} />}
-                  </BlockStyleEdition>
-                  <BlockStyleEdition label="Button text font" page={page} blockPosition={blockIndex} property="btnFont">
-                    {(data) => (
-                      <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
-                        {allowedFonts.map((font) => (
-                          <option key={font} value={font}>
-                            {font}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  </BlockStyleEdition>
-                </>
-              )}
+              <Accordion label="Styling">
+                {selectedBlock && selectedBlock.type === 'text' && (
+                  <>
+                    <BlockStyleEdition label="Text" page={page} blockPosition={blockIndex} property="textColor">
+                      {(data) => <ColorPicker {...data} />}
+                    </BlockStyleEdition>
+                    <BlockStyleEdition label="Text font" page={page} blockPosition={blockIndex} property="textFont">
+                      {(data) => (
+                        <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
+                          {allowedFonts.map((font) => (
+                            <option key={font} value={font}>
+                              {font}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </BlockStyleEdition>
+                  </>
+                )}
+                {selectedBlock && selectedBlock.type === 'choice' && (
+                  <>
+                    <BlockStyleEdition label="Button" page={page} blockPosition={blockIndex} property="btnColor">
+                      {(data) => <ColorPicker {...data} />}
+                    </BlockStyleEdition>
+                    <BlockStyleEdition
+                      label="Button text"
+                      page={page}
+                      blockPosition={blockIndex}
+                      property="btnTextColor"
+                    >
+                      {(data) => <ColorPicker {...data} />}
+                    </BlockStyleEdition>
+                    <BlockStyleEdition label="Button font" page={page} blockPosition={blockIndex} property="btnFont">
+                      {(data) => (
+                        <select value={data.value} onChange={(e) => data.onChange(e.target.value)}>
+                          {allowedFonts.map((font) => (
+                            <option key={font} value={font}>
+                              {font}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </BlockStyleEdition>
+                  </>
+                )}
+              </Accordion>
             </TabPannel>
           </Tabs>
         )}
