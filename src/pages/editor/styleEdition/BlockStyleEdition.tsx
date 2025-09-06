@@ -41,7 +41,7 @@ export default function BlockStyleEdition({ children, label, page, property, blo
           ),
       })}
       <Button
-        disabled={!page.format[property as keyof Format]}
+        disabled={!block.format[property as keyof typeof block.format]}
         onClick={() =>
           dispatch(
             changeBlockFormat({
