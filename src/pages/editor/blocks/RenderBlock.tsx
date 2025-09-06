@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
 import type { Block } from '../../../utils/game/Block';
 import ButtonChoice from './ButtonChoice';
-import "./renderBlock.scss"
+import './renderBlock.scss';
 
 type Props = {
   block: Block;
@@ -30,9 +30,8 @@ export default function RenderBlock({ block, onClick, active }: Props) {
           fontFamily: block.format?.textFont ?? page.format?.textFont ?? format.textFont,
           color: block.format?.textColor ?? page.format?.textColor ?? format.textColor,
         }}
-        onClick={onClick}
       >
-        {block.content}
+        <div onClick={onClick}>{block.content}</div>
       </div>
     );
   }

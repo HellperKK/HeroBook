@@ -1,8 +1,14 @@
 .text-block {
-    cursor: pointer;
+    width: 100%;
+    text-align: center;
+
+    >div {
+        display: inline-block;
+        cursor: pointer;
+        padding: 4px;
+    }
 
     &.active {
-        border: 1px solid red;
-        padding: 4px;
+        border: 3px solid red;
     }
 }

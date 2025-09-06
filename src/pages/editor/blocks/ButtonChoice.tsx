@@ -17,17 +17,18 @@ export default function ButtonChoice({ choice, onClick, className }: Props) {
   const page = pages.find((page) => page.id === +params.id!)!;
 
   return (
-    <button
-      className={`button-choice${className ?? ''}`}
-      type="button"
-      style={{
-        backgroundColor: choice.format?.btnColor ?? page.format?.btnColor ?? format.btnColor,
-        color: choice.format?.btnTextColor ?? page.format?.btnTextColor ?? format.btnTextColor,
-        fontFamily: choice.format?.btnFont ?? page.format?.btnFont ?? format.btnFont,
-      }}
-      onClick={onClick}
-    >
-      {choice.text}
-    </button>
+    <div className={`button-choice${className ?? ''}`}>
+      <button
+        type="button"
+        style={{
+          backgroundColor: choice.format?.btnColor ?? page.format?.btnColor ?? format.btnColor,
+          color: choice.format?.btnTextColor ?? page.format?.btnTextColor ?? format.btnTextColor,
+          fontFamily: choice.format?.btnFont ?? page.format?.btnFont ?? format.btnFont,
+        }}
+        onClick={onClick}
+      >
+        {choice.text}
+      </button>
+    </div>
   );
 }
