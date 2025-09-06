@@ -4,13 +4,14 @@ import './editor.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import ColorPicker from '../../components/inputs/colorPicker/ColorPicker';
+import TextArea from '../../components/inputs/textArea/TextArea';
 import TextField from '../../components/inputs/textField/TextField';
 import Toggle from '../../components/inputs/toggle/Toggle';
 import Accordion from '../../components/surfaces/accordion/Accordion';
 import TabPannel from '../../components/surfaces/tabs/TabPannel';
 import Tabs from '../../components/surfaces/tabs/Tabs';
 import Label from '../../components/texts/label/Label';
-import { changeGlobalSettings } from '../../store/projectSlice';
+import { changeBlockSettings, changeGlobalSettings } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
 import { allowedFonts } from '../../utils/game/allowedFonts';
 import RenderBlock from './blocks/RenderBlock';
@@ -227,9 +228,23 @@ export default function Editor() {
               </Accordion>
             </TabPannel>
             <TabPannel title="Element">
-              <Accordion label="Styling">
-                {selectedBlock && selectedBlock.type === 'text' && (
-                  <>
+              {selectedBlock && selectedBlock.type === 'text' && (
+                <>
+                  <Accordion label="Content">
+                    <TextArea
+                      value={selectedBlock.content}
+                      onChange={(value) =>
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { content: value },
+                          }),
+                        )
+                      }
+                    />
+                  </Accordion>
+                  <Accordion label="Styling">
                     <BlockStyleEdition label="Text" page={page} blockPosition={blockIndex} property="textColor">
                       {(data) => <ColorPicker {...data} />}
                     </BlockStyleEdition>
@@ -244,10 +259,74 @@ export default function Editor() {
                         </select>
                       )}
                     </BlockStyleEdition>
-                  </>
-                )}
-                {selectedBlock && selectedBlock.type === 'choice' && (
-                  <>
+                  </Accordion>
+                </>
+              )}
+              {selectedBlock && selectedBlock.type === 'choice' && (
+                <>
+                  <Accordion label="Content">
+                    <Label width="110px">Text</Label>
+                    <TextField
+                      value={selectedBlock.text}
+                      onChange={(value) =>
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { text: value },
+                          }),
+                        )
+                      }
+                    />
+                    <Label width="110px">Next page</Label>
+                    <select
+                      value={selectedBlock.pageId}
+                      onChange={(e) =>
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { pageId: +e.target.value },
+                          }),
+                        )
+                      }
+                    >
+                      {pages.map((page) => (
+                        <option key={page.id} value={page.id}>
+                          {page.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Accordion>
+                  <Accordion label="Scripts">
+                    <Label width="110px">Condition</Label>
+                    <JsCodeEditor
+                      value={selectedBlock.contidion}
+                      onChange={(value) =>
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { contidion: value },
+                          }),
+                        )
+                      }
+                    />
+                    <Label width="110px">Action</Label>
+                    <JsCodeEditor
+                      value={selectedBlock.action}
+                      onChange={(value) =>
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { action: value },
+                          }),
+                        )
+                      }
+                    />
+                  </Accordion>
+                  <Accordion label="Styling">
                     <BlockStyleEdition label="Button" page={page} blockPosition={blockIndex} property="btnColor">
                       {(data) => <ColorPicker {...data} />}
                     </BlockStyleEdition>
@@ -270,9 +349,9 @@ export default function Editor() {
                         </select>
                       )}
                     </BlockStyleEdition>
-                  </>
-                )}
-              </Accordion>
+                  </Accordion>
+                </>
+              )}
             </TabPannel>
           </Tabs>
         )}

@@ -69,10 +69,28 @@ export const projectSlice = createSlice({
           break;
       }
     },
+    changeBlockSettings: (
+      state,
+      action: PayloadAction<{ settings: unknown; blockPosition: number; pageId: number }>,
+    ) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      const block = page.content[action.payload.blockPosition];
+      if (!block) return;
+
+      Object.assign(block, action.payload.settings);
+    },
   },
 });
 
-export const { addPage, changeGlobalSettings, changeGlobalFormat, changePageFormat, changeBlockFormat } =
-  projectSlice.actions;
+export const {
+  addPage,
+  changeGlobalSettings,
+  changeGlobalFormat,
+  changePageFormat,
+  changeBlockSettings,
+  changeBlockFormat,
+} = projectSlice.actions;
 
 export default projectSlice.reducer;
