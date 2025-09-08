@@ -353,7 +353,7 @@ export default function Editor() {
                 </>
               )}
               {selectedBlock && (
-                <Accordion label="Blabla">
+                <Accordion label="Deletion">
                   <Button onClick={() => dispatch(deleteBlockAt({ blockPosition: blockIndex, pageId: page.id }))}>
                     Delete
                   </Button>
