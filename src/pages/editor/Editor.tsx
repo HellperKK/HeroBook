@@ -29,8 +29,8 @@ export default function Editor() {
     pages,
     settings: { format, gameTitle, author, expert, firstPage, startScript },
   } = useSelector((state: RootState) => state.project);
-  const [leftToggle, setLeftToggle] = useState(false);
-  const [rightToggle, setRightToggle] = useState(false);
+  const [leftToggle, setLeftToggle] = useState(true);
+  const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work
