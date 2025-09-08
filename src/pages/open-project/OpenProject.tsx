@@ -51,8 +51,8 @@ export default function OpenProject() {
                 baseDir: BaseDirectory.Document,
               });
               const data: Project = JSON.parse(dataTxt);
-              dispatch(loadProject(data));
 
+              dispatch(loadProject(data));
               navigate('/editor');
             }}
           >
