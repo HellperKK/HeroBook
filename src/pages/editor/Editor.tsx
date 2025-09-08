@@ -75,7 +75,7 @@ export default function Editor() {
         {rightToggle && (
           <Tabs>
             <TabPannel title="Project">
-              <Accordion label="Base Settings">
+              <Accordion label="Settings">
                 <div>
                   <Label width="110px">Game title</Label>
                   <TextField
