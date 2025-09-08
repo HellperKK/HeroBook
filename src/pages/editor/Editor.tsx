@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../components/inputs/button/Button';
 import './editor.scss';
+import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
 import ColorPicker from '../../components/inputs/colorPicker/ColorPicker';
 import TextArea from '../../components/inputs/textArea/TextArea';
 import TextField from '../../components/inputs/textField/TextField';
@@ -21,6 +23,7 @@ import {
 import type { RootState } from '../../store/store';
 import { freshId } from '../../utils/freshId';
 import { allowedFonts } from '../../utils/game/allowedFonts';
+import { projectsPath } from '../../utils/paths';
 import RenderBlock from './blocks/RenderBlock';
 import InsertBlockButton from './insertBlockButton/InsertBlockButton';
 import JsCodeEditor from './jsCodeEditor/JsCodeEditor';
@@ -34,7 +37,7 @@ export default function Editor() {
   const params = useParams();
   const {
     pages,
-    settings: { format, gameTitle, author, expert, firstPage, startScript },
+    settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
   } = useSelector((state: RootState) => state.project);
   const [leftToggle, setLeftToggle] = useState(true);
   const [rightToggle, setRightToggle] = useState(true);
@@ -49,6 +52,31 @@ export default function Editor() {
 
   return (
     <div className="editor" style={{ gridTemplateColumns: `${leftSize} 1fr ${rightSize}` }}>
+      <div className="editor-buttons">
+        <ButtonGroup>
+          <Button
+            onClick={async () => {
+              console.log("save")
+              await writeTextFile(
+                `${projectsPath}/${folderName}/data.json`,
+                JSON.stringify(
+                  {
+                    pages,
+                    settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
+                  },
+                  null,
+                  4,
+                ),
+                {
+                  baseDir: BaseDirectory.Document,
+                },
+              );
+            }}
+          >
+            Save
+          </Button>
+        </ButtonGroup>
+      </div>
       <div className="editor-leftbar">
         <Button onClick={() => setLeftToggle((toggled) => !toggled)}>{leftToggle ? 'Close' : 'Open'}</Button>
         {leftToggle && (

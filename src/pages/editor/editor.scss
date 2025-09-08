@@ -1,6 +1,7 @@
 .editor {
     display: grid;
-    grid-template-areas: "leftbar tabs lightbar";
+    grid-template-areas: "buttons buttons buttons" "leftbar tabs lightbar";
+    grid-template-rows: 42px 1fr;
     height: 100%;
 }
 
@@ -43,4 +44,8 @@
     .block-pair {
         display: contents;
     }
+}
+
+.editor-buttons {
+    grid-area: buttons;
 }
