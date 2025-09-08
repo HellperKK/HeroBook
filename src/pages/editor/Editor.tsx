@@ -11,7 +11,7 @@ import Accordion from '../../components/surfaces/accordion/Accordion';
 import TabPannel from '../../components/surfaces/tabs/TabPannel';
 import Tabs from '../../components/surfaces/tabs/Tabs';
 import Label from '../../components/texts/label/Label';
-import { changeBlockSettings, changeGlobalSettings } from '../../store/projectSlice';
+import { changeBlockSettings, changeGlobalSettings, deleteBlockAt } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
 import { allowedFonts } from '../../utils/game/allowedFonts';
 import RenderBlock from './blocks/RenderBlock';
@@ -351,6 +351,13 @@ export default function Editor() {
                     </BlockStyleEdition>
                   </Accordion>
                 </>
+              )}
+              {selectedBlock && (
+                <Accordion label="Blabla">
+                  <Button onClick={() => dispatch(deleteBlockAt({ blockPosition: blockIndex, pageId: page.id }))}>
+                    Delete
+                  </Button>
+                </Accordion>
               )}
             </TabPannel>
           </Tabs>

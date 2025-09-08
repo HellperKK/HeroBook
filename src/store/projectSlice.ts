@@ -105,6 +105,12 @@ export const projectSlice = createSlice({
           break;
       }
     },
+    deleteBlockAt: (state, action: PayloadAction<{ blockPosition: number; pageId: number }>) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      page.content.splice(action.payload.blockPosition, 1);
+    },
   },
 });
 
@@ -116,6 +122,7 @@ export const {
   changeBlockSettings,
   changeBlockFormat,
   inserBlockAt,
+  deleteBlockAt,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
