@@ -5,6 +5,7 @@ import MenuLayout from './components/layout/menuLayout/MenuLayout';
 import Editor from './pages/editor/Editor';
 import GraphPage from './pages/graph/GraphPage';
 import NewProject from './pages/new-project/NewProject';
+import OpenProject from './pages/open-project/OpenProject';
 import StartPage from './pages/start-page/StartPage';
 import { camelToKebab } from './utils/camelToKebab';
 import SettingsContext from './utils/contexts/settingsContext';
@@ -107,6 +108,7 @@ export default function App() {
           <Route path="/" element={<MenuLayout theme={theme} updateTheme={updateTheme} />}>
             <Route index element={<StartPage />} />
             <Route path="/new" element={<NewProject />} />
+            <Route path="/open" element={<OpenProject />} />
             <Route path="/editor">
               <Route index element={<GraphPage />} />
               <Route path="page/:id" element={<Editor />} />

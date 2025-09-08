@@ -60,6 +60,12 @@
         "$DOCUMENT/Herobook/**"
       ]
     },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
     "shell:allow-open",
     "shell:default",
     "fs:default"

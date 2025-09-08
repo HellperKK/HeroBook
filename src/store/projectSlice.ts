@@ -17,6 +17,9 @@ export const projectSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    loadProject: (_state, action: PayloadAction<Project>) => {
+      return action.payload;
+    },
     changeGlobalSettings: (state, action: PayloadAction<Partial<Settings>>) => {
       Object.assign(state.settings, action.payload);
     },
@@ -144,6 +147,7 @@ export const projectSlice = createSlice({
 });
 
 export const {
+  loadProject,
   addPage,
   addPageFromChoice,
   deletePagePage,
