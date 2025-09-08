@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '../../components/inputs/button/Button';
 import './editor.scss';
 import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
 import ColorPicker from '../../components/inputs/colorPicker/ColorPicker';
 import TextArea from '../../components/inputs/textArea/TextArea';
@@ -56,7 +56,7 @@ export default function Editor() {
         <ButtonGroup>
           <Button
             onClick={async () => {
-              console.log("save")
+              console.log('save');
               await writeTextFile(
                 `${projectsPath}/${folderName}/data.json`,
                 JSON.stringify(
