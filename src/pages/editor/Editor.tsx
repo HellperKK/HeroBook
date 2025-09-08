@@ -11,7 +11,13 @@ import Accordion from '../../components/surfaces/accordion/Accordion';
 import TabPannel from '../../components/surfaces/tabs/TabPannel';
 import Tabs from '../../components/surfaces/tabs/Tabs';
 import Label from '../../components/texts/label/Label';
-import { addPageFromChoice, changeBlockSettings, changeGlobalSettings, deleteBlockAt } from '../../store/projectSlice';
+import {
+  addPageFromChoice,
+  changeBlockSettings,
+  changeGlobalSettings,
+  changePageSettings,
+  deleteBlockAt,
+} from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
 import { freshId } from '../../utils/freshId';
 import { allowedFonts } from '../../utils/game/allowedFonts';
@@ -188,6 +194,22 @@ export default function Editor() {
               </Accordion>
             </TabPannel>
             <TabPannel title="Page">
+              <Accordion label="Settings">
+                <div>
+                  <Label width="110px">Page title</Label>
+                  <TextField
+                    onChange={(name) =>
+                      dispatch(
+                        changePageSettings({
+                          pageId: page.id,
+                          page: { name },
+                        }),
+                      )
+                    }
+                    value={page.name}
+                  />
+                </div>
+              </Accordion>
               <Accordion label="Styling">
                 <PageStyleEdition label="Background" page={page} property="background">
                   {(data) => <ColorPicker {...data} />}

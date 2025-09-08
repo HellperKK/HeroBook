@@ -7,6 +7,7 @@ import { emptyPage } from '../utils/game/empty/emptyPage';
 import { emptyProject } from '../utils/game/empty/emptyProject';
 import { emptyText } from '../utils/game/empty/emptyText';
 import type { ChoiceFormat, Format, TextFormat } from '../utils/game/Format';
+import type { Page } from '../utils/game/Page';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
 
@@ -34,6 +35,12 @@ export const projectSlice = createSlice({
           page.format[trueKey] = value;
         }
       }
+    },
+    changePageSettings: (state, action: PayloadAction<{ page: Partial<Page>; pageId: number }>) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      Object.assign(page, action.payload.page);
     },
     changeBlockFormat: (
       state,
@@ -115,13 +122,13 @@ export const projectSlice = createSlice({
       const newPage = { ...emptyPage, id: freshId(state.pages) };
       state.pages.push(newPage);
     },
-    addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number, newId: number }>) => {
+    addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number; newId: number }>) => {
       const page = state.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       const block = page.content[action.payload.blockPosition];
       if (!block) return;
-      if (block.type !== "choice") return;
+      if (block.type !== 'choice') return;
 
       const newPage = { ...emptyPage, id: action.payload.newId };
       state.pages.push(newPage);
@@ -143,6 +150,7 @@ export const {
   changeGlobalSettings,
   changeGlobalFormat,
   changePageFormat,
+  changePageSettings,
   changeBlockSettings,
   changeBlockFormat,
   inserBlockAt,
