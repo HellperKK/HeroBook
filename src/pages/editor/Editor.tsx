@@ -11,8 +11,9 @@ import Accordion from '../../components/surfaces/accordion/Accordion';
 import TabPannel from '../../components/surfaces/tabs/TabPannel';
 import Tabs from '../../components/surfaces/tabs/Tabs';
 import Label from '../../components/texts/label/Label';
-import { changeBlockSettings, changeGlobalSettings, deleteBlockAt } from '../../store/projectSlice';
+import { addPageFromChoice, changeBlockSettings, changeGlobalSettings, deleteBlockAt } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
+import { freshId } from '../../utils/freshId';
 import { allowedFonts } from '../../utils/game/allowedFonts';
 import RenderBlock from './blocks/RenderBlock';
 import InsertBlockButton from './insertBlockButton/InsertBlockButton';
@@ -281,16 +282,33 @@ export default function Editor() {
                     <Label width="110px">Next page</Label>
                     <select
                       value={selectedBlock.pageId}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const value = +e.target.value;
+                        if (value === -1) {
+                          const newId = freshId(pages);
+                          dispatch(
+                            addPageFromChoice({
+                              pageId: page.id,
+                              blockPosition: blockIndex,
+                              newId,
+                            }),
+                          );
+                          navigate(`/editor/page/${newId}`);
+                          return;
+                        }
+
                         dispatch(
                           changeBlockSettings({
                             pageId: page.id,
                             blockPosition: blockIndex,
-                            settings: { pageId: +e.target.value },
+                            settings: { pageId: value },
                           }),
-                        )
-                      }
+                        );
+                      }}
                     >
+                      <option key={-1} value={-1}>
+                        Create new page
+                      </option>
                       {pages.map((page) => (
                         <option key={page.id} value={page.id}>
                           {page.name}

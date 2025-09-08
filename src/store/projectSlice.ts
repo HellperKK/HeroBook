@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { freshId } from '../utils/freshId';
 import type { ChoiceBlock, TextBlock } from '../utils/game/Block';
 import { emptyChoice } from '../utils/game/empty/emptyChoice';
+import { emptyPage } from '../utils/game/empty/emptyPage';
 import { emptyProject } from '../utils/game/empty/emptyProject';
 import { emptyText } from '../utils/game/empty/emptyText';
 import type { ChoiceFormat, Format, TextFormat } from '../utils/game/Format';
@@ -15,7 +16,6 @@ export const projectSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    addPage: (_state) => {},
     changeGlobalSettings: (state, action: PayloadAction<Partial<Settings>>) => {
       Object.assign(state.settings, action.payload);
     },
@@ -111,11 +111,35 @@ export const projectSlice = createSlice({
 
       page.content.splice(action.payload.blockPosition, 1);
     },
+    addPage: (state) => {
+      const newPage = { ...emptyPage, id: freshId(state.pages) };
+      state.pages.push(newPage);
+    },
+    addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number, newId: number }>) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      const block = page.content[action.payload.blockPosition];
+      if (!block) return;
+      if (block.type !== "choice") return;
+
+      const newPage = { ...emptyPage, id: action.payload.newId };
+      state.pages.push(newPage);
+      block.pageId = action.payload.newId;
+    },
+    deletePagePage: (state, action: PayloadAction<{ pageId: number }>) => {
+      const pagePosition = state.pages.findIndex((page) => page.id === action.payload.pageId);
+      if (pagePosition === -1) return;
+
+      state.pages.splice(pagePosition, 1);
+    },
   },
 });
 
 export const {
   addPage,
+  addPageFromChoice,
+  deletePagePage,
   changeGlobalSettings,
   changeGlobalFormat,
   changePageFormat,
