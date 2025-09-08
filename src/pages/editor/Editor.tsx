@@ -15,6 +15,7 @@ import { changeBlockSettings, changeGlobalSettings } from '../../store/projectSl
 import type { RootState } from '../../store/store';
 import { allowedFonts } from '../../utils/game/allowedFonts';
 import RenderBlock from './blocks/RenderBlock';
+import InsertBlockButton from './insertBlockButton/InsertBlockButton';
 import JsCodeEditor from './jsCodeEditor/JsCodeEditor';
 import BlockStyleEdition from './styleEdition/BlockStyleEdition';
 import GlobalStyleEdition from './styleEdition/GlobalStyleEdition';
@@ -60,13 +61,12 @@ export default function Editor() {
       >
         <div className="game-inner" style={{ backgroundColor: page.format?.page ?? format.page }}>
           {page.content.map((block, index) => (
-            <RenderBlock
-              active={blockIndex === index}
-              block={block}
-              key={block.id}
-              onClick={() => setBlockIndex(index)}
-            />
+            <div className="block-pair" key={block.id}>
+              <InsertBlockButton index={index} />
+              <RenderBlock active={blockIndex === index} block={block} onClick={() => setBlockIndex(index)} />
+            </div>
           ))}
+          <InsertBlockButton index={page.content.length} />
         </div>
       </div>
       <div className="editor-rightbar">

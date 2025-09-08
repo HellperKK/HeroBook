@@ -39,4 +39,8 @@
     align-items: center;
     padding: 8px;
     gap: 8px;
+
+    .block-pair {
+        display: contents;
+    }
 }

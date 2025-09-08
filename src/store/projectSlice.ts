@@ -1,6 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { freshId } from '../utils/freshId';
+import type { ChoiceBlock, TextBlock } from '../utils/game/Block';
+import { emptyChoice } from '../utils/game/empty/emptyChoice';
 import { emptyProject } from '../utils/game/empty/emptyProject';
+import { emptyText } from '../utils/game/empty/emptyText';
 import type { ChoiceFormat, Format, TextFormat } from '../utils/game/Format';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
@@ -81,6 +85,26 @@ export const projectSlice = createSlice({
 
       Object.assign(block, action.payload.settings);
     },
+    inserBlockAt: (state, action: PayloadAction<{ blockType: string; blockPosition: number; pageId: number }>) => {
+      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      switch (action.payload.blockType) {
+        case 'text': {
+          const block: TextBlock = { ...emptyText, id: freshId(page.content) };
+          page.content.splice(action.payload.blockPosition, 0, block);
+          break;
+        }
+        case 'choice': {
+          const block: ChoiceBlock = { ...emptyChoice, id: freshId(page.content) };
+          page.content.splice(action.payload.blockPosition, 0, block);
+          break;
+        }
+
+        default:
+          break;
+      }
+    },
   },
 });
 
@@ -91,6 +115,7 @@ export const {
   changePageFormat,
   changeBlockSettings,
   changeBlockFormat,
+  inserBlockAt,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

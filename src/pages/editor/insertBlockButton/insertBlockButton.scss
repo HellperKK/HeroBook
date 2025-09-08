@@ -1,0 +1,10 @@
+.insert-block {
+    border-radius: 100%;
+    cursor: pointer;
+    opacity: 50%;
+    border: none;
+
+    &:hover {
+        opacity: 100%;
+    }
+}
