@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/inputs/button/Button';
+import Text from '../../components/texts/text/Text';
 import { loadProject } from '../../store/projectSlice';
 import type { Project } from '../../utils/game/Project';
 import { projectsPath } from '../../utils/paths';
@@ -44,7 +45,7 @@ export default function OpenProject() {
     <div>
       {project.map((project) => (
         <div key={project.name}>
-          {project.name}
+          <Text>{project.name}</Text>
           <Button
             onClick={async () => {
               const dataTxt = await readTextFile(`${projectsPath}/${project.name}/data.json`, {
