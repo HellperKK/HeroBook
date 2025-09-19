@@ -1,5 +1,5 @@
 import { ignore } from "../../../utils/ignore"
-import "./TextField.scss"
+import "./textField.scss"
 
 type Props = {
   onChange?: (value: string) => void,
