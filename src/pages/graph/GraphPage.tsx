@@ -48,9 +48,8 @@ export default function GraphPage() {
 	};
 
 	const events = {
-		// biome-ignore lint/suspicious/noExplicitAny: no types from lib
-		doubleClick: (event: any) => {
-			var { nodes, _edges } = event;
+		doubleClick: (event: {nodes: number[]}) => {
+			var { nodes } = event;
 			if (nodes.length === 0) return;
 			navigate(`/editor/page/${nodes[0]}`);
 		},
