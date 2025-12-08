@@ -24,16 +24,25 @@ export default function RenderBlock({ block, onClick, active }: Props) {
   const pageColor = page.format?.page ?? format.page;
 
   if (block.type === 'text') {
+    console.log(block.format?.textFont ?? page.format?.textFont ?? format.textFont);
     return (
+      // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+      // biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
       <div
+        onClick={onClick}
         className={`text-block`}
         style={{
-          fontFamily: block.format?.textFont ?? page.format?.textFont ?? format.textFont,
-          color: block.format?.textColor ?? page.format?.textColor ?? format.textColor,
           border: active ? `3px solid ${oppositeColorRGB(pageColor)}` : 'none',
         }}
       >
-        <div onClick={onClick}>{block.content}</div>
+        <pre
+          style={{
+            fontFamily: block.format?.textFont ?? page.format?.textFont ?? format.textFont,
+            color: block.format?.textColor ?? page.format?.textColor ?? format.textColor,
+          }}
+        >
+          {block.content}
+        </pre>
       </div>
     );
   }
