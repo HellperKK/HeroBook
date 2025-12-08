@@ -35,7 +35,7 @@ export const emptyProject: Project = {
 				{
 					id: 1,
 					type: "text",
-					content: "What to you whant for dessert ?",
+					content: "What to you want for dessert ?",
 					format: {},
 				},
 				{
