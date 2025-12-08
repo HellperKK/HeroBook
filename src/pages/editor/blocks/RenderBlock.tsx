@@ -26,8 +26,6 @@ export default function RenderBlock({ block, onClick, active }: Props) {
   if (block.type === 'text') {
     console.log(block.format?.textFont ?? page.format?.textFont ?? format.textFont);
     return (
-      // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-      // biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
       <div
         onClick={onClick}
         className={`text-block`}
