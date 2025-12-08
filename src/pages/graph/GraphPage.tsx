@@ -29,6 +29,7 @@ export default function GraphPage() {
 				edges.push({
 					from: page.id,
 					to: block.pageId,
+					length: 200,
 				});
 			}
 		}
@@ -36,6 +37,9 @@ export default function GraphPage() {
 	const options = {
 		layout: {
 			hierarchical: false,
+		},
+		physics: {
+			enabled: false,
 		},
 		edges: {
 			color: "#000000",
