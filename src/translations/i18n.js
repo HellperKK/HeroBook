@@ -12,7 +12,7 @@ const resources = {
       "save": "save",
       "quit": "quit",
       "window": "window",
-      "settings": "settings",
+      "settings": "Settings",
       "colors": "Colors",
       "light theme": "Light",
       "light contrast theme": "Light contrast",
