@@ -54,6 +54,9 @@ export default function Editor() {
     <div className="editor" style={{ gridTemplateColumns: `${leftSize} 1fr ${rightSize}` }}>
       <div className="editor-buttons">
         <ButtonGroup>
+          <Button type="button" onClick={() => navigate('/editor')}>
+            Go Back
+          </Button>
           <Button
             onClick={async () => {
               console.log('save');
@@ -81,9 +84,6 @@ export default function Editor() {
         <Button onClick={() => setLeftToggle((toggled) => !toggled)}>{leftToggle ? 'Close' : 'Open'}</Button>
         {leftToggle && (
           <>
-            <Button type="button" onClick={() => navigate('/editor')}>
-              Go Back
-            </Button>
             <div></div>
           </>
         )}
