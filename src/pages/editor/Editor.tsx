@@ -39,7 +39,7 @@ export default function Editor() {
     pages,
     settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
   } = useSelector((state: RootState) => state.project);
-  const [leftToggle, setLeftToggle] = useState(true);
+  const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
 
