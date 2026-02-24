@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/inputs/button/Button';
 import GridLayout from '../../components/layout/gridLayout/GridLayout';
-import Separator from '../../components/misc/separator/Separator';
 import Label from '../../components/texts/label/Label';
 import Text from '../../components/texts/text/Text';
 import './startPage.scss';
