@@ -1,58 +1,73 @@
-import Graph from "react-graph-vis";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import type { RootState } from "../../store/store";
+import Graph from 'react-graph-vis';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/inputs/button/Button';
+import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
+import { addPage } from '../../store/projectSlice';
+import type { RootState } from '../../store/store';
 
 export default function GraphPage() {
-	const navigate = useNavigate();
-	const {
-		pages,
-		settings: { firstPage },
-	} = useSelector((state: RootState) => state.project);
-	const nodes = [];
-	const edges = [];
+  const navigate = useNavigate();
+  const {
+    pages,
+    settings: { firstPage },
+  } = useSelector((state: RootState) => state.project);
+  const dispatch = useDispatch();
 
-	for (const page of pages) {
-		nodes.push({
-			id: page.id,
-			label: page.name,
-			title: page.name,
-			color: page.id === firstPage ? "#83d383" : "#d38383",
-			font: {
-				size: 25,
-				color: "#000000",
-			},
-		});
+  const nodes = [];
+  const edges = [];
 
-		for (const block of page.content) {
-			if (block.type === "choice") {
-				edges.push({
-					from: page.id,
-					to: block.pageId,
-					length: 200,
-				});
-			}
-		}
-	}
-	const options = {
-		layout: {
-			hierarchical: false,
-		},
-		physics: {
-			enabled: false,
-		},
-		edges: {
-			color: "#000000",
-		},
-		height: "100%",
-	};
+  for (const page of pages) {
+    nodes.push({
+      id: page.id,
+      label: page.name,
+      title: page.name,
+			value: page.id,
+			shape: 'box',
+      color: page.id === firstPage ? '#83d383' : '#d38383',
+      size: 10000,
+      font: {
+        size: 50,
+        color: '#000000',
+      },
+    });
 
-	const events = {
-		doubleClick: (event: {nodes: number[]}) => {
-			var { nodes } = event;
-			if (nodes.length === 0) return;
-			navigate(`/editor/page/${nodes[0]}`);
-		},
-	};
-	return <Graph graph={{ nodes, edges }} options={options} events={events} />;
+    for (const block of page.content) {
+      if (block.type === 'choice') {
+        edges.push({
+          from: page.id,
+          to: block.pageId,
+          length: 200,
+        });
+      }
+    }
+  }
+  const options = {
+    layout: {
+      hierarchical: false,
+    },
+    physics: {
+      enabled: false,
+    },
+    edges: {
+      color: '#000000',
+    },
+    height: '100%',
+  };
+
+  const events = {
+    doubleClick: (event: { nodes: number[] }) => {
+      var { nodes } = event;
+      if (nodes.length === 0) return;
+      navigate(`/editor/page/${nodes[0]}`);
+    },
+  };
+  return (
+    <>
+      <ButtonGroup>
+        <Button onClick={() => dispatch(addPage())}>Add Page</Button>
+      </ButtonGroup>
+      <Graph graph={{ nodes, edges }} options={options} events={events} />
+    </>
+  );
 }
