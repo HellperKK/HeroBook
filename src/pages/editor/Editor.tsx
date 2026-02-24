@@ -82,11 +82,11 @@ export default function Editor() {
       </div>
       <div className="editor-leftbar">
         <Button onClick={() => setLeftToggle((toggled) => !toggled)}>{leftToggle ? 'Close' : 'Open'}</Button>
-        {leftToggle && (
+        {/*leftToggle && (
           <>
             <div></div>
           </>
-        )}
+        )*/}
       </div>
       <div
         className="game-outer"
