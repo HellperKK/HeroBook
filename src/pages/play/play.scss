@@ -2,7 +2,6 @@
     height: 100%;
 
     .game-outer {
-        grid-area: tabs;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -23,9 +22,5 @@
         .block-pair {
             display: contents;
         }
-    }
-
-    .editor-buttons {
-        grid-area: buttons;
     }
 }
