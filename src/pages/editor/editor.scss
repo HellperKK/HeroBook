@@ -3,49 +3,49 @@
     grid-template-areas: "buttons buttons buttons" "leftbar tabs lightbar";
     grid-template-rows: 42px 1fr;
     height: 100%;
-}
 
-.editor-leftbar {
-    grid-area: leftbar;
-    background-color: var(--surface);
-    color: var(--text-surface);
-    border-right: 1px solid black;
-    border-top: 1px solid black;
-    overflow: hidden;
-}
-
-.editor-rightbar {
-    grid-area: lightbar;
-    background-color: var(--surface);
-    color: var(--text-surface);
-    border-left: 1px solid black;
-    border-top: 1px solid black;
-    overflow: hidden;
-}
-
-.game-outer {
-    grid-area: tabs;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.game-inner {
-    width: 80ch;
-    min-height: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 8px;
-    gap: 8px;
-
-    .block-pair {
-        display: contents;
+    .editor-leftbar {
+        grid-area: leftbar;
+        background-color: var(--surface);
+        color: var(--text-surface);
+        border-right: 1px solid black;
+        border-top: 1px solid black;
+        overflow: hidden;
     }
-}
 
-.editor-buttons {
-    grid-area: buttons;
+    .editor-rightbar {
+        grid-area: lightbar;
+        background-color: var(--surface);
+        color: var(--text-surface);
+        border-left: 1px solid black;
+        border-top: 1px solid black;
+        overflow: hidden;
+    }
+
+    .game-outer {
+        grid-area: tabs;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .game-inner {
+        width: 80ch;
+        min-height: 75%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 8px;
+        gap: 8px;
+
+        .block-pair {
+            display: contents;
+        }
+    }
+
+    .editor-buttons {
+        grid-area: buttons;
+    }
 }
