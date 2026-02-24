@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
 import type { Block } from '../../../utils/game/Block';
-import './renderBlock.scss';
 
 type Props = {
   block: Block;
