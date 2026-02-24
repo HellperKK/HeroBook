@@ -48,7 +48,7 @@ export default function OpenPlay() {
       <GridLayout columns={1} rows={2} className="open-project-grid">
         <div className="open-project-header">
           <Label width="100%">Open a Project</Label>
-          <Text>Select a project to continue editing.</Text>
+          <Text>Select a project to start playing.</Text>
         </div>
         <div className="open-project-list">
           {project.length === 0 ? (
