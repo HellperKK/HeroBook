@@ -137,7 +137,7 @@ export default function Editor() {
                   />
                 </div>
                 <div>
-                  <Label width="110px">Export mode?</Label>
+                  <Label width="110px">Expert mode?</Label>
                   <Toggle
                     onChange={(expert) =>
                       dispatch(
