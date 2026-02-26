@@ -35,10 +35,11 @@ export default function Editor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
+  const project  = useSelector((state: RootState) => state.project);
   const {
     pages,
     settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
-  } = useSelector((state: RootState) => state.project);
+  } = project;
   // const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
@@ -63,10 +64,7 @@ export default function Editor() {
               await writeTextFile(
                 `${projectsPath}/${folderName}/data.json`,
                 JSON.stringify(
-                  {
-                    pages,
-                    settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
-                  },
+                  project,
                   null,
                   4,
                 ),
