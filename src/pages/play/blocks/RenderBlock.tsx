@@ -1,3 +1,4 @@
+import Jinter from 'jintr';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
@@ -6,9 +7,11 @@ import type { Block } from '../../../utils/game/Block';
 type Props = {
   block: Block;
   onClick?: (id: number) => void;
+  // biome-ignore lint/suspicious/noExplicitAny: safe any
+  state: any;
 };
 
-export default function RenderBlock({ block, onClick }: Props) {
+export default function RenderBlock({ block, onClick, state }: Props) {
   const params = useParams();
   const {
     pages,
@@ -21,9 +24,7 @@ export default function RenderBlock({ block, onClick }: Props) {
   if (block.type === 'text') {
     console.log(block.format?.textFont ?? page.format?.textFont ?? format.textFont);
     return (
-      <div
-        className={`text-block`}
-      >
+      <div className={`text-block`}>
         <pre
           style={{
             fontFamily: block.format?.textFont ?? page.format?.textFont ?? format.textFont,
@@ -37,10 +38,13 @@ export default function RenderBlock({ block, onClick }: Props) {
   }
 
   if (block.type === 'choice') {
+    const condition = block.condition || 'true';
+    const jinter = new Jinter();
+    jinter.defineObject('$state', state);
+    const conditionResult = jinter.evaluate(condition);
     return (
-      <div
-        className={`button-choice`}
-      >
+      <>
+      {conditionResult &&<div className={`button-choice`}>
         <button
           type="button"
           style={{
@@ -54,7 +58,8 @@ export default function RenderBlock({ block, onClick }: Props) {
         >
           {block.text}
         </button>
-      </div>
+      </div>}
+      </>
     );
   }
 

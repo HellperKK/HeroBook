@@ -69,7 +69,7 @@ export default function OpenPlay() {
                       const data: Project = JSON.parse(dataTxt);
 
                       dispatch(loadProject(data));
-                      navigate(`/play/page/${data.settings.firstPage}`);
+                      navigate(`/play/page/0`);
                     }}
                   >
                     Open
