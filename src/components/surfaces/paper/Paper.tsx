@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import './paper.scss';
 
 type Props = {
@@ -7,9 +7,5 @@ type Props = {
 };
 
 export default function Paper({ children, className }: Props) {
-  return (
-    <div className={`paper ${className ?? ''}`}>
-      {children}
-    </div>
-  );
+  return <div className={`paper ${className ?? ''}`}>{children}</div>;
 }
