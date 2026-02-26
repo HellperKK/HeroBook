@@ -35,7 +35,7 @@ export default function MenuLayout({ theme, updateTheme }: Props) {
         <DropDownBar label={t('file')}>
           <MenuButton onClick={() => navigate('/new')}>New project</MenuButton>
           <MenuButton onClick={() => navigate('/editor/open')}>Open project</MenuButton>
-          <MenuButton onClick={() => navigate('/')}>Close project</MenuButton>
+          <MenuButton onClick={() => navigate('/')}>Back to menu</MenuButton>
           <MenuButton
             onClick={async () => {
               if (await isDesktopApp()) {
