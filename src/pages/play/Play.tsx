@@ -88,6 +88,21 @@ export default function Play() {
         }}
       >
         <div className="game-inner" style={{ backgroundColor: page.format?.page ?? format.page }}>
+          <div className={`button-choice`}>
+            <button
+              type="button"
+              style={{
+                backgroundColor: page.format?.btnColor ?? format.btnColor,
+                color: page.format?.btnTextColor ?? format.btnTextColor,
+                fontFamily: page.format?.btnFont ?? format.btnFont,
+              }}
+              onClick={() => {
+                navigate(`/play/page/0`);
+              }}
+            >
+              {texts.menu}
+            </button>
+          </div>
           {page.content.map((block) => (
             <div className="block-pair" key={block.id}>
               <RenderBlock block={block} onClick={(id) => navigate(`/play/page/${id}`)} state={state}/>

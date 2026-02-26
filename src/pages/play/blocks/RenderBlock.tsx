@@ -6,7 +6,7 @@ import type { Block } from '../../../utils/game/Block';
 
 type Props = {
   block: Block;
-  onClick?: (id: number) => void;
+  onClick?: (id: number, action: string) => void;
   // biome-ignore lint/suspicious/noExplicitAny: safe any
   state: any;
 };
@@ -53,7 +53,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
             fontFamily: block.format?.btnFont ?? page.format?.btnFont ?? format.btnFont,
           }}
           onClick={() => {
-            if (onClick) onClick(block.pageId);
+            if (onClick) onClick(block.pageId, block.action || '');
           }}
         >
           {block.text}
