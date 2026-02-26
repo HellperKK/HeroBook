@@ -1,7 +1,7 @@
 .editor {
     display: grid;
     /* grid-template-areas: "buttons buttons buttons" "leftbar tabs lightbar"; */
-    grid-template-areas: "buttons buttons" "tabs lightbar";
+    grid-template-areas: "buttons buttons" "tabs rightbar";
     grid-template-rows: 42px 1fr;
     height: 100%;
 
@@ -15,7 +15,7 @@
     }
 
     .editor-rightbar {
-        grid-area: lightbar;
+        grid-area: rightbar;
         background-color: var(--surface);
         color: var(--text-surface);
         border-left: 1px solid black;
