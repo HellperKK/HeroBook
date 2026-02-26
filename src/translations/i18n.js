@@ -8,9 +8,9 @@ const resources = {
   en: {
     translation: {
       "file": "file",
-      "open": "open",
-      "save": "save",
-      "quit": "quit",
+      "open": "Open",
+      "save": "Save",
+      "quit": "Quit",
       "window": "window",
       "settings": "Settings",
       "colors": "Colors",
@@ -35,9 +35,9 @@ const resources = {
   fr: {
     translation: {
       "file": "fichier",
-      "open": "ouvrir",
-      "save": "sauvegarder",
-      "quit": "quiter",
+      "open": "Ouvrir",
+      "save": "Sauvegarder",
+      "quit": "Quiter",
       "window": "fenêtre",
       "settings": "paramètres",
       "colors": "Couleurs",
