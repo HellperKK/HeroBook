@@ -122,7 +122,8 @@ export const projectSlice = createSlice({
       page.content.splice(action.payload.blockPosition, 1);
     },
     addPage: (state) => {
-      const newPage = { ...emptyPage, id: freshId(state.pages) };
+      const id = freshId(state.pages);
+      const newPage = { ...emptyPage, id, name: `Page ${id}` };
       state.pages.push(newPage);
     },
     addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number; newId: number }>) => {
