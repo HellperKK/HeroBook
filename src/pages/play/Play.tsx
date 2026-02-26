@@ -16,9 +16,6 @@ export default function Play() {
 
   // biome-ignore lint/suspicious/noExplicitAny: safe any
   const [state, setState] = useImmer<any>({});
-
-  console.log(state);
-
   // biome-ignore lint/style/noNonNullAssertion: will allways work
   const id = +params.id!;
 
