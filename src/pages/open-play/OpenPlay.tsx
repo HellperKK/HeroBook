@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/inputs/button/Button';
 import GridLayout from '../../components/layout/gridLayout/GridLayout';
+import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import Text from '../../components/texts/text/Text';
 import { loadProject } from '../../store/projectSlice';
@@ -45,37 +46,40 @@ export default function OpenPlay() {
 
   return (
     <div className="open-project-page">
-      <GridLayout columns={1} rows={2} className="open-project-grid">
-        <div className="open-project-header">
-          <Label width="100%">Open a Project</Label>
-          <Text>Select a project to start playing.</Text>
-        </div>
-        <div className="open-project-list">
-          {project.length === 0 ? (
-            <Text>No projects found.</Text>
-          ) : (
-            project.map((project) => (
-              <div className="open-project-item" key={project.name}>
-                <Text>{project.name}</Text>
-                <Button
-                  className="open-project-open-btn"
-                  onClick={async () => {
-                    const dataTxt = await readTextFile(`${projectsPath}/${project.name}/data.json`, {
-                      baseDir: BaseDirectory.Document,
-                    });
-                    const data: Project = JSON.parse(dataTxt);
+      <Paper>
+        <Button onClick={() => navigate('/')}>Go back</Button>
+        <GridLayout columns={1} rows={2} className="open-project-grid">
+          <div className="open-project-header">
+            <Label width="100%">Open a Project</Label>
+            <Text>Select a project to start playing.</Text>
+          </div>
+          <div className="open-project-list">
+            {project.length === 0 ? (
+              <Text>No projects found.</Text>
+            ) : (
+              project.map((project) => (
+                <div className="open-project-item" key={project.name}>
+                  <Text>{project.name}</Text>
+                  <Button
+                    className="open-project-open-btn"
+                    onClick={async () => {
+                      const dataTxt = await readTextFile(`${projectsPath}/${project.name}/data.json`, {
+                        baseDir: BaseDirectory.Document,
+                      });
+                      const data: Project = JSON.parse(dataTxt);
 
-                    dispatch(loadProject(data));
-                    navigate(`/play/page/${data.settings.firstPage}`);
-                  }}
-                >
-                  Open
-                </Button>
-              </div>
-            ))
-          )}
-        </div>
-      </GridLayout>
+                      dispatch(loadProject(data));
+                      navigate(`/play/page/${data.settings.firstPage}`);
+                    }}
+                  >
+                    Open
+                  </Button>
+                </div>
+              ))
+            )}
+          </div>
+        </GridLayout>
+      </Paper>
     </div>
   );
 }
