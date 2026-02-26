@@ -105,7 +105,19 @@ export default function Play() {
           </div>
           {page.content.map((block) => (
             <div className="block-pair" key={block.id}>
-              <RenderBlock block={block} onClick={(id) => navigate(`/play/page/${id}`)} state={state}/>
+              <RenderBlock
+                block={block}
+                onClick={(id, action) => {
+                  // biome-ignore lint/suspicious/noExplicitAny: safe any
+                  setState((draft: any) => {
+                    const jinter = new Jinter();
+                    jinter.defineObject('$state', draft);
+                    jinter.evaluate(action);
+                  });
+                  navigate(`/play/page/${id}`);
+                }}
+                state={state}
+              />
             </div>
           ))}
         </div>
