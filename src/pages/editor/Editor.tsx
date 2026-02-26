@@ -51,7 +51,7 @@ export default function Editor() {
   const selectedBlock = blockIndex === -1 ? null : page.content[blockIndex];
 
   return (
-    <div className="editor" style={{ gridTemplateColumns: `${leftSize} 1fr ${rightSize}` }}>
+    <div className="editor" style={{ gridTemplateColumns: `1fr ${rightSize}` }}>
       <div className="editor-buttons">
         <ButtonGroup>
           <Button type="button" onClick={() => navigate('/editor')}>
@@ -79,14 +79,6 @@ export default function Editor() {
             Save
           </Button>
         </ButtonGroup>
-      </div>
-      <div className="editor-leftbar">
-        <Button onClick={() => setLeftToggle((toggled) => !toggled)}>{leftToggle ? 'Close' : 'Open'}</Button>
-        {/*leftToggle && (
-          <>
-            <div></div>
-          </>
-        )*/}
       </div>
       <div
         className="game-outer"
