@@ -1,0 +1,5 @@
+.label {
+  display: inline-block;
+  font-size: calc(var(--font-size) * var(--font-ratio));
+  margin: 0 4px;
+}

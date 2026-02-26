@@ -1,0 +1,11 @@
+.menu-button {
+    display: block;
+    border: none;
+    background-color: transparent;
+    color: var(--text-surface);
+    width: 100%;
+    margin: 0;
+    padding: 0 4px;
+    font-size: calc(var(--font-size) * var(--font-ratio));
+    cursor: pointer;
+}

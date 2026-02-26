@@ -1,0 +1,73 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [
+        "$CONFIG/template-config.json",
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-file",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [
+        "$CONFIG/template-config.json",
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-write-file",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        "$CONFIG/template-config.json",
+        "$DOCUMENT/Herobook",
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [
+        "$DOCUMENT/Herobook",
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-remove",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
+    "shell:allow-open",
+    "shell:default",
+    "fs:default"
+  ]
+}

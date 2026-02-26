@@ -1,0 +1,27 @@
+.tabs-titles {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--surface);
+  color: var(--text-surface);
+  border: 1px solid var(--text-surface);
+}
+
+.tabs-link {
+  background-color: var(--surface);
+  color: var(--text-surface);
+  cursor: pointer;
+  padding: var(--padding-size);
+  font-size: calc(var(--font-size) * var(--font-ratio));
+  border: none;
+}
+
+.tabs-link-active {
+  background-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.tabs-content {
+  background-color: var(--surface);
+  color: var(--text-surface);
+  padding: var(--padding-size);
+}

@@ -1,0 +1,20 @@
+export type Theme =  {
+    primary: string;
+    primaryVariant: string;
+    secondary: string;
+    secondaryVariant: string;
+    background: string;
+    surface: string;
+    surfaceHover: string;
+    error: string;
+    textPrimary: string;
+    textSecondary: string;
+    textBackground: string;
+    textSurface: string;
+    textError: string;
+    fontSize: string;
+    paddingSize: string;
+    fontFamily: string;
+    fontRatio: string;
+    clickDelay: number;
+  };

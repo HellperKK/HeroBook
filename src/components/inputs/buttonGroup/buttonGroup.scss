@@ -1,0 +1,7 @@
+.button-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--primary);
+  height: calc(34px + var(--padding-size) * 2);
+}
