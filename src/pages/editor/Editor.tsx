@@ -39,14 +39,14 @@ export default function Editor() {
     pages,
     settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
   } = useSelector((state: RootState) => state.project);
-  const [leftToggle, setLeftToggle] = useState(false);
+  // const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work
   const page = pages.find((page) => page.id === +params.id!)!;
 
-  const leftSize = leftToggle ? '400px' : '70px';
+  //const leftSize = leftToggle ? '400px' : '70px';
   const rightSize = rightToggle ? '400px' : '70px';
   const selectedBlock = blockIndex === -1 ? null : page.content[blockIndex];
 
