@@ -359,13 +359,13 @@ export default function Editor() {
                   <Accordion label="Script">
                     <Label width="110px">Condition</Label>
                     <JsCodeEditor
-                      value={selectedBlock.contidion}
+                      value={selectedBlock.condition}
                       onChange={(value) =>
                         dispatch(
                           changeBlockSettings({
                             pageId: page.id,
                             blockPosition: blockIndex,
-                            settings: { contidion: value },
+                            settings: { condition: value },
                           }),
                         )
                       }

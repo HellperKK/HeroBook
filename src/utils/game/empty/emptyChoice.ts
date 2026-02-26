@@ -6,6 +6,6 @@ export const emptyChoice: ChoiceBlock = {
   text: 'This is a choice',
   pageId: 0,
   action: '',
-  contidion: '',
+  condition: '',
   format: {},
 };

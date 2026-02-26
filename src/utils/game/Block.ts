@@ -8,7 +8,7 @@ export type ChoiceBlock = BlockBase & {
   text: string;
   pageId: number;
   action: string;
-  contidion: string; 
+  condition: string; 
   format: Partial<ChoiceFormat>;
 };
 
