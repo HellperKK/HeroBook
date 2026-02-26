@@ -358,7 +358,7 @@ export default function Editor() {
                       ))}
                     </select>
                   </Accordion>
-                  <Accordion label="Scripts">
+                  <Accordion label="Script">
                     <Label width="110px">Condition</Label>
                     <JsCodeEditor
                       value={selectedBlock.contidion}
