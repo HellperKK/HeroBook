@@ -349,6 +349,9 @@ export default function Editor() {
                       <option key={-1} value={-1}>
                         Create new page
                       </option>
+                      <option key={0} value={0}>
+                        Menu
+                      </option>
                       {pages.map((page) => (
                         <option key={page.id} value={page.id}>
                           {page.name}
