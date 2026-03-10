@@ -1,10 +1,10 @@
 [package]
 name = "herobook"
-version = "2.0.0"
+version = "2.1.0"
 description = "A text game engine"
 authors = ["HellperKK"]
-license = ""
-repository = ""
+license = "MIT"
+repository = "https://github.com/HellperKK/HeroBook"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
