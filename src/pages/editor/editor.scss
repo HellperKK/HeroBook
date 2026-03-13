@@ -15,12 +15,19 @@
     }
 
     .editor-rightbar {
+        position: relative;
         grid-area: rightbar;
         background-color: var(--surface);
         color: var(--text-surface);
         border-left: 1px solid black;
         border-top: 1px solid black;
         overflow: hidden;
+
+        .rightbar-sticky {
+            position: fixed;
+            top: 84px;
+            width: 100%;
+        }
     }
 
     .game-outer {
@@ -48,5 +55,7 @@
 
     .editor-buttons {
         grid-area: buttons;
+        position: sticky;
+        top: 0px;
     }
 }
