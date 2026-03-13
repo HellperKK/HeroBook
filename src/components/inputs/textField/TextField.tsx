@@ -1,10 +1,11 @@
+import type { HTMLInputTypeAttribute } from "react"
 import { ignore } from "../../../utils/ignore"
 import "./textField.scss"
 
 type Props = {
   onChange?: (value: string) => void,
   value: string,
-  type?: string,
+  type?: HTMLInputTypeAttribute,
   className?: string,
   required?: boolean
 }
