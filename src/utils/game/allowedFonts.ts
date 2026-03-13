@@ -1,1 +1,1 @@
-export const allowedFonts = ["system-ui", "sans-serif", "dyslexic", "cursive", "fantasy", "monospace", "serif"];
+export const allowedFonts = ['system-ui', 'sans-serif', 'dyslexic', 'cursive', 'fantasy', 'monospace', 'serif'];

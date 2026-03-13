@@ -9,10 +9,10 @@
 .tabs-link {
   background-color: var(--surface);
   color: var(--text-surface);
-  cursor: pointer;
   padding: var(--padding-size);
   font-size: calc(var(--font-size) * var(--font-ratio));
   border: none;
+  margin: 0;
 }
 
 .tabs-link-active {

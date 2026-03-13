@@ -68,6 +68,7 @@
     },
     "shell:allow-open",
     "shell:default",
-    "fs:default"
+    "fs:default",
+    "dialog:default"
   ]
 }

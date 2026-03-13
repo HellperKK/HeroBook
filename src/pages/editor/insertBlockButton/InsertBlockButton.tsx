@@ -54,6 +54,14 @@ export default function InsertBlockButton({ index }: Props) {
           >
             Choice
           </Button>
+          <Button
+            onClick={() => {
+              dispatch(inserBlockAt({ blockType: 'image', blockPosition: index, pageId: page.id }));
+              setModalOpen(false);
+            }}
+          >
+            Image
+          </Button>
         </div>
       </Modal>
     </div>

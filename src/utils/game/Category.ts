@@ -1,7 +1,7 @@
-import type { Page } from "./Page";
+import type { Page } from './Page';
 
 export type Category = {
-	name: string;
-	visible: boolean;
-	pages: Array<Page>;
+  name: string;
+  visible: boolean;
+  pages: Array<Page>;
 };

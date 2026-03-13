@@ -46,8 +46,9 @@ export default function MenuLayout({ theme, updateTheme }: Props) {
             {t('quit')}
           </MenuButton>
         </DropDownBar>
-        <DropDownBar label="editors">
+        <DropDownBar label="editor">
           <MenuButton onClick={() => navigate('/editor')}>Page editor</MenuButton>
+          <MenuButton onClick={() => navigate('/editor/assets')}>Assets</MenuButton>
         </DropDownBar>
         <DropDownBar label={t('window')}>
           <MenuButton onClick={() => setStylingOpen(true)}>{t('settings')}</MenuButton>

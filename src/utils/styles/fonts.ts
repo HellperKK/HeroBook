@@ -1,16 +1,16 @@
-import type { Theme } from "./Theme";
+import type { Theme } from './Theme';
 
 export const fontSystem: Partial<Theme> = {
-	fontSize: "1rem",
-	fontFamily: "system-ui",
+  fontSize: '1rem',
+  fontFamily: 'system-ui',
 };
 
 export const fontSans: Partial<Theme> = {
-	fontSize: "1rem",
-	fontFamily: "sans-serif",
+  fontSize: '1rem',
+  fontFamily: 'sans-serif',
 };
 
 export const fontDys: Partial<Theme> = {
-	fontSize: "0.7rem",
-	fontFamily: "dyslexic",
+  fontSize: '0.7rem',
+  fontFamily: 'dyslexic',
 };

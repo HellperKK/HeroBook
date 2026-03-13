@@ -1,5 +1,5 @@
-import "./separator.scss";
+import './separator.scss';
 
 export default function Separator() {
-  return <div className="separator"></div>
+  return <div className="separator"></div>;
 }

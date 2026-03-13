@@ -8,7 +8,7 @@ export type ChoiceBlock = BlockBase & {
   text: string;
   pageId: number;
   action: string;
-  condition: string; 
+  condition: string;
   format: Partial<ChoiceFormat>;
 };
 
@@ -17,16 +17,17 @@ export type TextBlock = BlockBase & {
   content: string;
   format: Partial<TextFormat>;
 };
-export type Block =
-  | TextBlock
-  | (BlockBase & {
-      type: 'image';
-      path: string;
-      format: Partial<MediaFormat>;
-    })
-  | (BlockBase & {
-      type: 'video';
-      path: string;
-      format: Partial<MediaFormat>;
-    })
-  | ChoiceBlock;
+
+export type ImageBlock = BlockBase & {
+  type: 'image';
+  path: string;
+  format: Partial<MediaFormat>;
+};
+
+export type VideoBlock = BlockBase & {
+  type: 'video';
+  path: string;
+  format: Partial<MediaFormat>;
+};
+
+export type Block = TextBlock | ChoiceBlock | ImageBlock | VideoBlock;

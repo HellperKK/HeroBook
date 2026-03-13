@@ -1,10 +1,10 @@
 [package]
 name = "herobook"
-version = "2.0.0"
+version = "2.1.0"
 description = "A text game engine"
 authors = ["HellperKK"]
-license = ""
-repository = ""
+license = "MIT"
+repository = "https://github.com/HellperKK/HeroBook"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -18,6 +18,8 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 tauri-plugin-shell = "2.3.5"
 tauri-plugin-fs = "2.4.5"
+image = "0.25.9"
+tauri-plugin-dialog = "2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
