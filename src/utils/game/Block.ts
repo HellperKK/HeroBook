@@ -17,16 +17,21 @@ export type TextBlock = BlockBase & {
   content: string;
   format: Partial<TextFormat>;
 };
+
+export type ImageBlock = BlockBase & {
+  type: 'image';
+  path: string;
+  format: Partial<MediaFormat>;
+}
+
+export type VideoBlock = BlockBase & {
+  type: 'video';
+  path: string;
+  format: Partial<MediaFormat>;
+}
+
 export type Block =
   | TextBlock
-  | (BlockBase & {
-      type: 'image';
-      path: string;
-      format: Partial<MediaFormat>;
-    })
-  | (BlockBase & {
-      type: 'video';
-      path: string;
-      format: Partial<MediaFormat>;
-    })
-  | ChoiceBlock;
+  | ChoiceBlock
+  | ImageBlock
+  | VideoBlock;

@@ -1,15 +1,16 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { freshId } from '../utils/freshId';
-import type { ChoiceBlock, TextBlock } from '../utils/game/Block';
+import type { ChoiceBlock, ImageBlock, TextBlock } from '../utils/game/Block';
 import { emptyChoice } from '../utils/game/empty/emptyChoice';
 import { emptyPage } from '../utils/game/empty/emptyPage';
 import { emptyProject } from '../utils/game/empty/emptyProject';
 import { emptyText } from '../utils/game/empty/emptyText';
-import type { ChoiceFormat, Format, TextFormat } from '../utils/game/Format';
+import type { ChoiceFormat, Format, MediaFormat, TextFormat } from '../utils/game/Format';
 import type { Page } from '../utils/game/Page';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
+import { emptyImage } from '../utils/game/empty/emptyImage';
 
 const initialState: Project = emptyProject;
 
@@ -57,10 +58,19 @@ export const projectSlice = createSlice({
 
       switch (block.type) {
         case 'image':
+          for (const [key, value] of Object.entries(action.payload.format as MediaFormat)) {
+            const trueKey = key as keyof MediaFormat;
+            if (value === undefined && block.format[trueKey] !== undefined) {
+              delete block.format[trueKey];
+            } else {
+              block.format[trueKey] = value;
+            }
+          }
+          break;
         case 'video':
           return;
         case 'text':
-          for (const [key, value] of Object.entries(action.payload.format)) {
+          for (const [key, value] of Object.entries(action.payload.format as TextFormat)) {
             const trueKey = key as keyof TextFormat;
             if (value === undefined && block.format[trueKey] !== undefined) {
               delete block.format[trueKey];
@@ -70,7 +80,7 @@ export const projectSlice = createSlice({
           }
           break;
         case 'choice':
-          for (const [key, value] of Object.entries(action.payload.format)) {
+          for (const [key, value] of Object.entries(action.payload.format as ChoiceFormat)) {
             const trueKey = key as keyof ChoiceFormat;
             if (value === undefined && block.format[trueKey] !== undefined) {
               delete block.format[trueKey];
@@ -107,6 +117,11 @@ export const projectSlice = createSlice({
         }
         case 'choice': {
           const block: ChoiceBlock = { ...emptyChoice, id: freshId(page.content) };
+          page.content.splice(action.payload.blockPosition, 0, block);
+          break;
+        }
+        case 'image': {
+          const block: ImageBlock = { ...emptyImage, id: freshId(page.content) };
           page.content.splice(action.payload.blockPosition, 0, block);
           break;
         }

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../components/inputs/button/Button';
 import './editor.scss';
-import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, readDir, writeTextFile } from '@tauri-apps/plugin-fs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
@@ -35,7 +35,7 @@ export default function Editor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const project  = useSelector((state: RootState) => state.project);
+  const project = useSelector((state: RootState) => state.project);
   const {
     pages,
     settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
@@ -43,6 +43,18 @@ export default function Editor() {
   // const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
+  const [images, setImages] = useState<Array<string>>([]);
+
+  const assetsPath = `herobook/projects/${project.settings.folderName}/images`;
+  const loadImages = async () => {
+    const images = await readDir(assetsPath, { baseDir: BaseDirectory.Document });
+    setImages(images.map((image) => image.name));
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: will run only once
+  useEffect(() => {
+    loadImages();
+  }, []);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work
   const page = pages.find((page) => page.id === +params.id!)!;
@@ -61,17 +73,9 @@ export default function Editor() {
           <Button
             onClick={async () => {
               console.log('save');
-              await writeTextFile(
-                `${projectsPath}/${folderName}/data.json`,
-                JSON.stringify(
-                  project,
-                  null,
-                  4,
-                ),
-                {
-                  baseDir: BaseDirectory.Document,
-                },
-              );
+              await writeTextFile(`${projectsPath}/${folderName}/data.json`, JSON.stringify(project, null, 4), {
+                baseDir: BaseDirectory.Document,
+              });
             }}
           >
             Save
@@ -197,6 +201,12 @@ export default function Editor() {
                     </select>
                   )}
                 </GlobalStyleEdition>
+                <GlobalStyleEdition label="Width" property="width">
+                  {(data) => <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />}
+                </GlobalStyleEdition>
+                <GlobalStyleEdition label="Height" property="height">
+                  {(data) => <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />}
+                </GlobalStyleEdition>
               </Accordion>
               <Accordion label="Start script">
                 <JsCodeEditor
@@ -265,6 +275,12 @@ export default function Editor() {
                       ))}
                     </select>
                   )}
+                </PageStyleEdition>
+                <PageStyleEdition label="Width" page={page} property="width">
+                  {(data) => <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />}
+                </PageStyleEdition>
+                <PageStyleEdition label="Height" page={page} property="height">
+                  {(data) => <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />}
                 </PageStyleEdition>
               </Accordion>
             </TabPannel>
@@ -408,6 +424,45 @@ export default function Editor() {
                             </option>
                           ))}
                         </select>
+                      )}
+                    </BlockStyleEdition>
+                  </Accordion>
+                </>
+              )}
+              {selectedBlock && selectedBlock.type === 'image' && (
+                <>
+                  <Accordion label="Content">
+                    <Label width="110px">Image path</Label>
+                    <select
+                      value={selectedBlock.path}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        dispatch(
+                          changeBlockSettings({
+                            pageId: page.id,
+                            blockPosition: blockIndex,
+                            settings: { path: value },
+                          }),
+                        );
+                      }}
+                    >
+                      <option value="">no image</option>
+                      {images.map((image) => (
+                        <option key={image} value={image}>
+                          {image}
+                        </option>
+                      ))}
+                    </select>
+                  </Accordion>
+                  <Accordion label="Styling">
+                    <BlockStyleEdition label="Width" page={page} blockPosition={blockIndex} property="width">
+                      {(data) => (
+                        <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />
+                      )}
+                    </BlockStyleEdition>
+                    <BlockStyleEdition label="Height" page={page} blockPosition={blockIndex} property="height">
+                      {(data) => (
+                        <TextField type="number" value={data.value} onChange={(value) => data.onChange(value)} />
                       )}
                     </BlockStyleEdition>
                   </Accordion>
