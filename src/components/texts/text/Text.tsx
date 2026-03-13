@@ -1,9 +1,9 @@
-import "./text.scss"
+import './text.scss';
 
 type Props = {
-    children: string
-}
+  children: string;
+};
 
-export default function Text({children}:Props) {
-    return <p className="text">{children}</p>
+export default function Text({ children }: Props) {
+  return <p className="text">{children}</p>;
 }

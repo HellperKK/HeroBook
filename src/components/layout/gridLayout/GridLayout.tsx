@@ -1,11 +1,11 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
 
-import "./gridLayout.scss";
+import './gridLayout.scss';
 
 type Props = PropsWithChildren<{
   columns: number;
   rows: number;
-  className?: string
+  className?: string;
 }>;
 
 export default function GridLayout({ children, columns, rows, className }: Props) {
@@ -14,6 +14,10 @@ export default function GridLayout({ children, columns, rows, className }: Props
   const style = {
     gridTemplateColumns,
     gridTemplateRows,
-  }
-  return <div style={style} className={`grid-layout ${className ?? ""}`} >{children}</div>;
+  };
+  return (
+    <div style={style} className={`grid-layout ${className ?? ''}`}>
+      {children}
+    </div>
+  );
 }

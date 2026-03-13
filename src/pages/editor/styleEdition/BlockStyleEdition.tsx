@@ -25,10 +25,7 @@ export default function BlockStyleEdition({ children, label, page, property, blo
     <div>
       <Label width="110px">{label}</Label>
       {children({
-        value:
-          block.format[property as keyof typeof block.format] ??
-          page.format[property] ??
-          format[property],
+        value: block.format[property as keyof typeof block.format] ?? page.format[property] ?? format[property],
         onChange: (value) =>
           dispatch(
             changeBlockFormat({
@@ -49,7 +46,7 @@ export default function BlockStyleEdition({ children, label, page, property, blo
               format: {
                 [property]: undefined,
               },
-              blockPosition
+              blockPosition,
             }),
           )
         }

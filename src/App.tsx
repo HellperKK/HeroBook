@@ -115,7 +115,7 @@ export default function App() {
               <Route index element={<GraphPage />} />
               <Route path="page/:id" element={<Editor />} />
               <Route path="open" element={<OpenProject />} />
-            <Route path="assets" element={<AssetsManager />} />
+              <Route path="assets" element={<AssetsManager />} />
             </Route>
             <Route path="/play">
               <Route index element={<GraphPage />} />

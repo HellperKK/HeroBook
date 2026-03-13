@@ -22,8 +22,8 @@ export default function GraphPage() {
       id: page.id,
       label: page.name,
       title: page.name,
-			value: page.id,
-			shape: 'box',
+      value: page.id,
+      shape: 'box',
       color: page.id === firstPage ? '#83d383' : '#d38383',
       size: 10000,
       font: {

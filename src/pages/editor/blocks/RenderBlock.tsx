@@ -97,7 +97,13 @@ export default function RenderBlock({ block, onClick, active }: Props) {
       <div className="image-block">
         {/** biome-ignore lint/a11y/noStaticElementInteractions: false positive */}
         {/** biome-ignore lint/a11y/useKeyWithClickEvents: false positive */}
-        <img src={src} alt="" width={+(block.format.width ?? page.format.width ?? format.width)} height={+(block.format.height ?? page.format.height ?? format.height)} onClick={onClick} />
+        <img
+          src={src}
+          alt=""
+          width={+(block.format.width ?? page.format.width ?? format.width)}
+          height={+(block.format.height ?? page.format.height ?? format.height)}
+          onClick={onClick}
+        />
       </div>
     );
   }
