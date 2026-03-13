@@ -16,6 +16,10 @@ type Props = {
 
 export default function RenderBlock({ block, onClick, active }: Props) {
   const [path, setPath] = useState<string | null>(null);
+  const {
+    pages,
+    settings: { format, folderName },
+  } = useSelector((state: RootState) => state.project);
 
   const loadPath = async () => {
     if (block.type === 'image') {
@@ -34,10 +38,6 @@ export default function RenderBlock({ block, onClick, active }: Props) {
   }, [(block as ImageBlock).path]);
 
   const params = useParams();
-  const {
-    pages,
-    settings: { format, folderName },
-  } = useSelector((state: RootState) => state.project);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work
   const page = pages.find((page) => page.id === +params.id!)!;
