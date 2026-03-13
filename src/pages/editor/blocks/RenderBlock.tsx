@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function RenderBlock({ block, onClick, active }: Props) {
-  const [path, setPath] = useState('');
+  const [path, setPath] = useState<string | null>(null);
 
   const loadPath = async () => {
     if (block.type === 'image') {
