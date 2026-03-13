@@ -15,6 +15,7 @@ import { isDesktopApp } from './utils/isDesktopApp';
 import { projectsPath, rootPath } from './utils/paths';
 import { defaultTheme } from './utils/styles/default';
 import type { Theme } from './utils/styles/Theme';
+import AssetsManager from './pages/assets-manager/AssetsManager';
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
@@ -114,6 +115,7 @@ export default function App() {
               <Route index element={<GraphPage />} />
               <Route path="page/:id" element={<Editor />} />
               <Route path="open" element={<OpenProject />} />
+            <Route path="assets" element={<AssetsManager />} />
             </Route>
             <Route path="/play">
               <Route index element={<GraphPage />} />
