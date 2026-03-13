@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function RenderBlock({ block, onClick, active }: Props) {
-  const [path, setPath] = useState<string | null>(null);
+  const [path, setPath] = useState<string | undefined>(undefined);
   const {
     pages,
     settings: { format, folderName },
