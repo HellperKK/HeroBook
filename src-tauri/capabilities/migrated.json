@@ -66,6 +66,12 @@
         "$DOCUMENT/Herobook/**"
       ]
     },
+    {
+      "identifier": "fs:allow-lstat",
+      "allow": [
+        "$DOCUMENT/Herobook/**"
+      ]
+    },
     "shell:allow-open",
     "shell:default",
     "fs:default",
