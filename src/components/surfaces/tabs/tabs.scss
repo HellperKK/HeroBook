@@ -1,3 +1,9 @@
+.tabs {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 35px 1fr;
+}
+
 .tabs-titles {
   display: flex;
   flex-direction: row;
@@ -24,4 +30,8 @@
   background-color: var(--surface);
   color: var(--text-surface);
   padding: var(--padding-size);
+}
+
+.tab-pannel {
+  height: 100%;
 }
