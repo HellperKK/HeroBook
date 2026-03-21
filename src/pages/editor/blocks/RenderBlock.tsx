@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import type { RootState } from '../../../store/store';
 import type { Block, ImageBlock } from '../../../utils/game/Block';
 import './renderBlock.scss';
-import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
-import { useEffect, useState } from 'react';
 import { BaseDirectory, readFile } from '@tauri-apps/plugin-fs';
+import { useEffect, useState } from 'react';
 import noImage from '../../../assets/images/no-image.png';
+import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
 
 type Props = {
   block: Block;
@@ -27,7 +27,7 @@ export default function RenderBlock({ block, onClick, active }: Props) {
       const blob = await readFile(assetsPath, {
         baseDir: BaseDirectory.Document,
       });
-      const base64 = (blob as unknown as { toBase64: () => string }).toBase64();
+      const base64 = (blob as any).toBase64() as string;
       setPath(`data:image/png;base64,${base64}`);
     }
   };

@@ -1,11 +1,11 @@
+import { BaseDirectory, readFile } from '@tauri-apps/plugin-fs';
 import Jinter from 'jintr';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import noImage from '../../../assets/images/no-image.png';
 import type { RootState } from '../../../store/store';
 import type { Block, ImageBlock } from '../../../utils/game/Block';
-import { useEffect, useState } from 'react';
-import { BaseDirectory, readFile } from '@tauri-apps/plugin-fs';
-import noImage from '../../../assets/images/no-image.png';
 
 type Props = {
   block: Block;
@@ -28,7 +28,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
       const blob = await readFile(assetsPath, {
         baseDir: BaseDirectory.Document,
       });
-      const base64 = (blob as unknown as { toBase64: () => string }).toBase64();
+      const base64 = (blob as any).toBase64() as string;
       setPath(`data:image/png;base64,${base64}`);
     }
   };
