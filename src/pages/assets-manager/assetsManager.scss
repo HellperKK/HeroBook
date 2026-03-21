@@ -1,3 +1,21 @@
 .assets-manager {
     height: 100%;
 }
+
+.assets-images {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    grid-template-rows: 1fr;
+}
+
+.assets-images-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.assets-images-list {
+    display: flex;
+    flex-direction: column;
+}
