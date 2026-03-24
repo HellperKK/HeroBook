@@ -61,12 +61,6 @@
       ]
     },
     {
-      "identifier": "fs:allow-read-dir",
-      "allow": [
-        "$DOCUMENT/Herobook/**"
-      ]
-    },
-    {
       "identifier": "fs:allow-lstat",
       "allow": [
         "$DOCUMENT/Herobook/**"
