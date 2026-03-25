@@ -2,6 +2,7 @@ import { BaseDirectory, exists, mkdir, readTextFile, writeTextFile } from '@taur
 import { useEffect, useState } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import MenuLayout from './components/layout/menuLayout/MenuLayout';
+import AssetsManager from './pages/assets-manager/AssetsManager';
 import Editor from './pages/editor/Editor';
 import GraphPage from './pages/graph/GraphPage';
 import NewProject from './pages/new-project/NewProject';
@@ -15,7 +16,6 @@ import { isDesktopApp } from './utils/isDesktopApp';
 import { projectsPath, rootPath } from './utils/paths';
 import { defaultTheme } from './utils/styles/default';
 import type { Theme } from './utils/styles/Theme';
-import AssetsManager from './pages/assets-manager/AssetsManager';
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
