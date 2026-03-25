@@ -2,9 +2,9 @@ import Button from '../../components/inputs/button/Button';
 import TextField from '../../components/inputs/textField/TextField';
 import Toggle from '../../components/inputs/toggle/Toggle';
 import GridLayout from '../../components/layout/gridLayout/GridLayout';
+import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import Text from '../../components/texts/text/Text';
-import Paper from '../../components/surfaces/paper/Paper';
 import './newProject.scss';
 import { BaseDirectory, exists, mkdir, writeTextFile } from '@tauri-apps/plugin-fs';
 import { useState } from 'react';
@@ -62,6 +62,13 @@ export default function NewProject() {
 
                   const safeName = safeProjectName(formState.projectName);
                   const projectPath = `${projectsPath}/${safeName}`;
+                  const project = structuredClone(emptyProject);
+                  Object.assign(project.settings, {
+                    folderName: safeName,
+                    gameTitle: formState.projectName,
+                    author: formState.projectAuthor,
+                    expert: formState.expertMode,
+                  });
 
                   if (
                     await exists(projectPath, {
@@ -86,7 +93,8 @@ export default function NewProject() {
                   await mkdir(`${projectPath}/videos`, {
                     baseDir: BaseDirectory.Document,
                   });
-                  await writeTextFile(`${projectPath}/data.json`, JSON.stringify(emptyProject, null, 4), {
+
+                  await writeTextFile(`${projectPath}/data.json`, JSON.stringify(project, null, 4), {
                     baseDir: BaseDirectory.Document,
                   });
                   dispatch(
