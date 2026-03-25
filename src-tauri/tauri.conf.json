@@ -18,7 +18,7 @@
   },
   "productName": "herobook",
   "mainBinaryName": "herobook",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "identifier": "fr.weblart-studio.herobook",
   "plugins": {},
   "app": {
