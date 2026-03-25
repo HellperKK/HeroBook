@@ -331,58 +331,62 @@ export default function Editor() {
                 {selectedBlock && selectedBlock.type === 'choice' && (
                   <>
                     <Accordion label="Content">
-                      <Label width="110px">Text</Label>
-                      <TextField
-                        value={selectedBlock.text}
-                        onChange={(value) =>
-                          dispatch(
-                            changeBlockSettings({
-                              pageId: page.id,
-                              blockPosition: blockIndex,
-                              settings: { text: value },
-                            }),
-                          )
-                        }
-                      />
-                      <Label width="110px">Next page</Label>
-                      <select
-                        value={selectedBlock.pageId}
-                        onChange={(e) => {
-                          const value = +e.target.value;
-                          if (value === -1) {
-                            const newId = freshId(pages);
+                      <div>
+                        <Label width="110px">Text</Label>
+                        <TextField
+                          value={selectedBlock.text}
+                          onChange={(value) =>
                             dispatch(
-                              addPageFromChoice({
+                              changeBlockSettings({
                                 pageId: page.id,
                                 blockPosition: blockIndex,
-                                newId,
+                                settings: { text: value },
+                              }),
+                            )
+                          }
+                        />
+                      </div>
+                      <div>
+                        <Label width="110px">Next page</Label>
+                        <select
+                          value={selectedBlock.pageId}
+                          onChange={(e) => {
+                            const value = +e.target.value;
+                            if (value === -1) {
+                              const newId = freshId(pages);
+                              dispatch(
+                                addPageFromChoice({
+                                  pageId: page.id,
+                                  blockPosition: blockIndex,
+                                  newId,
+                                }),
+                              );
+                              navigate(`/editor/page/${newId}`);
+                              return;
+                            }
+
+                            dispatch(
+                              changeBlockSettings({
+                                pageId: page.id,
+                                blockPosition: blockIndex,
+                                settings: { pageId: value },
                               }),
                             );
-                            navigate(`/editor/page/${newId}`);
-                            return;
-                          }
-
-                          dispatch(
-                            changeBlockSettings({
-                              pageId: page.id,
-                              blockPosition: blockIndex,
-                              settings: { pageId: value },
-                            }),
-                          );
-                        }}
-                      >
-                        <option key={-1} value={-1}>
-                          Create new page
-                        </option>
-                        <option key={0} value={0}>
-                          Menu
-                        </option>
-                        {pages.map((page) => (
-                          <option key={page.id} value={page.id}>
-                            {page.name}
+                          }}
+                        >
+                          <option key={-1} value={-1}>
+                            Create new page
                           </option>
-                        ))}
-                      </select>
+                          <option key={0} value={0}>
+                            Menu
+                          </option>
+                          {pages.map((page) => (
+                            <option key={page.id} value={page.id}>
+                              {page.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </Accordion>
                     <Accordion label="Script">
                       <Label width="110px">Condition</Label>
