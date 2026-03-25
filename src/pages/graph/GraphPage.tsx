@@ -66,6 +66,13 @@ export default function GraphPage() {
     <>
       <ButtonGroup>
         <Button onClick={() => dispatch(addPage())}>Add Page</Button>
+        <Button
+          onClick={async () => {
+            navigate('/play/page/0');
+          }}
+        >
+          Play
+        </Button>
       </ButtonGroup>
       <Graph graph={{ nodes, edges }} options={options} events={events} />
     </>
