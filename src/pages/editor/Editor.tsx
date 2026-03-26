@@ -45,7 +45,7 @@ export default function Editor() {
   const [blockIndex, setBlockIndex] = useState(-1);
   const [images, setImages] = useState<Array<string>>([]);
 
-  const assetsPath = `herobook/projects/${project.settings.folderName}/images`;
+  const assetsPath = `${projectsPath}/${project.settings.folderName}/images`;
   const loadImages = async () => {
     const images = await readDir(assetsPath, { baseDir: BaseDirectory.Document });
     setImages(images.map((image) => image.name));
