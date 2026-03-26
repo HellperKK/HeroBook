@@ -7,6 +7,7 @@ import { BaseDirectory, readFile } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
 import noImage from '../../../assets/images/no-image.png';
 import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
+import { projectsPath } from '../../../utils/paths';
 
 type Props = {
   block: Block;
@@ -23,7 +24,7 @@ export default function RenderBlock({ block, onClick, active }: Props) {
 
   const loadPath = async () => {
     if (block.type === 'image') {
-      const assetsPath = `herobook/projects/${folderName}/images/${block.path}`;
+      const assetsPath = `${projectsPath}/${folderName}/images/${block.path}`;
       const blob = await readFile(assetsPath, {
         baseDir: BaseDirectory.Document,
       });
