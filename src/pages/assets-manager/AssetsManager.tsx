@@ -9,6 +9,7 @@ import Button from '../../components/inputs/button/Button';
 import Text from '../../components/texts/text/Text';
 import type { RootState } from '../../store/store';
 import { fileName } from '../../utils/fileName';
+import { projectsPath } from '../../utils/paths';
 
 export default function AssetsManager() {
   const project = useSelector((state: RootState) => state.project);
@@ -16,7 +17,7 @@ export default function AssetsManager() {
   const [assets, setAssets] = useState<Array<DirEntry>>([]);
   const [assetSource, setAssetSource] = useState<string | null>(null);
 
-  const assetsPath = `herobook/projects/${project.settings.folderName}/images`;
+  const assetsPath = `${projectsPath}/${project.settings.folderName}/images`;
 
   const loadImages = async () => {
     const images = await readDir(assetsPath, { baseDir: BaseDirectory.Document });
