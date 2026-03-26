@@ -46,12 +46,12 @@ export default function AssetsManager() {
     await loadImages();
   };
 
-  const getSource = async (file:string) => {
-    const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document })
-    const base64 = (bytes as any).toBase64() as string
+  const getSource = async (file: string) => {
+    const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document });
+    const base64 = (bytes as any).toBase64() as string;
     const url = `data:application/octet-stream;base64,${base64}`;
     setAssetSource(url);
-  }
+  };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: will run only once
   useEffect(() => {
@@ -66,7 +66,14 @@ export default function AssetsManager() {
             <div className="assets-images-list">
               <Button onClick={importAssets}>+</Button>
               {assets.map((asset) => (
-                <Button key={asset.name} onClick={() => {getSource(asset.name)}}>{fileName(asset.name, false)}</Button>
+                <Button
+                  key={asset.name}
+                  onClick={() => {
+                    getSource(asset.name);
+                  }}
+                >
+                  {fileName(asset.name, false)}
+                </Button>
               ))}
             </div>
             <div className="assets-images-item">
