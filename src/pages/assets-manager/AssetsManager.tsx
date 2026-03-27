@@ -9,6 +9,7 @@ import Button from '../../components/inputs/button/Button';
 import Text from '../../components/texts/text/Text';
 import type { RootState } from '../../store/store';
 import { fileName } from '../../utils/fileName';
+import { projectsPath } from '../../utils/paths';
 
 export default function AssetsManager() {
   const project = useSelector((state: RootState) => state.project);
@@ -16,7 +17,7 @@ export default function AssetsManager() {
   const [assets, setAssets] = useState<Array<DirEntry>>([]);
   const [assetSource, setAssetSource] = useState<string | null>(null);
 
-  const assetsPath = `herobook/projects/${project.settings.folderName}/images`;
+  const assetsPath = `${projectsPath}/${project.settings.folderName}/images`;
 
   const loadImages = async () => {
     const images = await readDir(assetsPath, { baseDir: BaseDirectory.Document });
@@ -45,12 +46,12 @@ export default function AssetsManager() {
     await loadImages();
   };
 
-  const getSource = async (file:string) => {
-    const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document })
-    const base64 = (bytes as any).toBase64() as string
+  const getSource = async (file: string) => {
+    const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document });
+    const base64 = (bytes as any).toBase64() as string;
     const url = `data:application/octet-stream;base64,${base64}`;
     setAssetSource(url);
-  }
+  };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: will run only once
   useEffect(() => {
@@ -65,7 +66,14 @@ export default function AssetsManager() {
             <div className="assets-images-list">
               <Button onClick={importAssets}>+</Button>
               {assets.map((asset) => (
-                <Button key={asset.name} onClick={() => {getSource(asset.name)}}>{fileName(asset.name, false)}</Button>
+                <Button
+                  key={asset.name}
+                  onClick={() => {
+                    getSource(asset.name);
+                  }}
+                >
+                  {fileName(asset.name, false)}
+                </Button>
               ))}
             </div>
             <div className="assets-images-item">

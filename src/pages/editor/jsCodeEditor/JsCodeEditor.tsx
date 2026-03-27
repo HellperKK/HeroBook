@@ -15,7 +15,7 @@ export default function JsCodeEditor({ value, onChange }: Props) {
       highlight={(code) => Prism.highlight(code, Prism.languages.js, 'js')}
       padding={10}
       style={{
-        backgroundColor: 'white',
+        backgroundColor: 'lightgrey',
       }}
     />
   );
