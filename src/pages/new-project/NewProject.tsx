@@ -93,6 +93,9 @@ export default function NewProject() {
                   await mkdir(`${projectPath}/videos`, {
                     baseDir: BaseDirectory.Document,
                   });
+                  await mkdir(`${projectPath}/fonts`, {
+                    baseDir: BaseDirectory.Document,
+                  });
 
                   await writeTextFile(`${projectPath}/data.json`, JSON.stringify(project, null, 4), {
                     baseDir: BaseDirectory.Document,
