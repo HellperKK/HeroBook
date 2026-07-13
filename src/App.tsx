@@ -6,8 +6,6 @@ import AssetsManager from './pages/assets-manager/AssetsManager';
 import Editor from './pages/editor/Editor';
 import GraphPage from './pages/graph/GraphPage';
 import NewProject from './pages/new-project/NewProject';
-import OpenPlay from './pages/open-play/OpenPlay';
-import OpenProject from './pages/open-project/OpenProject';
 import Play from './pages/play/Play';
 import StartPage from './pages/start-page/StartPage';
 import { camelToKebab } from './utils/camelToKebab';
@@ -92,16 +90,6 @@ export default function App() {
   useEffect(() => {
     manageProjectsDirectories();
     loadTheme();
-    document.addEventListener('keydown', (event) => {
-      // Prevent F5 or Ctrl+R (Windows/Linux) and Command+R (Mac) from refreshing the page
-      if (event.key === 'F5' || (event.ctrlKey && event.key === 'r') || (event.metaKey && event.key === 'r')) {
-        event.preventDefault();
-      }
-    });
-
-    document.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-    });
   }, []);
 
   return (
@@ -114,13 +102,11 @@ export default function App() {
             <Route path="/editor">
               <Route index element={<GraphPage />} />
               <Route path="page/:id" element={<Editor />} />
-              <Route path="open" element={<OpenProject />} />
               <Route path="assets" element={<AssetsManager />} />
             </Route>
             <Route path="/play">
               <Route index element={<GraphPage />} />
               <Route path="page/:id" element={<Play />} />
-              <Route path="open" element={<OpenPlay />} />
             </Route>
           </Route>
         </Routes>
