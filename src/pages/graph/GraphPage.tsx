@@ -7,13 +7,15 @@ import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import { addPage, duplicatePage, quitEditor } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
+import { saveProject } from '../../utils/saveProject';
 
 export default function GraphPage() {
   const navigate = useNavigate();
+  const project = useSelector((state: RootState) => state.project.project);
   const {
     pages,
     settings: { firstPage },
-  } = useSelector((state: RootState) => state.project.project);
+  } = project;
   const dispatch = useDispatch();
 
   /*
@@ -84,6 +86,13 @@ export default function GraphPage() {
           }}
         >
           Play
+        </Button>
+        <Button
+          onClick={async () => {
+            saveProject(project);
+          }}
+        >
+          Save
         </Button>
       </ButtonGroup>
       {/* <Graph graph={{ nodes, edges }} options={options} events={events} /> */}

@@ -32,6 +32,7 @@ import GlobalStyleEdition from './styleEdition/GlobalStyleEdition';
 import PageStyleEdition from './styleEdition/PageStyleEdition';
 
 import './editor.scss';
+import { saveProject } from '../../utils/saveProject';
 
 export default function Editor() {
   const dispatch = useDispatch();
@@ -40,10 +41,7 @@ export default function Editor() {
   const data = useSelector((state: RootState) => state.project);
   console.log(data.project.settings.format);
   const {
-    project: {
-      pages,
-      settings,
-    },
+    project: { pages, settings },
   } = data;
   // const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
@@ -77,10 +75,7 @@ export default function Editor() {
           </Button>
           <Button
             onClick={async () => {
-              console.log('save');
-              await writeTextFile(`${projectsPath}/${settings.folderName}/data.json`, JSON.stringify(data, null, 4), {
-                baseDir: BaseDirectory.Document,
-              });
+              saveProject(data.project);
             }}
           >
             Save
