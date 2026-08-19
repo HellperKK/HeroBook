@@ -20,7 +20,7 @@ export default function RenderBlock({ block, onClick, active }: Props) {
   const {
     pages,
     settings: { format, folderName },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
 
   const loadPath = async () => {
     if (block.type === 'image') {

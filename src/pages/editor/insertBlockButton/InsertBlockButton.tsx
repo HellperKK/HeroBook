@@ -18,7 +18,7 @@ export default function InsertBlockButton({ index }: Props) {
   const {
     pages,
     settings: { format },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const [modalOpen, setModalOpen] = useState(false);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work

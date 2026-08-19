@@ -35,17 +35,20 @@ export default function Editor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const project = useSelector((state: RootState) => state.project);
+  const data = useSelector((state: RootState) => state.project);
+  console.log(data.project.settings.format);
   const {
-    pages,
-    settings: { format, gameTitle, author, expert, firstPage, startScript, folderName },
-  } = project;
+    project: {
+      pages,
+      settings,
+    },
+  } = data;
   // const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(true);
   const [blockIndex, setBlockIndex] = useState(-1);
   const [images, setImages] = useState<Array<string>>([]);
 
-  const assetsPath = `${projectsPath}/${project.settings.folderName}/images`;
+  const assetsPath = `${projectsPath}/${settings.folderName}/images`;
   const loadImages = async () => {
     const images = await readDir(assetsPath, { baseDir: BaseDirectory.Document });
     setImages(images.map((image) => image.name));
@@ -73,7 +76,7 @@ export default function Editor() {
           <Button
             onClick={async () => {
               console.log('save');
-              await writeTextFile(`${projectsPath}/${folderName}/data.json`, JSON.stringify(project, null, 4), {
+              await writeTextFile(`${projectsPath}/${settings.folderName}/data.json`, JSON.stringify(data, null, 4), {
                 baseDir: BaseDirectory.Document,
               });
             }}
@@ -85,10 +88,10 @@ export default function Editor() {
       <div
         className="game-outer"
         style={{
-          backgroundColor: page.format?.background ?? format.background,
+          backgroundColor: page.format?.background ?? settings.format.background,
         }}
       >
-        <div className="game-inner" style={{ backgroundColor: page.format?.page ?? format.page }}>
+        <div className="game-inner" style={{ backgroundColor: page.format?.page ?? settings.format.page }}>
           {page.content.map((block, index) => (
             <div className="block-pair" key={block.id}>
               <InsertBlockButton index={index} />
@@ -115,7 +118,7 @@ export default function Editor() {
                           }),
                         )
                       }
-                      value={gameTitle}
+                      value={settings.gameTitle}
                     />
                   </div>
                   <div>
@@ -128,7 +131,7 @@ export default function Editor() {
                           }),
                         )
                       }
-                      value={author}
+                      value={settings.author}
                     />
                   </div>
                   <div>
@@ -141,7 +144,7 @@ export default function Editor() {
                           }),
                         )
                       }
-                      checked={expert}
+                      checked={settings.expert}
                     />
                   </div>
                   <div>
@@ -154,7 +157,7 @@ export default function Editor() {
                           }),
                         )
                       }
-                      value={firstPage}
+                      value={settings.firstPage}
                     >
                       {pages.map((page) => (
                         <option key={page.id} value={page.id}>
@@ -215,7 +218,7 @@ export default function Editor() {
                 </Accordion>
                 <Accordion label="Start script">
                   <JsCodeEditor
-                    value={startScript ?? ''}
+                    value={settings.startScript ?? ''}
                     onChange={(value) =>
                       dispatch(
                         changeGlobalSettings({
