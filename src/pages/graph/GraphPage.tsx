@@ -5,7 +5,7 @@ import Button from '../../components/inputs/button/Button';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
 import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
-import { addPage, quitEditor } from '../../store/projectSlice';
+import { addPage, duplicatePage, quitEditor } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
 
 export default function GraphPage() {
@@ -92,6 +92,7 @@ export default function GraphPage() {
           <div key={page.id}>
             <Label width="150px">{page.name}</Label>
             <Button onClick={() => navigate(`/editor/page/${page.id}`)}>Open</Button>
+            <Button onClick={() => dispatch(duplicatePage({ pageId: page.id }))}>Duplicate</Button>
           </div>
         ))}
       </Paper>

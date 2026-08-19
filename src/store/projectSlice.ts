@@ -158,6 +158,18 @@ export const projectSlice = createSlice({
       const newPage = { ...emptyPage, id, name: `Page ${id}` };
       state.project.pages.push(newPage);
     },
+    duplicatePage: (state, action: PayloadAction<{ pageId: number; }>) => {
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      let count = 1;
+      while (state.project.pages.some((p) => p.name === `${page.name} #${count}`)) {
+        count++;
+      }
+
+      const newPage = { ...page, id: freshId(state.project.pages), name: `${page.name} #${count}` };
+      state.project.pages.push(newPage);
+    },
     addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number; newId: number }>) => {
       const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
@@ -184,6 +196,7 @@ export const {
   editProject,
   quitEditor,
   addPage,
+  duplicatePage,
   addPageFromChoice,
   deletePagePage,
   changeGlobalSettings,
