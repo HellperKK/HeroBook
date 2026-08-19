@@ -29,7 +29,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
       const blob = await readFile(assetsPath, {
         baseDir: BaseDirectory.Document,
       });
-      const base64 = (blob as any).toBase64() as string;
+      const base64 = blob.toBase64();
       setPath(`data:image/png;base64,${base64}`);
     }
   };

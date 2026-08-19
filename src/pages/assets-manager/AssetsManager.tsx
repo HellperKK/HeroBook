@@ -48,7 +48,7 @@ export default function AssetsManager() {
 
   const getSource = async (file: string) => {
     const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document });
-    const base64 = (bytes as any).toBase64() as string;
+    const base64 = bytes.toBase64();
     const url = `data:application/octet-stream;base64,${base64}`;
     setAssetSource(url);
   };
