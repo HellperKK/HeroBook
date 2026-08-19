@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Button from '../../../components/inputs/button/Button';
 import Label from '../../../components/texts/label/Label';
 import { changeBlockFormat } from '../../../store/projectSlice';

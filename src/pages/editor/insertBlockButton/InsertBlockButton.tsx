@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import type { RootState } from '../../../store/store';
-import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
-import './insertBlockButton.scss';
-import { useState } from 'react';
+
 import Button from '../../../components/inputs/button/Button';
 import Modal from '../../../components/surfaces/modal/Modal';
 import { inserBlockAt } from '../../../store/projectSlice';
+import type { RootState } from '../../../store/store';
+import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
+
+import './insertBlockButton.scss';
 
 type Props = {
   index: number;

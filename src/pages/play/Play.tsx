@@ -1,10 +1,12 @@
+import Jinter from 'jintr';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+
 import type { RootState } from '../../store/store';
 import RenderBlock from './blocks/RenderBlock';
+
 import './play.scss';
-import Jinter from 'jintr';
-import { useImmer } from 'use-immer';
 
 export default function Play() {
   const navigate = useNavigate();

@@ -1,15 +1,17 @@
-import { useSelector } from 'react-redux';
-import TabPannel from '../../components/surfaces/tabs/TabPannel';
-import Tabs from '../../components/surfaces/tabs/Tabs';
-import './assetsManager.scss';
 import { open } from '@tauri-apps/plugin-dialog';
 import { BaseDirectory, type DirEntry, readDir, readFile, writeFile } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import Button from '../../components/inputs/button/Button';
+import TabPannel from '../../components/surfaces/tabs/TabPannel';
+import Tabs from '../../components/surfaces/tabs/Tabs';
 import Text from '../../components/texts/text/Text';
 import type { RootState } from '../../store/store';
 import { fileName } from '../../utils/fileName';
 import { projectsPath } from '../../utils/paths';
+
+import './assetsManager.scss';
 
 export default function AssetsManager() {
   const project = useSelector((state: RootState) => state.project.project);

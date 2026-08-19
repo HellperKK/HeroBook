@@ -1,5 +1,6 @@
 import Prism from 'prismjs';
 import EditorModule from 'react-simple-code-editor';
+
 import 'prismjs/themes/prism.css';
 
 const Editor =

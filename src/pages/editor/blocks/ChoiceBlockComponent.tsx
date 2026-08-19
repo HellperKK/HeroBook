@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom';
-import type { ChoiceBlock } from '../../../utils/game/Block';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import type { RootState } from '../../../store/store';
+import type { ChoiceBlock } from '../../../utils/game/Block';
 import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
 
 type Props = {

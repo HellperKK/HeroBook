@@ -1,8 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+
 import { freshId } from '../utils/freshId';
 import type { ChoiceBlock, ImageBlock, TextBlock } from '../utils/game/Block';
 import { emptyChoice } from '../utils/game/empty/emptyChoice';
+import { emptyImage } from '../utils/game/empty/emptyImage';
 import { emptyPage } from '../utils/game/empty/emptyPage';
 import { emptyProject } from '../utils/game/empty/emptyProject';
 import { emptyText } from '../utils/game/empty/emptyText';
@@ -10,7 +12,6 @@ import type { ChoiceFormat, Format, MediaFormat, TextFormat } from '../utils/gam
 import type { Page } from '../utils/game/Page';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
-import { emptyImage } from '../utils/game/empty/emptyImage';
 
 type ProjectState = {
   project: Project;

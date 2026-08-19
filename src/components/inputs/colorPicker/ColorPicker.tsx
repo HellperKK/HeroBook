@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+
 import './colorPicker.scss';
 
 type Props = {

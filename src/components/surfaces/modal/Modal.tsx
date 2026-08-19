@@ -1,5 +1,7 @@
 import { type PropsWithChildren, useEffect, useRef } from 'react';
+
 import Button from '../../inputs/button/Button';
+
 import './modal.scss';
 
 type Props = PropsWithChildren<{

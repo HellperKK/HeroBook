@@ -1,5 +1,7 @@
 import { type ReactElement, useState } from 'react';
+
 import { reactElementToArray } from '../../../utils/reactNodeToArray';
+
 import './tabs.scss';
 
 type Props = {

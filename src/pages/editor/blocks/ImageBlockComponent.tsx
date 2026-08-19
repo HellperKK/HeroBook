@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import type { ImageBlock } from '../../../utils/game/Block';
-import { projectsPath } from '../../../utils/paths';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../store/store';
 import { BaseDirectory, readFile } from '@tauri-apps/plugin-fs';
-import noImage from '../../../assets/images/no-image.png';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import noImage from '../../../assets/images/no-image.png';
+import type { RootState } from '../../../store/store';
+import type { ImageBlock } from '../../../utils/game/Block';
 import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
+import { projectsPath } from '../../../utils/paths';
 
 type Props = {
   block: ImageBlock;

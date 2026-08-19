@@ -1,6 +1,7 @@
 import { BaseDirectory, exists, mkdir, readTextFile, writeTextFile } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+
 import MenuLayout from './components/layout/menuLayout/MenuLayout';
 import AssetsManager from './pages/assets-manager/AssetsManager';
 import Editor from './pages/editor/Editor';

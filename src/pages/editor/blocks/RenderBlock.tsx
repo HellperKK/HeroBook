@@ -1,8 +1,9 @@
 import type { Block } from '../../../utils/game/Block';
-import './renderBlock.scss';
-import TextualBlock from './TextBlockComponent';
 import ChoiceBlockComponent from './ChoiceBlockComponent';
 import ImageBlockComponent from './ImageBlockComponent';
+import TextualBlock from './TextBlockComponent';
+
+import './renderBlock.scss';
 
 type Props = {
   block: Block;

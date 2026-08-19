@@ -1,3 +1,8 @@
+import { BaseDirectory, exists, mkdir, writeTextFile } from '@tauri-apps/plugin-fs';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '../../components/inputs/button/Button';
 import TextField from '../../components/inputs/textField/TextField';
 import Toggle from '../../components/inputs/toggle/Toggle';
@@ -5,15 +10,12 @@ import GridLayout from '../../components/layout/gridLayout/GridLayout';
 import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import Text from '../../components/texts/text/Text';
-import './newProject.scss';
-import { BaseDirectory, exists, mkdir, writeTextFile } from '@tauri-apps/plugin-fs';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { changeGlobalSettings } from '../../store/projectSlice';
 import { emptyProject } from '../../utils/game/empty/emptyProject';
 import { projectsPath } from '../../utils/paths';
 import { safeProjectName } from '../../utils/safeProjectName';
+
+import './newProject.scss';
 
 export default function NewProject() {
   const dispatch = useDispatch();

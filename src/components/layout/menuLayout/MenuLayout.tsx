@@ -1,5 +1,9 @@
+import { invoke } from '@tauri-apps/api/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import { isDesktopApp } from '../../../utils/isDesktopApp';
 import { darkContrastTheme, darkTheme, lightContrastTheme, lightTheme } from '../../../utils/styles/colors';
 import { fontDys, fontSans, fontSystem } from '../../../utils/styles/fonts';
 import { mediumSize, smallSize } from '../../../utils/styles/sizes';
@@ -13,10 +17,8 @@ import Label from '../../texts/label/Label';
 import Text from '../../texts/text/Text';
 import DropDownBar from './DropDownBar';
 import MenuButton from './MenuButton';
+
 import './menuLayout.scss';
-import { invoke } from '@tauri-apps/api/core';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { isDesktopApp } from '../../../utils/isDesktopApp';
 
 type Props = {
   theme: Theme;

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import Button from '../../components/inputs/button/Button';
-import './editor.scss';
 import { BaseDirectory, readDir, writeTextFile } from '@tauri-apps/plugin-fs';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+
+import Button from '../../components/inputs/button/Button';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
 import ColorPicker from '../../components/inputs/colorPicker/ColorPicker';
 import TextArea from '../../components/inputs/textArea/TextArea';
@@ -30,6 +30,8 @@ import JsCodeEditor from './jsCodeEditor/JsCodeEditor';
 import BlockStyleEdition from './styleEdition/BlockStyleEdition';
 import GlobalStyleEdition from './styleEdition/GlobalStyleEdition';
 import PageStyleEdition from './styleEdition/PageStyleEdition';
+
+import './editor.scss';
 
 export default function Editor() {
   const dispatch = useDispatch();

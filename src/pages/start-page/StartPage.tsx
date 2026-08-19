@@ -1,15 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-import Button from '../../components/inputs/button/Button';
-import Label from '../../components/texts/label/Label';
-import './startPage.scss';
-import Paper from '../../components/surfaces/paper/Paper';
-import { useEffect, useState } from 'react';
 import { BaseDirectory, DirEntry, exists, readDir, readTextFile } from '@tauri-apps/plugin-fs';
-import { projectsPath } from '../../utils/paths';
-import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
-import { Project } from '../../utils/game/Project';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import Button from '../../components/inputs/button/Button';
+import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
+import Paper from '../../components/surfaces/paper/Paper';
+import Label from '../../components/texts/label/Label';
 import { editProject, loadProject } from '../../store/projectSlice';
+import { Project } from '../../utils/game/Project';
+import { projectsPath } from '../../utils/paths';
+
+import './startPage.scss';
 
 export default function StartPage() {
   const navigate = useNavigate();

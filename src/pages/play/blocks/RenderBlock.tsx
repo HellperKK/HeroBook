@@ -3,6 +3,7 @@ import Jinter from 'jintr';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 import noImage from '../../../assets/images/no-image.png';
 import type { RootState } from '../../../store/store';
 import type { Block, ImageBlock } from '../../../utils/game/Block';

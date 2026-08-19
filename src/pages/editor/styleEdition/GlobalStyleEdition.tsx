@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Label from '../../../components/texts/label/Label';
 import { changeGlobalFormat } from '../../../store/projectSlice';
 import type { RootState } from '../../../store/store';

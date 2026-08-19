@@ -1,8 +1,10 @@
 import type { PropsWithChildren } from 'react';
 import { useContext, useState } from 'react';
-import './button.scss';
+
 import SettingsContext from '../../../utils/contexts/settingsContext';
 import { ignore } from '../../../utils/ignore';
+
+import './button.scss';
 
 type Props = PropsWithChildren<{
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
