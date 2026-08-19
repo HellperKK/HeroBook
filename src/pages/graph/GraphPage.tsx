@@ -1,12 +1,12 @@
-import Graph from 'react-graph-vis';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../../components/inputs/button/Button';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
-import { addPage, quitEditor } from '../../store/projectSlice';
-import type { RootState } from '../../store/store';
 import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
+import { addPage, quitEditor } from '../../store/projectSlice';
+import type { RootState } from '../../store/store';
 
 export default function GraphPage() {
   const navigate = useNavigate();
@@ -96,5 +96,5 @@ export default function GraphPage() {
         ))}
       </Paper>
     </>
-  )
+  );
 }
