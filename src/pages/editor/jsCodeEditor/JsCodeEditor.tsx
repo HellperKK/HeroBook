@@ -1,6 +1,10 @@
 import Prism from 'prismjs';
-import Editor from 'react-simple-code-editor';
+import EditorModule from 'react-simple-code-editor';
 import 'prismjs/themes/prism.css';
+
+const Editor =
+  (EditorModule as unknown as { default?: typeof EditorModule }).default ??
+  EditorModule;
 
 type Props = {
   value: string;
