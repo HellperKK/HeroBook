@@ -1,4 +1,4 @@
-import { BaseDirectory, readDir, writeTextFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, readDir } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,6 +24,7 @@ import type { RootState } from '../../store/store';
 import { freshId } from '../../utils/freshId';
 import { allowedFonts } from '../../utils/game/allowedFonts';
 import { projectsPath } from '../../utils/paths';
+import { saveProject } from '../../utils/saveProject';
 import RenderBlock from './blocks/RenderBlock';
 import InsertBlockButton from './insertBlockButton/InsertBlockButton';
 import JsCodeEditor from './jsCodeEditor/JsCodeEditor';
@@ -32,7 +33,6 @@ import GlobalStyleEdition from './styleEdition/GlobalStyleEdition';
 import PageStyleEdition from './styleEdition/PageStyleEdition';
 
 import './editor.scss';
-import { saveProject } from '../../utils/saveProject';
 
 export default function Editor() {
   const dispatch = useDispatch();
