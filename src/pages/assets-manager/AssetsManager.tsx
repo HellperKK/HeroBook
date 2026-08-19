@@ -12,7 +12,7 @@ import { fileName } from '../../utils/fileName';
 import { projectsPath } from '../../utils/paths';
 
 export default function AssetsManager() {
-  const project = useSelector((state: RootState) => state.project);
+  const project = useSelector((state: RootState) => state.project.project);
 
   const [assets, setAssets] = useState<Array<DirEntry>>([]);
   const [assetSource, setAssetSource] = useState<string | null>(null);

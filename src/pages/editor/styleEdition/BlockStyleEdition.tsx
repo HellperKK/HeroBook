@@ -18,7 +18,7 @@ type Props = {
 export default function BlockStyleEdition({ children, label, page, property, blockPosition }: Props) {
   const {
     settings: { format },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const dispatch = useDispatch();
   const block = page.content[blockPosition];
   return (

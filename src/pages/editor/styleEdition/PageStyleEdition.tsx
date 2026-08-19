@@ -17,7 +17,7 @@ type Props = {
 export default function PageStyleEdition({ children, label, page, property }: Props) {
   const {
     settings: { format },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const dispatch = useDispatch();
   return (
     <div>

@@ -20,7 +20,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
   const {
     pages,
     settings: { format, folderName },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const [path, setPath] = useState<string | undefined>(undefined);
 
   const loadPath = async () => {
