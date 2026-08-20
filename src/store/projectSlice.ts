@@ -20,7 +20,7 @@ type ProjectState = {
 
 const initialState: ProjectState = {
   project: emptyProject,
-  inEditor: false
+  inEditor: false,
 };
 
 export const projectSlice = createSlice({
@@ -158,17 +158,18 @@ export const projectSlice = createSlice({
       const newPage = { ...emptyPage, id, name: `Page ${id}` };
       state.project.pages.push(newPage);
     },
-    duplicatePage: (state, action: PayloadAction<{ pageId: number; }>) => {
-      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
-      if (!page) return;
+    duplicatePage: (state, action: PayloadAction<{ pageId: number }>) => {
+      const pagePosition = state.project.pages.findIndex((page) => page.id === action.payload.pageId);
+      if (pagePosition === -1) return;
 
+      const page = state.project.pages[pagePosition];
       let count = 1;
       while (state.project.pages.some((p) => p.name === `${page.name} #${count}`)) {
         count++;
       }
 
       const newPage = { ...page, id: freshId(state.project.pages), name: `${page.name} #${count}` };
-      state.project.pages.push(newPage);
+      state.project.pages.splice(pagePosition + 1, 0, newPage);
     },
     addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number; newId: number }>) => {
       const page = state.project.pages.find((page) => page.id === action.payload.pageId);
