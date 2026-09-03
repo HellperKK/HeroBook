@@ -72,6 +72,14 @@ export default function StartPage() {
         >
           New project
         </Button>
+        <Button
+        className="new-project-button"
+          onClick={() => {
+            loadProjectList();
+          }}
+        >
+          Reload
+        </Button>
         {projects.map((project) => (
           <div key={project.name} className="project-entry">
             <Label>{project.name}</Label>
