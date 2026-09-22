@@ -36,7 +36,6 @@ export default function MenuLayout({ theme, updateTheme }: Props) {
       <div className="menu-dropdown">
         <DropDownBar label={t('file')}>
           <MenuButton onClick={() => navigate('/new')}>New project</MenuButton>
-          <MenuButton onClick={() => navigate('/editor/open')}>Open project</MenuButton>
           <MenuButton onClick={() => navigate('/')}>Back to menu</MenuButton>
           <MenuButton
             onClick={async () => {
