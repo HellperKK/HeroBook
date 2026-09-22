@@ -1,4 +1,4 @@
-import { BaseDirectory, DirEntry, exists, readDir, readTextFile } from '@tauri-apps/plugin-fs';
+import { BaseDirectory, type DirEntry, exists, readDir, readTextFile } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
 import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import { editProject, loadProject } from '../../store/projectSlice';
-import { Project } from '../../utils/game/Project';
+import type { Project } from '../../utils/game/Project';
 import { projectsPath } from '../../utils/paths';
 
 import './startPage.scss';
@@ -34,9 +34,12 @@ export default function StartPage() {
         }))
       ) {
         trueMemo.push(file);
-        console.log("valid", await exists(`${projectsPath}/${file.name}/data.json`, {
-          baseDir: BaseDirectory.Document,
-        }));
+        console.log(
+          'valid',
+          await exists(`${projectsPath}/${file.name}/data.json`, {
+            baseDir: BaseDirectory.Document,
+          }),
+        );
       }
 
       return trueMemo;
@@ -59,13 +62,13 @@ export default function StartPage() {
     const data: Project = JSON.parse(dataTxt);
 
     return data;
-  }
+  };
 
   return (
     <div className="start-page">
       <Paper className="start-page-paper">
         <Button
-        className="new-project-button"
+          className="new-project-button"
           onClick={() => {
             navigate(`/new`);
           }}
