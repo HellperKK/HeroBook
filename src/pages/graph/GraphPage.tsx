@@ -1,3 +1,4 @@
+import { BaseDirectory, readFile, writeFile } from '@tauri-apps/plugin-fs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,14 +8,18 @@ import Paper from '../../components/surfaces/paper/Paper';
 import Label from '../../components/texts/label/Label';
 import { addPage, duplicatePage, quitEditor } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
+import { projectsPath } from '../../utils/paths';
 import { saveProject } from '../../utils/saveProject';
+import { scanDirectoryFiles } from '../../utils/scanDirectoryFiles';
+import JSZip from 'jszip';
+import { save } from '@tauri-apps/plugin-dialog';
 
 export default function GraphPage() {
   const navigate = useNavigate();
   const project = useSelector((state: RootState) => state.project.project);
   const {
     pages,
-    settings: { firstPage },
+    settings: { folderName },
   } = project;
   const dispatch = useDispatch();
 
@@ -93,6 +98,37 @@ export default function GraphPage() {
           }}
         >
           Save
+        </Button>
+        <Button
+          onClick={async () => {
+            const filePath = await save({
+              filters: [
+                {
+                  name: 'Zip',
+                  extensions: ['zip'],
+                },
+              ],
+            });
+
+            if (filePath === null) {
+              return;
+            }
+
+            const projectFiles = await scanDirectoryFiles(`${projectsPath}/${folderName}`, {
+              baseDir: BaseDirectory.Document,
+            });
+            const zip = new JSZip();
+            const promises = projectFiles.map(async (file) => {
+              const fileData = await readFile(file, { baseDir: BaseDirectory.Document });
+              zip.file(file.replace(`${projectsPath}/${folderName}/`, ''), fileData, { binary: true });
+            });
+            await Promise.all(promises);
+
+            const bin = await zip.generateAsync({ type: 'uint8array' });
+            await writeFile(filePath, bin);
+          }}
+        >
+          Export as zip
         </Button>
       </ButtonGroup>
       {/* <Graph graph={{ nodes, edges }} options={options} events={events} /> */}

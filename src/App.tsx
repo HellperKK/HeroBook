@@ -12,7 +12,7 @@ import StartPage from './pages/start-page/StartPage';
 import { camelToKebab } from './utils/camelToKebab';
 import SettingsContext from './utils/contexts/settingsContext';
 import { isDesktopApp } from './utils/isDesktopApp';
-import { projectsPath, rootPath } from './utils/paths';
+import { gamesPath, projectsPath, rootPath } from './utils/paths';
 import { defaultTheme } from './utils/styles/default';
 import type { Theme } from './utils/styles/Theme';
 
@@ -84,6 +84,13 @@ export default function App() {
     });
     if (!projectsDirectoryExists) {
       await mkdir(projectsPath, { baseDir: BaseDirectory.Document });
+    }
+
+    projectsDirectoryExists = await exists(gamesPath, {
+      baseDir: BaseDirectory.Document,
+    });
+    if (!projectsDirectoryExists) {
+      await mkdir(gamesPath, { baseDir: BaseDirectory.Document });
     }
   };
 

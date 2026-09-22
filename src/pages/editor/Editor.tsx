@@ -39,7 +39,6 @@ export default function Editor() {
   const navigate = useNavigate();
   const params = useParams();
   const data = useSelector((state: RootState) => state.project);
-  console.log(data.project.settings.format);
   const {
     project: { pages, settings },
   } = data;

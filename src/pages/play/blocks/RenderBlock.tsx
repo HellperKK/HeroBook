@@ -44,7 +44,6 @@ export default function RenderBlock({ block, onClick, state }: Props) {
   const page = pages.find((page) => page.id === +params.id!)!;
 
   if (block.type === 'text') {
-    console.log(block.format?.textFont ?? page.format?.textFont ?? format.textFont);
     return (
       <div className={`text-block`}>
         <pre
