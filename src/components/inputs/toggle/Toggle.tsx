@@ -1,4 +1,5 @@
 import { ignore } from '../../../utils/ignore';
+
 import './toggle.scss';
 
 type Props = {

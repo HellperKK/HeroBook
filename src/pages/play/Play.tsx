@@ -1,18 +1,20 @@
+import Jinter from 'jintr';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+
 import type { RootState } from '../../store/store';
 import RenderBlock from './blocks/RenderBlock';
+
 import './play.scss';
-import Jinter from 'jintr';
-import { useImmer } from 'use-immer';
 
 export default function Play() {
   const navigate = useNavigate();
   const params = useParams();
-  const {
+  const {project: {
     pages,
     settings: { format, texts, firstPage, gameTitle, author, startScript },
-  } = useSelector((state: RootState) => state.project);
+  }, inEditor} = useSelector((state: RootState) => state.project);
 
   // biome-ignore lint/suspicious/noExplicitAny: safe any
   const [state, setState] = useImmer<any>({});
@@ -61,7 +63,11 @@ export default function Play() {
                   fontFamily: format.btnFont,
                 }}
                 onClick={() => {
-                  navigate(`/play/open`);
+                  if (inEditor) {
+                    navigate(`/editor`);
+                  } else {
+                    navigate(`/`);
+                  }
                 }}
               >
                 {texts.quit}

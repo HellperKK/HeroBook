@@ -1,8 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+
 import { freshId } from '../utils/freshId';
 import type { ChoiceBlock, ImageBlock, TextBlock } from '../utils/game/Block';
 import { emptyChoice } from '../utils/game/empty/emptyChoice';
+import { emptyImage } from '../utils/game/empty/emptyImage';
 import { emptyPage } from '../utils/game/empty/emptyPage';
 import { emptyProject } from '../utils/game/empty/emptyProject';
 import { emptyText } from '../utils/game/empty/emptyText';
@@ -10,25 +12,40 @@ import type { ChoiceFormat, Format, MediaFormat, TextFormat } from '../utils/gam
 import type { Page } from '../utils/game/Page';
 import type { Project } from '../utils/game/Project';
 import type { Settings } from '../utils/game/Settings';
-import { emptyImage } from '../utils/game/empty/emptyImage';
 
-const initialState: Project = emptyProject;
+type ProjectState = {
+  project: Project;
+  inEditor: boolean;
+};
+
+const initialState: ProjectState = {
+  project: emptyProject,
+  inEditor: false
+};
 
 export const projectSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    loadProject: (_state, action: PayloadAction<Project>) => {
-      return action.payload;
+    loadProject: (state, action: PayloadAction<Project>) => {
+      state.project = action.payload;
+    },
+    editProject: (state, action: PayloadAction<Project>) => {
+      state.project = action.payload;
+      state.inEditor = true;
+    },
+    quitEditor: (state) => {
+      state.project = emptyProject;
+      state.inEditor = false;
     },
     changeGlobalSettings: (state, action: PayloadAction<Partial<Settings>>) => {
-      Object.assign(state.settings, action.payload);
+      Object.assign(state.project.settings, action.payload);
     },
     changeGlobalFormat: (state, action: PayloadAction<Partial<Format>>) => {
-      Object.assign(state.settings.format, action.payload);
+      Object.assign(state.project.settings.format, action.payload);
     },
     changePageFormat: (state, action: PayloadAction<{ format: Partial<Format>; pageId: number }>) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       for (const [key, value] of Object.entries(action.payload.format)) {
@@ -41,7 +58,7 @@ export const projectSlice = createSlice({
       }
     },
     changePageSettings: (state, action: PayloadAction<{ page: Partial<Page>; pageId: number }>) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       Object.assign(page, action.payload.page);
@@ -50,7 +67,7 @@ export const projectSlice = createSlice({
       state,
       action: PayloadAction<{ format: Partial<Format>; blockPosition: number; pageId: number }>,
     ) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       const block = page.content[action.payload.blockPosition];
@@ -97,7 +114,7 @@ export const projectSlice = createSlice({
       state,
       action: PayloadAction<{ settings: unknown; blockPosition: number; pageId: number }>,
     ) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       const block = page.content[action.payload.blockPosition];
@@ -106,7 +123,7 @@ export const projectSlice = createSlice({
       Object.assign(block, action.payload.settings);
     },
     inserBlockAt: (state, action: PayloadAction<{ blockType: string; blockPosition: number; pageId: number }>) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       switch (action.payload.blockType) {
@@ -131,18 +148,30 @@ export const projectSlice = createSlice({
       }
     },
     deleteBlockAt: (state, action: PayloadAction<{ blockPosition: number; pageId: number }>) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       page.content.splice(action.payload.blockPosition, 1);
     },
     addPage: (state) => {
-      const id = freshId(state.pages);
+      const id = freshId(state.project.pages);
       const newPage = { ...emptyPage, id, name: `Page ${id}` };
-      state.pages.push(newPage);
+      state.project.pages.push(newPage);
+    },
+    duplicatePage: (state, action: PayloadAction<{ pageId: number; }>) => {
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
+      if (!page) return;
+
+      let count = 1;
+      while (state.project.pages.some((p) => p.name === `${page.name} #${count}`)) {
+        count++;
+      }
+
+      const newPage = { ...page, id: freshId(state.project.pages), name: `${page.name} #${count}` };
+      state.project.pages.push(newPage);
     },
     addPageFromChoice: (state, action: PayloadAction<{ blockPosition: number; pageId: number; newId: number }>) => {
-      const page = state.pages.find((page) => page.id === action.payload.pageId);
+      const page = state.project.pages.find((page) => page.id === action.payload.pageId);
       if (!page) return;
 
       const block = page.content[action.payload.blockPosition];
@@ -150,21 +179,24 @@ export const projectSlice = createSlice({
       if (block.type !== 'choice') return;
 
       const newPage = { ...emptyPage, id: action.payload.newId };
-      state.pages.push(newPage);
+      state.project.pages.push(newPage);
       block.pageId = action.payload.newId;
     },
     deletePagePage: (state, action: PayloadAction<{ pageId: number }>) => {
-      const pagePosition = state.pages.findIndex((page) => page.id === action.payload.pageId);
+      const pagePosition = state.project.pages.findIndex((page) => page.id === action.payload.pageId);
       if (pagePosition === -1) return;
 
-      state.pages.splice(pagePosition, 1);
+      state.project.pages.splice(pagePosition, 1);
     },
   },
 });
 
 export const {
   loadProject,
+  editProject,
+  quitEditor,
   addPage,
+  duplicatePage,
   addPageFromChoice,
   deletePagePage,
   changeGlobalSettings,

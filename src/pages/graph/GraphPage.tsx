@@ -1,19 +1,24 @@
-import Graph from 'react-graph-vis';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../../components/inputs/button/Button';
 import ButtonGroup from '../../components/inputs/buttonGroup/buttonGroup';
-import { addPage } from '../../store/projectSlice';
+import Paper from '../../components/surfaces/paper/Paper';
+import Label from '../../components/texts/label/Label';
+import { addPage, duplicatePage, quitEditor } from '../../store/projectSlice';
 import type { RootState } from '../../store/store';
+import { saveProject } from '../../utils/saveProject';
 
 export default function GraphPage() {
   const navigate = useNavigate();
+  const project = useSelector((state: RootState) => state.project.project);
   const {
     pages,
     settings: { firstPage },
-  } = useSelector((state: RootState) => state.project);
+  } = project;
   const dispatch = useDispatch();
 
+  /*
   const nodes = [];
   const edges = [];
 
@@ -62,9 +67,18 @@ export default function GraphPage() {
       navigate(`/editor/page/${nodes[0]}`);
     },
   };
+  */
   return (
     <>
       <ButtonGroup>
+        <Button
+          onClick={async () => {
+            dispatch(quitEditor());
+            navigate('/');
+          }}
+        >
+          Back to menu
+        </Button>
         <Button onClick={() => dispatch(addPage())}>Add Page</Button>
         <Button
           onClick={async () => {
@@ -73,8 +87,24 @@ export default function GraphPage() {
         >
           Play
         </Button>
+        <Button
+          onClick={async () => {
+            saveProject(project);
+          }}
+        >
+          Save
+        </Button>
       </ButtonGroup>
-      <Graph graph={{ nodes, edges }} options={options} events={events} />
+      {/* <Graph graph={{ nodes, edges }} options={options} events={events} /> */}
+      <Paper>
+        {pages.map((page) => (
+          <div key={page.id}>
+            <Label width="150px">{page.name}</Label>
+            <Button onClick={() => navigate(`/editor/page/${page.id}`)}>Open</Button>
+            <Button onClick={() => dispatch(duplicatePage({ pageId: page.id }))}>Duplicate</Button>
+          </div>
+        ))}
+      </Paper>
     </>
   );
 }

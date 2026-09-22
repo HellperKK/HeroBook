@@ -1,4 +1,5 @@
-import { BaseDirectory, lstat } from "@tauri-apps/plugin-fs";
+import { BaseDirectory, lstat } from '@tauri-apps/plugin-fs';
+
 import { scanDirectoryFiles } from "./scanDirectoryFiles";
 
 export async function getDirectoryWeight(path: string) {

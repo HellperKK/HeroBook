@@ -1,7 +1,9 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import './buttonGroup.scss';
+
 import { separate } from '../../../utils/separate';
 import Separator from '../../misc/separator/Separator';
+
+import './buttonGroup.scss';
 
 type Props = PropsWithChildren<{}>;
 

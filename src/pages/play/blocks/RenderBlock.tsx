@@ -3,6 +3,7 @@ import Jinter from 'jintr';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
 import noImage from '../../../assets/images/no-image.png';
 import type { RootState } from '../../../store/store';
 import type { Block, ImageBlock } from '../../../utils/game/Block';
@@ -20,7 +21,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
   const {
     pages,
     settings: { format, folderName },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const [path, setPath] = useState<string | undefined>(undefined);
 
   const loadPath = async () => {
@@ -29,7 +30,7 @@ export default function RenderBlock({ block, onClick, state }: Props) {
       const blob = await readFile(assetsPath, {
         baseDir: BaseDirectory.Document,
       });
-      const base64 = (blob as any).toBase64() as string;
+      const base64 = blob.toBase64();
       setPath(`data:image/png;base64,${base64}`);
     }
   };

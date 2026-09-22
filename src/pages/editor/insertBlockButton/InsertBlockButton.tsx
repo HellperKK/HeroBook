@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import type { RootState } from '../../../store/store';
-import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
-import './insertBlockButton.scss';
-import { useState } from 'react';
+
 import Button from '../../../components/inputs/button/Button';
 import Modal from '../../../components/surfaces/modal/Modal';
 import { inserBlockAt } from '../../../store/projectSlice';
+import type { RootState } from '../../../store/store';
+import { oppositeColorRGB } from '../../../utils/oppositeColorRGB';
+
+import './insertBlockButton.scss';
 
 type Props = {
   index: number;
@@ -18,7 +20,7 @@ export default function InsertBlockButton({ index }: Props) {
   const {
     pages,
     settings: { format },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const [modalOpen, setModalOpen] = useState(false);
 
   // biome-ignore lint/style/noNonNullAssertion: will allways work

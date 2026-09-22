@@ -1,18 +1,20 @@
-import { useSelector } from 'react-redux';
-import TabPannel from '../../components/surfaces/tabs/TabPannel';
-import Tabs from '../../components/surfaces/tabs/Tabs';
-import './assetsManager.scss';
 import { open } from '@tauri-apps/plugin-dialog';
 import { BaseDirectory, type DirEntry, readDir, readFile, writeFile } from '@tauri-apps/plugin-fs';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import Button from '../../components/inputs/button/Button';
+import TabPannel from '../../components/surfaces/tabs/TabPannel';
+import Tabs from '../../components/surfaces/tabs/Tabs';
 import Text from '../../components/texts/text/Text';
 import type { RootState } from '../../store/store';
 import { fileName } from '../../utils/fileName';
 import { projectsPath } from '../../utils/paths';
 
+import './assetsManager.scss';
+
 export default function AssetsManager() {
-  const project = useSelector((state: RootState) => state.project);
+  const project = useSelector((state: RootState) => state.project.project);
 
   const [assets, setAssets] = useState<Array<DirEntry>>([]);
   const [assetSource, setAssetSource] = useState<string | null>(null);
@@ -48,7 +50,7 @@ export default function AssetsManager() {
 
   const getSource = async (file: string) => {
     const bytes = await readFile(`${assetsPath}/${fileName(file)}`, { baseDir: BaseDirectory.Document });
-    const base64 = (bytes as any).toBase64() as string;
+    const base64 = bytes.toBase64();
     const url = `data:application/octet-stream;base64,${base64}`;
     setAssetSource(url);
   };

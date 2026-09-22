@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Label from '../../../components/texts/label/Label';
 import { changeGlobalFormat } from '../../../store/projectSlice';
 import type { RootState } from '../../../store/store';
@@ -14,7 +15,7 @@ type Props = {
 export default function GlobalStyleEdition({ children, label, property }: Props) {
   const {
     settings: { format },
-  } = useSelector((state: RootState) => state.project);
+  } = useSelector((state: RootState) => state.project.project);
   const dispatch = useDispatch();
   return (
     <div>

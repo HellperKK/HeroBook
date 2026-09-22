@@ -1,4 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
+
 import './accordion.scss';
 
 type Props = PropsWithChildren<{

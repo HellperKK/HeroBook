@@ -1,7 +1,9 @@
 import { type ReactElement, useState } from 'react';
+
 import { reactElementToArray } from '../../../utils/reactNodeToArray';
-import './tabs.scss';
 import Button from '../../inputs/button/Button';
+
+import './tabs.scss';
 
 type Element = ReactElement<{ title: string; disabled?: boolean }>;
 type Props = { children?: Element | Element[] };

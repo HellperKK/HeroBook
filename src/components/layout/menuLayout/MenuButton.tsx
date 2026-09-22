@@ -1,4 +1,5 @@
 import type { MouseEventHandler, PropsWithChildren } from 'react';
+
 import './menuButton.scss';
 
 type Props = PropsWithChildren<{
