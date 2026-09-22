@@ -128,7 +128,7 @@ export default function GraphPage() {
             await writeFile(filePath, bin);
           }}
         >
-          Export
+          Export as zip
         </Button>
       </ButtonGroup>
       {/* <Graph graph={{ nodes, edges }} options={options} events={events} /> */}
